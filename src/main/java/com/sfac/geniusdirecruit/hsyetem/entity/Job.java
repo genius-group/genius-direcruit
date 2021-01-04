@@ -15,7 +15,7 @@ public class Job {
     @Column
     private String jobName;
     @Column
-    private String describe;
+    private String jobDescribe;
     @Column
     private double pay;
     @Column

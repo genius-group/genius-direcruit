@@ -17,7 +17,7 @@ public class Company {
     @Column
     private String address;
     @Column
-    private String describe;
+    private String companyDescribe;
     @Column
     private String creditRating;
     @Column
