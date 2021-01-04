@@ -1,6 +1,8 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,4 +14,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper
 public interface UserDao {
+    @Select("select * from user where user_name = #{userName} and user_pwd =#{userPwd}")
+    User selectUserByUserNameAndPwd(String userName,String userPwd);
 }
