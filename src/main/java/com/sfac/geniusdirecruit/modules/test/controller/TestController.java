@@ -23,4 +23,10 @@ public class TestController {
     public String testDesc(){
         return "This is a test!";
     }
+
+    @RequestMapping("/register")
+    public String testRegister(){
+        return "backstage/login";
+    }
+
 }
