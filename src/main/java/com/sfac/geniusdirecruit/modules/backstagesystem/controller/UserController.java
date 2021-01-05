@@ -12,5 +12,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("")
 public class UserController {
-    /*u飞虎顾问式*/
+
 }
