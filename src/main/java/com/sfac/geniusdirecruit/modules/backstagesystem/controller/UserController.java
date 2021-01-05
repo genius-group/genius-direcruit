@@ -1,6 +1,11 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.controller;
 
+import com.sfac.geniusdirecruit.common.entity.ResultEntity;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
+import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -10,7 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * XXXXX
  */
 @Controller
-@RequestMapping("")
+@RequestMapping("/api")
 public class UserController {
-
+    @Autowired
+    private UserService userService;
+    @GetMapping(value ="/login",consumes = "application/json")
+    ResultEntity<User> selectUserByUserNameAndPwd(String userName, String userPwd){
+        return userService.selectUserByUserNameAndPwd(userName,userPwd);
+    }
 }
