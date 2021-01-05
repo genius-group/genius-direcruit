@@ -19,7 +19,13 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
     @Override
     public ResultEntity<User> selectUserByUserNameAndPwd(String userName, String userPwd) {
-        userDao.selectUserByUserNameAndPwd(userName,userPwd);
-        return  new ResultEntity<>(ResultEntity.ResultStatus.FAILED.status, "Category name is repeat.");
+        User user=userDao.selectUserByUserNameAndPwd(userName,userPwd);
+        if(user==null){
+            return new ResultEntity<>(ResultEntity.ResultStatus.FAILED.status, "login defeat.");
+        }
+        else {
+            return  new ResultEntity<>(ResultEntity.ResultStatus.FAILED.status, "login success.");
+        }
+
     }
 }

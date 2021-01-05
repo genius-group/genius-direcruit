@@ -6,6 +6,7 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -20,7 +21,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     @GetMapping(value ="/login",consumes = "application/json")
-    ResultEntity<User> selectUserByUserNameAndPwd(String userName, String userPwd){
-        return userService.selectUserByUserNameAndPwd(userName,userPwd);
+    ResultEntity<User> selectUserByUserNameAndPwd(User user){
+        return userService.selectUserByUserNameAndPwd(user.getUserName(),user.getUserPwd());
     }
 }
