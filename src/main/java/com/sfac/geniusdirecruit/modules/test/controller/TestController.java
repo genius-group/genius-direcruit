@@ -28,6 +28,7 @@ public class TestController {
      * http://localhost:8080/test/register----get
      */
 
+    /*test123456*/
     @RequestMapping("/register")
     public String testRegister(){
         return "frontdesk/register";
