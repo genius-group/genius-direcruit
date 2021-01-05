@@ -21,11 +21,9 @@ public class Role {
     private Integer roleId;
 
     //角色名称
-    @Column
     private String roleName;
 
     //角色描述
-    @Column
     private String roleDescribe;
 
     @Transient

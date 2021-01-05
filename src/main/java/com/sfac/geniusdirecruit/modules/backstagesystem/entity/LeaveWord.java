@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @Author: yzs
@@ -20,19 +21,19 @@ public class LeaveWord {
     @Id//主键列
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer leaveWordId;
+
     private Integer userId;
+
     private Integer jobId;
 
     //留言内容
-    @Column
     private String content;
 
     //留言标题
-    @Column
     private String title;
 
     //留言时间
     @Column
     @JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
-    private LocalDateTime leaveTime;
+    private Date leaveTime;
 }

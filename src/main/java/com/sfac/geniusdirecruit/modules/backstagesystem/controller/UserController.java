@@ -5,9 +5,7 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author: yzs
@@ -15,13 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * 概要：
  * XXXXX
  */
-@Controller
+@RestController
 @RequestMapping("/api")
 public class UserController {
     @Autowired
     private UserService userService;
-    @GetMapping(value ="/login",consumes = "application/json")
-    ResultEntity<User> selectUserByUserNameAndPwd(User user){
+    @PostMapping(value ="/login",consumes = "application/json")
+    ResultEntity<User> selectUserByUserNameAndPwd(@RequestBody User user){
+
         return userService.selectUserByUserNameAndPwd(user.getUserName(),user.getUserPwd());
     }
 }

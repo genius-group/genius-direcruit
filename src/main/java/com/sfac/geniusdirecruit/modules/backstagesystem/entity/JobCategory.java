@@ -21,6 +21,5 @@ public class JobCategory {
     private Integer jobCategoryId;
 
     //职位类别名称
-    @Column
     private String jobCategoryName;
 }

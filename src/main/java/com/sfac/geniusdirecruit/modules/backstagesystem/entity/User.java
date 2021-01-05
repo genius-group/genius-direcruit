@@ -23,11 +23,9 @@ public class User {
     private Integer userId;
 
     //用户名
-    @Column
     private String userName;
 
     //密码
-    @Column
     private String userPwd;
 
     //创建时间
@@ -40,7 +38,6 @@ public class User {
     private String tel;
 
     //状态
-    @Column
     private Integer state;
 
     @Transient
