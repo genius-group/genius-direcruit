@@ -24,9 +24,13 @@ public class TestController {
         return "This is a test!";
     }
 
+    /**
+     * http://localhost:8080/test/register----get
+     */
+
     @RequestMapping("/register")
     public String testRegister(){
-        return "backstage/login";
+        return "frontdesk/register";
     }
 
 }
