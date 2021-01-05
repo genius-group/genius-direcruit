@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 @SpringBootApplication
 public class GeniusDirecruitApplication {
 
+    // aaaaa
     public static void main(String[] args) {
         SpringApplication.run(GeniusDirecruitApplication.class, args);
     }
