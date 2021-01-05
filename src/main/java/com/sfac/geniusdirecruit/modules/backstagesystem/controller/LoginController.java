@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/user")
 public class LoginController {
-@Autowired
-private UserService userService;
+/*合肥姑姑一个*/
     @RequestMapping("/login")
     public String index(){
 
