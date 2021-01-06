@@ -16,7 +16,9 @@ import java.util.List;
 @Repository
 @Mapper
 public interface UserDao {
-    @Select("select * from user where user_name = #{userName} and user_pwd =#{userPwd}")
+
+    //用户名密码登录
+    @Select("select user_name,user_pwd from user where user_name = #{userName} and user_pwd =#{userPwd}")
     User selectUserByUserNameAndPwd(String userName,String userPwd);
     @Select("select * from user")
     List<User> selectAllUser();

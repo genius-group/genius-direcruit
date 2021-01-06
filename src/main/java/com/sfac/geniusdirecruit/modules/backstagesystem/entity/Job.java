@@ -24,39 +24,30 @@ public class Job {
     private Integer jobCategoryId;
 
     //职位名称
-    @Column
     private String jobName;
 
     //职位描述
-    @Column
     private String description;
 
     //工作薪酬
-    @Column
     private String pay;
 
     //招聘人数
-    @Column
     private String numbers;
 
     //学历要求
-    @Column
     private String degree;
 
     //有效期限
-    @Column
     private String expiryDate;
 
     //工作区域
-    @Column
     private String area;
 
     //工作地址
-    @Column
     private String address;
 
     //游览次数
-    @Column
     private String viewCount;
 
     //发布时间

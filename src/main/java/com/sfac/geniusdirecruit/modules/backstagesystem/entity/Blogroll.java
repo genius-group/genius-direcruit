@@ -20,14 +20,11 @@ public class Blogroll {
     private Integer blogrollId;
 
     //链接名称
-    @Column
     private String blogrollName;
 
     //链接徽标
-    @Column
     private String blogrollLogo;
 
     //链接网址
-    @Column
     private String blogrollUrl;
 }

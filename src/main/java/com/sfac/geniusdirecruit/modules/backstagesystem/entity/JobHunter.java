@@ -22,30 +22,23 @@ public class JobHunter {
     private Integer userId;
 
     //求职者姓名
-    @Column
     private String jobHunterName;
 
     //性别
-    @Column
     private String sex;
 
     //生日
-    @Column
     private String birth;
 
     //头像
-    @Column
     private String photo;
 
     //学历
-    @Column
     private String educate;
 
     //邮箱
-    @Column
     private String email;
 
     //地址
-    @Column
     private String address;
 }
