@@ -21,12 +21,15 @@ public interface NewsDao {
     //添加news
     @Insert("insert into news (title,content,create_time) values (#{title},#{content},#{createTime})")
     void insertNews(News news);
+
     //根据标题查询
     @Select("select * from news where title = #{title}")
     News selectNewsByTitle(String title);
+
     //查询news数据
     @Select("select * from news")
     List<News> getNews();
+
     //分页排序
     @Select("<script>" +
             "select * from news "
@@ -50,7 +53,7 @@ public interface NewsDao {
     News getNewsById(Integer newId);
     @Update("update news set title=#{title},content=#{content},create_time=#{createTime} where new_id = #{newId}")
     void updateNews(News news);
-
+    //删除news
     @Delete("delete from news where new_id = #{newId}")
     void deleteNewsById(Integer newId);
 }

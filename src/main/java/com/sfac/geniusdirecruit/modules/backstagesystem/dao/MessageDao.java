@@ -1,10 +1,8 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 
-import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Message;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.News;
-import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.MessageVo;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
