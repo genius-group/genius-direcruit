@@ -2,9 +2,7 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Role;
 import com.sfac.geniusdirecruit.modules.common.entity.SearchBean;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,6 +16,7 @@ import java.util.List;
 @Repository
 @Mapper
 public interface RoleDao {
+
     @Select("select * from role")
     List<Role> selectAllRoles();
 
@@ -39,6 +38,15 @@ public interface RoleDao {
             + "</script>")
     List<Role> getRolesBySearchBean(SearchBean searchBean);
 
-    @Insert("insert into role (role_name,role_describe) values (#{roleName},#{roleDescribe}")
+    @Insert("insert into role (role_name,role_describe) values (#{roleName},#{roleDescribe})")
     void insertRole(Role role);
+
+    @Select("select * from role where role_id = #{roleId}")
+    Role getRoleByRoleId(int roleId);
+
+    @Update("update role set role_name = #{roleName},role_describe = #{roleDescribe} where role_id = #{roleId}")
+    void editRole(Role role);
+
+    @Delete("delete from role where role_id = #{roleId}")
+    void deleteRoleByRoleId(Integer roleId);
 }

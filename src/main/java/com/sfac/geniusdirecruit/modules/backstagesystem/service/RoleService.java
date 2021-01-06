@@ -19,4 +19,10 @@ public interface RoleService {
     PageInfo<Role> getRolesBySearchBean(SearchBean searchBean);
 
     ResultEntity<Role> insertRole(Role role);
+
+    Role getRoleByRoleId(int roleId);
+
+    ResultEntity<Role> editRole(Role role);
+
+    ResultEntity<Object> deleteRoleByRoleId(Integer roleId);
 }

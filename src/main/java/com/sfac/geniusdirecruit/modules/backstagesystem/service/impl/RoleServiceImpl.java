@@ -10,6 +10,7 @@ import com.sfac.geniusdirecruit.modules.common.entity.SearchBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -43,5 +44,25 @@ public class RoleServiceImpl implements RoleService {
         roleDao.insertRole(role);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "insert success",role);
+    }
+
+    @Override
+    public Role getRoleByRoleId(int roleId) {
+        return roleDao.getRoleByRoleId(roleId);
+    }
+
+    @Transactional
+    @Override
+    public ResultEntity<Role> editRole(Role role) {
+        roleDao.editRole(role);
+        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                "update success",role);
+    }
+
+    @Override
+    public ResultEntity<Object> deleteRoleByRoleId(Integer roleId) {
+        roleDao.deleteRoleByRoleId(roleId);
+        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                "Delete success");
     }
 }

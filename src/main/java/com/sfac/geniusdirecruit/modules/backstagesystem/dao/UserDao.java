@@ -20,18 +20,9 @@ public interface UserDao {
     //用户名密码登录
     @Select("select user_name,user_pwd from user where user_name = #{userName} and user_pwd =#{userPwd}")
     User selectUserByUserNameAndPwd(String userName,String userPwd);
+
     @Select("select * from user")
     List<User> selectAllUser();
-
-    @Insert("insert into user (user_name,user_pwd,create_time,tel,state) values (#{userName},#{userPwd},#{createTime},#{tel},#{state})")
-    void insertUser(User user);
-
-    @Select("select * from user where user_id = #{userId}")
-    User getUserById(int userId);
-
-    @Update("update user set user_name = #{userName},user_pwd=#{userPwd}, create_time = #{createTime},tel = #{tel},state = #{state} where user_id = #{userId}")
-    void editUser(User user);
-
 
     @Select("<script>" +
             "select * from user "
@@ -50,6 +41,15 @@ public interface UserDao {
             + "</choose>"
             + "</script>")
     List<User> getUsersBySearchBean(SearchBean searchBean);
+
+    @Insert("insert into user (user_name,user_pwd,create_time,tel,state) values (#{userName},#{userPwd},#{createTime},#{tel},#{state})")
+    void insertUser(User user);
+
+    @Select("select * from user where user_id = #{userId}")
+    User getUserById(int userId);
+
+    @Update("update user set user_name = #{userName},user_pwd=#{userPwd}, create_time = #{createTime},tel = #{tel},state = #{state} where user_id = #{userId}")
+    void editUser(User user);
 
     @Delete("delete from user where user_id = #{userId}")
     void deleteUserByUserId(Integer userId);
