@@ -36,7 +36,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public ResultEntity<MessageVo> addMessage(MessageVo messageVo) {
 
-        News temp = messageDao.selectLeaveWordByTitle(messageVo.getTitle());
+        News temp = messageDao.selectMessageByTitle(messageVo.getTitle());
 
         if (temp == null) {
             Message message = new Message();
@@ -45,6 +45,7 @@ public class MessageServiceImpl implements MessageService {
             message.setMessageTime(messageVo.getMessageTime());
             message.setTitle(messageVo.getTitle());
             message.setUserId(messageVo.getUserId());
+
             messageDao.insertMessage(message);
             return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                     "Insert success", messageVo);
@@ -54,8 +55,8 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public ResultEntity<Object> deleteMessageById(Integer leaveWordId) {
-        messageDao.deleteMessageById(leaveWordId);
+    public ResultEntity<Object> deleteMessageById(Integer messageId) {
+        messageDao.deleteMessageById(messageId);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "Delete success");
     }

@@ -23,7 +23,7 @@ import java.util.List;
 @Mapper
 public interface MessageDao {
     @Select("select * from message where title = #{title}")
-    News selectLeaveWordByTitle(String title);
+    News selectMessageByTitle(String title);
 
     @Insert("insert into message (user_id,job_id,title,content,message_time) values (#{userId},#{jobId},#{title},#{content},#{messageTime})")
     void insertMessage(Message message);
