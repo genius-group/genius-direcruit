@@ -16,7 +16,7 @@ import java.util.List;
  * XXXXX
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("")
 public class JobhunterController {
     @Autowired
     private JobhunterService jobhunterService;

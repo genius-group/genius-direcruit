@@ -23,21 +23,12 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
-    private UserDao userDao;
-
+    UserDao userDao;
     @Override
     public List<User> selectAllUser() {
         return userDao.selectAllUser();
     }
 
-    @Override
-    public PageInfo<User> getUsersBySearchBean(SearchBean searchBean) {
-        searchBean.initSearchBean();
-        PageHelper.startPage(searchBean.getCurrentPage(), searchBean.getPageSize());
-        return new PageInfo<>(Optional
-                .ofNullable(userDao.getUsersBySearchBean(searchBean))
-                .orElse(Collections.emptyList()));
-    }
 
     @Override
     @Transactional
@@ -45,6 +36,7 @@ public class UserServiceImpl implements UserService {
         userDao.insertUser(user);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "insert success",user);
+
     }
 
     @Override
@@ -60,9 +52,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public PageInfo<User> getUsersBySearchBean(SearchBean searchBean) {
+        searchBean.initSearchBean();
+        PageHelper.startPage(searchBean.getCurrentPage(), searchBean.getPageSize());
+        return new PageInfo<>(Optional
+                .ofNullable(userDao.getUsersBySearchBean(searchBean))
+                .orElse(Collections.emptyList()));
+    }
+
+    @Override
     public ResultEntity<Object> deleteUserByUserId(Integer userId) {
         userDao.deleteUserByUserId(userId);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
-                "delete success");
+                "Delete success");
     }
 }

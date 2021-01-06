@@ -25,7 +25,7 @@ public interface JobhunterDao {
             "select * from job_hunter "
             + "<where> "
             + "<if test='keyWord != \"\" and keyWord != null'>"
-            + " and (job_hunter_id like '%${keyWord}%')"
+            + " and (title like '%${keyWord}%') "
             + "</if>"
             + "</where>"
             + "<choose>"
@@ -37,5 +37,5 @@ public interface JobhunterDao {
             + "</otherwise>"
             + "</choose>"
             + "</script>")
-    List<Jobhunter> getJobhunterBySearchBean();
+    PageInfo<Jobhunter> getJobhunterBySearchBean();
 }

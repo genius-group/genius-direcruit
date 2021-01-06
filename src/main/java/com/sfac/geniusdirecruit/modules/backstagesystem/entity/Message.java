@@ -14,13 +14,13 @@ import java.util.Date;
  * 留言
  */
 @Entity
-@Table(name = "leave_word")
+@Table(name = "message")
 @Data
-public class LeaveWord {
+public class Message {
     //创建主键
     @Id//主键列
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer leaveWordId;
+    private Integer messageId;
 
     private Integer userId;
 
@@ -35,5 +35,5 @@ public class LeaveWord {
     //留言时间
     @Column
     @JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
-    private Date leaveTime;
+    private LocalDateTime messageTime;
 }

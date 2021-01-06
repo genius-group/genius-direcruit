@@ -1,8 +1,10 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 
+import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
-import com.sfac.geniusdirecruit.modules.backstagesystem.entity.LeaveWord;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Message;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.News;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.MessageVo;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -19,21 +21,21 @@ import java.util.List;
  */
 @Repository
 @Mapper
-public interface LeaveWordDao {
-    @Select("select * from leaveWord where title = #{title}")
+public interface MessageDao {
+    @Select("select * from message where title = #{title}")
     News selectLeaveWordByTitle(String title);
 
-    @Insert("insert into leaveWord (user_id,job_id,title,content,leave_time) values (#{userId},#{jobId},#{title},#{content},#{leaveTime})")
-    void insertLeaveWord(LeaveWord leaveWord);
+    @Insert("insert into message (user_id,job_id,title,content,message_time) values (#{userId},#{jobId},#{title},#{content},#{messageTime})")
+    void insertMessage(Message message);
 
-    @Delete("delete from leaveWord where leaveWord_id = #{leaveWordId}")
-    void deleteLeaveWordById(Integer leaveWordId);
-    //查询news数据
-    @Select("select * from news")
-    List<LeaveWord> getLeaveWord();
+    @Delete("delete from message where message_id = #{messageId}")
+    void deleteMessageById(Integer messageId);
+    //查询Message数据
+    @Select("select * from message")
+    List<Message> getMessage();
     //分页排序
     @Select("<script>" +
-            "select * from leaveWord "
+            "select * from message "
             + "<where> "
             + "<if test='keyWord != \"\" and keyWord != null'>"
             + " and (title like '%${keyWord}%') "
@@ -44,9 +46,9 @@ public interface LeaveWordDao {
             + " order by ${order} ${direction}"
             + "</when>"
             + "<otherwise>"
-            + " order by leave_time desc"
+            + " order by message_time desc"
             + "</otherwise>"
             + "</choose>"
             + "</script>")
-    List<LeaveWord> getLeaveWordBySearchBean(SearchBean searchBean);
+    List<Message> getMessageBySearchBean(SearchBean searchBean);
 }

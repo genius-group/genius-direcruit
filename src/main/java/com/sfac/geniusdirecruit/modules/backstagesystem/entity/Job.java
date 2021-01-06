@@ -21,6 +21,7 @@ public class Job {
     @Id//主键列
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer jobId;
+
     private Integer jobCategoryId;
 
     //职位名称
@@ -52,7 +53,7 @@ public class Job {
 
     //发布时间
     @Column
-    @JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime releaseTime;
 
     @Transient

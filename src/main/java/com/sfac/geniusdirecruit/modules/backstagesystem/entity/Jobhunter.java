@@ -12,7 +12,7 @@ import java.util.List;
  * 求职者
  */
 @Entity
-@Table(name = "jobhunter")
+@Table(name = "job_hunter")
 @Data
 public class Jobhunter {
     //创建主键
