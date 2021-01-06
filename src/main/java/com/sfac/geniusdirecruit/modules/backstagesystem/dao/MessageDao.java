@@ -51,4 +51,10 @@ public interface MessageDao {
             + "</choose>"
             + "</script>")
     List<Message> getMessageBySearchBean(SearchBean searchBean);
+
+    @Select("select * from message where user_id=#{userId}")
+    List<Message> selectMessagesByUserId(Integer userId);
+
+    @Delete("delete from message where user_id = #{userId}")
+    void deleteMessagesByUserId(Integer userId);
 }
