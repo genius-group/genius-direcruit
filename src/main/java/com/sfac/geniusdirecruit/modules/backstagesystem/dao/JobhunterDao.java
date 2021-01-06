@@ -2,6 +2,7 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 
 import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Jobhunter;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -38,4 +39,10 @@ public interface JobhunterDao {
             + "</choose>"
             + "</script>")
     PageInfo<Jobhunter> getJobhunterBySearchBean();
+
+    @Select("select * from job_hunter where user_id = #{userId}")
+    Jobhunter selectJobHunterByUserId(Integer userId);
+
+    @Delete("delete from job_hunter where user_id = #{userId}")
+    void deleteJobHunterByUserId(Integer userId);
 }
