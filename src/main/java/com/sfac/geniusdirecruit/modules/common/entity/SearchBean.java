@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class SearchBean {
     public final static int DEFAULT_CURRENT_PAGE = 1;
-    public final static int DEFAULT_PAGE_SIZE = 5;
+    public final static int DEFAULT_PAGE_SIZE = 2;
 
     private int currentPage;
     private int pageSize;

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @Data
-public class User {
+public class User{
     //创建主键
     @Id//主键列
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,8 +32,8 @@ public class User {
 
     //创建时间
     @Column
-    @JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
-    private LocalDateTime createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 
     //电话
     @Column(length = 11)
@@ -45,4 +45,5 @@ public class User {
 
     @Transient
     private List<Role> roles;
+
 }
