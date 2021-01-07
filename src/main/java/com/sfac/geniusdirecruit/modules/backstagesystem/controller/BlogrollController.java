@@ -22,9 +22,10 @@ public class BlogrollController {
     @Autowired
     private BlogrollService blogrollService;
     //添加blogroll http://127.0.0.1:8080/api/blogroll
-
+    //{"blogrollName":"百度", "blogrollLogo":1, "blogrollUrl":"www.baidu"}
     @PostMapping(value = "/blogroll", consumes = "application/json")
     public ResultEntity<Blogroll> insertBlogroll(@RequestBody Blogroll blogroll) {
+
         return blogrollService.insertBlogroll(blogroll);
     }
 
@@ -35,7 +36,7 @@ public class BlogrollController {
     }
 
     //http://127.0.0.1:8080/api/blogrolls   post请求
-    // {"currentPage":3, "pageSize":2, "order":"create_time", "direction":"desc", "keyWord":""}
+    // {"currentPage":1, "pageSize":2, "order":"blogroll_id", "direction":"desc", "keyWord":""}
     @PostMapping(value = "/blogrolls", consumes = "application/json")
     public PageInfo<Blogroll> getBlogrollBySearchBean(
             @RequestBody SearchBean searchBean) {
@@ -49,13 +50,14 @@ public class BlogrollController {
     }
 
     //编辑  http://127.0.0.1:8080/api/blogroll
+    //{"blogrollId":1,"blogrollName":"腾讯", "blogrollLogo":2, "blogrollUrl":"www.baidu"}
     @PutMapping(value = "/blogroll", consumes = "application/json")
     public ResultEntity<Blogroll> updateBlogroll(@RequestBody Blogroll blogroll) {
         return blogrollService.updateBlogroll(blogroll);
     }
 
-    //删除news http://127.0.0.1:8080/api/blogroll/1
-    @DeleteMapping("/news/{blogrollId}")
+    //删除 http://127.0.0.1:8080/api/blogroll/1
+    @DeleteMapping("/blogroll/{blogrollId}")
     public ResultEntity<Object> deleteBlogrollById(@PathVariable("blogrollId") Integer blogrollId) {
         return blogrollService.deleteBlogrollById(blogrollId);
     }

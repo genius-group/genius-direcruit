@@ -1,13 +1,11 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Job;
-import com.sfac.geniusdirecruit.modules.backstagesystem.entity.News;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.JobService;
+import com.sfac.geniusdirecruit.modules.common.entity.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.ws.Action;
@@ -24,9 +22,8 @@ import java.util.List;
 public class JobController {
     @Autowired
     private JobService jobService;
-    //添加news http://127.0.0.1:8080/api/job
-   // {"jobCategoryId":"1","jobName":"习大大","description":"ygfeueuigvdu","pay":"5000","numbers":"21","degree":"大专",
-    //"expiryDate":"1","area":"习大大","address":"ygfeueuigvdu","viewCount":"5000","releaseTime":"2021-01-05 14:33:34"}
+    //添加 http://127.0.0.1:8080/api/job
+   //{"jobCategoryId":"1","jobName":"习大大","description":"ygfeueuigvdu","pay":"5000","numbers":"21","degree":"大专","expiryDate":"1","area":"习大大","address":"ygfeueuigvdu","viewCount":"5000","releaseTime":"2021-01-05 14:33:34"}
     @PostMapping(value = "/job", consumes = "application/json")
     public ResultEntity<Job> insertJob(@RequestBody Job job) {
         return jobService.insertJob(job);

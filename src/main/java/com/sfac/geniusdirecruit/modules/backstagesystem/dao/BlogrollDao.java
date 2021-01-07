@@ -17,13 +17,13 @@ import java.util.List;
 @Mapper
 public interface BlogrollDao {
     //添加blogroll
-    @Insert("insert into blogroll (title,content,create_time) values (#{title},#{content},#{createTime})")
+    @Insert("insert into blogroll (blogroll_name,blogroll_logo,blogroll_url) values (#{blogrollName},#{blogrollLogo},#{blogrollUrl})")
     void insertBlogroll(Blogroll blogroll);
 
     //根据blogrollName查询
     @Select("select * from blogroll where blogroll_name = #{blogrollName}")
     Blogroll selectblogrollNameByBlogrollName(String blogrollName);
-    //查询news数据
+    //查询blogrollId数据
     @Select("select * from blogroll")
     List<Blogroll> getBlogroll();
 
@@ -32,7 +32,7 @@ public interface BlogrollDao {
             "select * from blogroll "
             + "<where> "
             + "<if test='keyWord != \"\" and keyWord != null'>"
-            + " and (title like '%${keyWord}%') "
+            + " and (blogroll_name like '%${keyWord}%') "
             + "</if>"
             + "</where>"
             + "<choose>"
@@ -40,23 +40,18 @@ public interface BlogrollDao {
             + " order by ${order} ${direction}"
             + "</when>"
             + "<otherwise>"
-            + " order by create_time desc"
+            + " order by blogroll_id desc"
             + "</otherwise>"
             + "</choose>"
             + "</script>")
     List<Blogroll> getBlogrollBySearchBean(SearchBean searchBean);
 
-    //根据newId查询
+    //根据blogrollId查询
     @Select("select * from blogroll where blogroll_id = #{blogrollId}")
-    Blogroll getBlogrollById(Integer newId);
-    @Update("update news set title=#{title},content=#{content},create_time=#{createTime} where new_id = #{newId}")
+    Blogroll getBlogrollById(Integer blogrollId);
+    @Update("update blogroll set blogroll_name=#{blogrollName},blogroll_logo=#{blogrollLogo},blogroll_url=#{blogrollUrl} where blogroll_id = #{blogrollId}")
     void updateBlogroll(Blogroll blogroll);
-    //删除news
+    //删除blogrollId
     @Delete("delete from blogroll where blogroll_id = #{blogrollId}")
     void deleteBlogrollById(Integer blogrollId);
-
-/*
-
-
-    */
 }

@@ -17,7 +17,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>种类列表 <small>categories</small></h3>
+                <h3>种类列表 <small>job</small></h3>
             </div>
         </div>
 
@@ -38,7 +38,7 @@
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>种类名称</th>
+                                                <th>job名称</th>
                                                 <th>操作列</th>
                                             </tr>
                                         </thead>
@@ -56,8 +56,8 @@
 </div>
 <!-- /page content -->
 
-<div th:replace="shopping/categoryAdd"></div>
-<div th:replace="shopping/categoryEdit"></div>
+<div th:replace="shopping/jobAdd"></div>
+<div th:replace="shopping/jobEdit"></div>
 
 <!-- Datatables -->
 <script src="/plugin/datatables.net/js/jquery.dataTables.min.js"></script>
@@ -120,7 +120,7 @@
                 searchBean.keyWord = data.search.value;
 
                 $.ajax({
-                    url : "/api/categories",
+                    url : "/api/job",
                     type : "post",
                     contentType: "application/json",
                     data : JSON.stringify(searchBean),
@@ -186,14 +186,14 @@
     }
 
     function addModal() {
-        var category = {};
-        category.name = $("#nameForAdd").val();
+        var job = {};
+        job.name = $("#nameForAdd").val();
 
         $.ajax({
-            url : "/api/category",
+            url : "/api/job",
             type : "post",
             contentType: "application/json",
-            data : JSON.stringify(category),
+            data : JSON.stringify(job),
             success : function (rs) {
                 if (rs.status == 200) {
                     $('#modalAdd').modal('hide');
@@ -210,10 +210,8 @@
 
     function initEditModal(id) {
         $.ajax({
-            url : "/api/category/" + id,
+            url : "/api/jobs/" + id,
             type : "get",
-            //contentType: "application/json",
-            //data : JSON.stringify(category),
             success : function (rs) {
                 $("#idForEdit").val(rs.id);
                 $("#nameForEdit").val(rs.name);
@@ -225,12 +223,12 @@
     }
 
     function editModal() {
-        var category = {};
-        category.id = $("#idForEdit").val();
-        category.name = $("#nameForEdit").val();
+        var job = {};
+        job.id = $("#idForEdit").val();
+        job.name = $("#nameForEdit").val();
 
         $.ajax({
-            url : "/api/category",
+            url : "/api/job",
             type : "put",
             contentType: "application/json",
             data : JSON.stringify(category),
@@ -252,7 +250,7 @@
         bootbox.confirm("Are you sure?", function(result) {
             if(result) {
                 $.ajax({
-                    url : "/api/category/" + id,
+                    url : "/api/job/" + id,
                     type : "delete",
                     //contentType: "application/json",
                     //data : JSON.stringify(category),

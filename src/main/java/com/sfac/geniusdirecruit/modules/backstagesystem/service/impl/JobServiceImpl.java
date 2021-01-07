@@ -2,12 +2,11 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Job;
-import com.sfac.geniusdirecruit.modules.backstagesystem.entity.News;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.JobService;
+import com.sfac.geniusdirecruit.modules.common.entity.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

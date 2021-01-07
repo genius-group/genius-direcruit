@@ -62,7 +62,7 @@ public class BlogrollServiceImpl implements BlogrollService {
     public ResultEntity<Blogroll> updateBlogroll(Blogroll blogroll) {
         blogrollDao.updateBlogroll(blogroll);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
-                "Delete success");
+                "update success");
 
     }
 

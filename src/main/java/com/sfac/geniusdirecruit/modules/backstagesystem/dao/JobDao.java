@@ -1,10 +1,8 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 
-import com.github.pagehelper.PageInfo;
-import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Job;
-import com.sfac.geniusdirecruit.modules.backstagesystem.entity.News;
+import com.sfac.geniusdirecruit.modules.common.entity.ResultEntity;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -55,7 +53,7 @@ public interface JobDao {
             + "</script>")
     List<Job> getJobBySearchBean(SearchBean searchBean);
     //修改job
-    @Update("update job set #{jobCategoryId},jobName=#{jobName},description=#{description},pay=#{pay},numbers=#{numbers},degree=#{degree},expiryDate=#{expiryDate},area=#{area},address=#{address},viewCount=#{viewCount},releaseTime=#{releaseTime} where job_id = #{jobId}")
+    @Update("update job set job_ategory_id=#{jobCategoryId},jobName=#{jobName},description=#{description},pay=#{pay},numbers=#{numbers},degree=#{degree},expiryDate=#{expiryDate},area=#{area},address=#{address},viewCount=#{viewCount},releaseTime=#{releaseTime} where job_id = #{jobId}")
     ResultEntity<Job> updateJob();
 
     //删除job
