@@ -14,6 +14,7 @@ import java.util.HashMap;
  * 概要：
  * XXXXX
  */
+
 @Controller
 @RequestMapping("/test")
 public class TestController {
@@ -36,7 +37,8 @@ public class TestController {
     /*test12*/
     @RequestMapping("/register")
     public String testRegister(){
-        return "frontdesk/register";
+        System.err.println("从注册页面跳过来了哟");
+        return "frontdesk/login";
     }
 
     @RequestMapping("/login")
