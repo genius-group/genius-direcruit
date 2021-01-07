@@ -42,14 +42,12 @@ public class UserController {
          return userService.getUsersBySearchBean(searchBean);
     }
 
-
-
     /**
      * 添加用户
-     * http://127.0.0.1:8080/api/addUser---------post
+     * http://127.0.0.1:8080/api/user---------post
      *{"userName":"lisi","userPwd":"444","createTime":"2021-01-05 12:30:00","tel":"18398103075","state":1}
      */
-    @PostMapping(value = "/addUser",consumes = "application/json")
+    @PostMapping(value = "/user",consumes = "application/json")
     public ResultEntity<User> insertUser(@RequestBody User user) {
         return userService.insertUser(user);
     }
@@ -65,19 +63,19 @@ public class UserController {
 
     /**
      * 编辑用户
-     *http://127.0.0.1:8080/api/editUser-----------put
+     *http://127.0.0.1:8080/api/user-----------put
      * {"userId":1,"userName":"lisi","userPwd":"111","createTime":"2008-01-05 12:00:00","tel":"13619087415","state":1}
      */
-    @PutMapping(value = "/editUser",consumes = "application/json")
+    @PutMapping(value = "/user",consumes = "application/json")
     public ResultEntity<User> editUser(@RequestBody User user){
         return userService.editUser(user);
     }
 
     /**
      * 删除用户
-     * http://127.0.0.1:8080/api/deleteUser/6------delete
+     * http://127.0.0.1:8080/api/user/6------delete
      */
-    @DeleteMapping("/deleteUser/{userId}")
+    @DeleteMapping("/user/{userId}")
     public ResultEntity<Object> deleteUserByUserId(@PathVariable Integer userId){
         return userService.deleteUserByUserId(userId);
     }

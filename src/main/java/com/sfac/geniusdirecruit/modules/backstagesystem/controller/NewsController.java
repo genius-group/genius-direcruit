@@ -19,46 +19,47 @@ import java.util.List;
  * XXXXX
  */
 @RestController
-@RequestMapping("/news")
+@RequestMapping("/api")
 public class NewsController {
     @Autowired
     private NewsService newsService;
 
-    //添加news http://127.0.0.1:8080/news/addNews
+    //添加news http://127.0.0.1:8080/api/news
     //{"title":"习大大","content":"ygfeueuigvdu","createTime":"2020-01-05 14:33:34"}
-    @PostMapping(value = "/addNews", consumes = "application/json")
+    @PostMapping(value = "/news", consumes = "application/json")
     public ResultEntity<News> insertNews(@RequestBody News news) {
         return newsService.insertNews(news);
     }
 
-    //http://127.0.0.1:8080/news/readNewses  get请求
-    @GetMapping("/readNewses")
+    //http://127.0.0.1:8080/api/newses  get请求
+    @GetMapping("/newses")
     public List<News> getNews() {
         return newsService.getNews();
     }
 
-    //http://127.0.0.1:8080/news/readNewses   post请求
+    //http://127.0.0.1:8080/api/newses   post请求
     // {"currentPage":3, "pageSize":2, "order":"create_time", "direction":"desc", "keyWord":""}
-    @PostMapping(value = "/readNewses", consumes = "application/json")
+    @PostMapping(value = "/newses", consumes = "application/json")
     public PageInfo<News> getNewsBySearchBean(
             @RequestBody SearchBean searchBean) {
         return newsService.getNewsBySearchBean(searchBean);
     }
 
-    //预编辑  http://127.0.0.1:8080/news/news/1
+    //预编辑  http://127.0.0.1:8080/api/news/1
     @GetMapping("/news/{newId}")
     public News getnewsById(@PathVariable("newId") Integer newId) {
         return newsService.getNewsById(newId);
     }
 
-    //编辑  http://127.0.0.1:8080/news/editNews
-    @PutMapping(value = "/editNews", consumes = "application/json")
+    //编辑  http://127.0.0.1:8080/api/news
+    //{"newId":"3","title":"习大大","content":"ygfeueuigvdu","createTime":"2020-01-06 14:33:34"}
+    @PutMapping(value = "/news", consumes = "application/json")
     public ResultEntity<News> updateNews(@RequestBody News news) {
         return newsService.updateNews(news);
     }
 
-    //删除news http://127.0.0.1:8080/news/deleteNews/1
-    @DeleteMapping("/deleteNews/{newId}")
+    //删除news http://127.0.0.1:8080/api/news/1
+    @DeleteMapping("/news/{newId}")
     public ResultEntity<Object> deleteNewsById(@PathVariable("newId") Integer newId) {
         return newsService.deleteNewsById(newId);
     }

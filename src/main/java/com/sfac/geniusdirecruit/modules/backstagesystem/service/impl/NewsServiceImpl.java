@@ -33,8 +33,7 @@ public class NewsServiceImpl implements NewsService {
             return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                     "Insert success", news);
         }
-
-        return new ResultEntity<>(ResultEntity.ResultStatus.FAILED.status,
+            return new ResultEntity<>(ResultEntity.ResultStatus.FAILED.status,
                 "Category name is repeat.");
     }
 

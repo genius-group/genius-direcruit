@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ public class User{
     //创建时间
     @Column
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
+    private LocalDateTime createTime;
 
     //电话
     @Column(length = 11)
