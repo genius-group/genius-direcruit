@@ -96,16 +96,17 @@ public class UserServiceImpl implements UserService {
     public HashMap<Object, String> loginIn(User user) {
         HashMap<Object,String> map = new HashMap<Object, String>();
         User user_db = userDao.selectUserByUserName(user.getUserName());
-
-        System.err.println(user.getUserPwd());
-        System.err.println(user_db.getUserPwd());
-        if (user.getUserPwd().equals(user_db.getUserPwd())){
-            System.err.println(11111);
-            map.put("info","登录成功");
-            return map;
+        if (user_db==null){
+            map.put("info","用户不存在");
         }else {
-            return null;
+            if (user.getUserPwd().equals(user_db.getUserPwd())){
+                map.put("info","登录成功");
+                return map;
+            }else {
+                map.put("info","密码错误");
+                return map;
+            }
         }
-
+        return map;
     }
 }
