@@ -25,76 +25,107 @@
       <link href="/frontdesk/css/style.css" rel="stylesheet">
    </head>
    <body>
+
       <!-- Register -->
       <div class="bg-white">
+
+
          <div class="container">
+
             <div class="row justify-content-center align-items-center d-flex vh-100">
+
                <div class="col-lg-4 mx-auto">
+
                   <div class="osahan-login py-4">
+
                      <div class="text-center mb-4">
                         <a href="../backstage/index.html"><img src="/frontdesk/images/fav.svg" alt=""></a>
-                        <h5 class="font-weight-bold mt-3">Join Miver</h5>
-                        <p class="text-muted">Make the most of your professional life</p>
+                        <h5 class="font-weight-bold mt-3">牛人直聘</h5>
+                        <p class="text-muted">手机注册</p>
                      </div>
+
+
+
+
                      <form action="../backstage/index.html">
-                        <div class="form-row">
-                           <div class="col">
-                              <div class="form-group">
-                                 <label class="mb-1">First name</label>
-                                 <div class="position-relative icon-form-control">
-                                    <i class="mdi mdi-account position-absolute"></i>
-                                    <input type="text" class="form-control">
-                                 </div>
-                              </div>
-                           </div>
-                           <div class="col">
-                              <div class="form-group">
-                                 <label class="mb-1">Last name</label>
-                                 <div class="position-relative">
-                                    <input type="text" class="form-control">
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
+
+
                         <div class="form-group">
-                           <label class="mb-1">Email</label>
+                           <label class="mb-1">phone number</label>
                            <div class="position-relative icon-form-control">
-                              <i class="mdi mdi-email-outline position-absolute"></i>
-                              <input type="email" class="form-control">
+                              <input type="email" class="form-control" placeholder="手机号">
                            </div>
                         </div>
-                        <div class="form-group">
-                           <label class="mb-1">Password (6 or more characters)</label>
-                           <div class="position-relative icon-form-control">
-                              <i class="mdi mdi-key-variant position-absolute"></i>
-                              <input type="password" class="form-control">
-                           </div>
-                        </div>
-                        <div class="form-group">
-                           <label class="mb-1">You agree to the Miver <a href="#">User Agreement</a>, <a href="#">Privacy Policy</a>, and <a  href="#">Cookie Policy</a>.</label>
-                        </div>
-                        <button class="btn btn-success btn-block text-uppercase" type="submit"> Agree & Join </button>
+
+
+                         <div class="form-group" style="float: left">
+                            <input type="password" style="width: 200px;display: inline-block" class="form-control" id="inputPassword" placeholder="验证码" >
+
+                            <div id="send" class="text-right" style="float: right;padding-left: 30px">
+                               <button type="button" class="btn btn-primary mb-2" onclick="sendSms()" >发送验证码</button>
+
+                            </div>
+
+                             <!--<label class="mb-1">Verification Code</label>
+
+                             <div class="position-relative icon-form-control" style="display:inline">
+
+
+                             </div>-->
+                         </div>
+
+
+                        <button class="btn btn-success btn-block text-uppercase" type="submit"> 同意并加入 </button>
+
+
                         <div class="text-center mt-3 border-bottom pb-3">
-                           <p class="small text-muted">Or login with</p>
+                           <p class="small text-muted">或使用邮箱</p>
                            <div class="row">
                               <div class="col-6">
-                                 <button type="button" class="btn btn-outline-instagram btn-block"><i class="mdi mdi-instagram"></i> Instagram</button>
+                                 <button type="button" class="btn btn-outline-instagram btn-block"><i class="mdi mdi-instagram"></i> 一款图片分享应用</button>
                               </div>
                               <div class="col-6">
-                                 <button type="button" class="btn btn-outline-facebook btn-block"><i class="mdi mdi-facebook"></i> Facebook</button>
+                                 <button type="button" class="btn btn-outline-facebook btn-block"><i class="mdi mdi-facebook"></i> Email registration</button>
                               </div>
                            </div>
                         </div>
+
+
                         <div class="py-3 d-flex align-item-center">
-                           <a href="forgot-password.html">Forgot password?</a>
-                           <span class="ml-auto"> Already on Miver? <a href="login.html">Sign in</a></span>
+                           <a href="forgot-password.html">忘记密码了？</a>
+                           <span class="ml-auto"> 已经上Part-time Job了？ <a href="/test/register">登录</a></span>
                         </div>
+
+
                      </form>
+
+<!--                      <form class="form-inline">
+                          <div class="form-group mb-2">
+                              <label for="staticEmail2" class="sr-only">Email</label>
+                              <input type="text" readonly="" class="form-control-plaintext" id="staticEmail2" value="email@example.com">
+                          </div>
+
+                          <div class="form-group mx-sm-3 mb-2">
+                              <label for="inputPassword2" class="sr-only">Password</label>
+                              <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
+                          </div>
+                          <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>
+
+                      </form>-->
+
+
                   </div>
+
                </div>
+
             </div>
+
          </div>
+
+
       </div>
+
+
       <!-- End Register -->
       <!-- Bootstrap core JavaScript -->
       <script src="/frontdesk/vendor/jquery/jquery.min.js"></script>
