@@ -5,6 +5,7 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.modules.common.entity.SearchBean;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -25,4 +26,6 @@ public interface UserService {
     PageInfo<User> getUsersBySearchBean(SearchBean searchBean);
 
     ResultEntity<Object> deleteUserByUserId(Integer userId);
+
+    HashMap<Object, String> loginIn(User user);
 }

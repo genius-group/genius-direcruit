@@ -1,9 +1,12 @@
 package com.sfac.geniusdirecruit.modules.test.controller;
 
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
+import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 /**
  * @Author: yzs
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/test")
 public class TestController {
+    @Autowired
+    UserService userService;
 
     /**
      * http://localhost:8080/test/desc----get
@@ -32,6 +37,19 @@ public class TestController {
     @RequestMapping("/register")
     public String testRegister(){
         return "frontdesk/register";
+    }
+
+    @RequestMapping("/login")
+    public String testlogin(){
+        return "frontdesk/login";
+    }
+
+    @PostMapping("/loginIn")
+    @ResponseBody
+    public HashMap<Object,String> loginIn(@RequestBody User user){
+        HashMap<Object, String> map = userService.loginIn(user);
+        System.err.println(map);
+        return map;
     }
 
 }

@@ -5,7 +5,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <meta name="description" content="Gurdeep singh osahan">
       <meta name="author" content="Gurdeep singh osahan">
-      <title>Miver</title>
+      <title>牛人直聘</title>
       <!-- Favicon Icon -->
       <link rel="icon" type="image/png" href="/frontdesk/images/fav.svg">
       <!-- Bootstrap core CSS -->
@@ -33,31 +33,31 @@
                   <div class="osahan-login py-4">
                      <div class="text-center mb-4">
                         <a href="../backstage/index.html"><img src="/frontdesk/images/fav.svg" alt=""></a>
-                        <h5 class="font-weight-bold mt-3">Welcome Back</h5>
-                        <p class="text-muted">Don't miss your next opportunity. Sign in to stay updated on your professional world.</p>
+                        <h5 class="font-weight-bold mt-3">欢迎回来</h5>
+                        <p class="text-muted">不要错过每一次机会,登录去更新你的职业世界吧</p>
                      </div>
-                     <form action="../backstage/index.html">
+                     <form action="javascript:void(0)" data-parsley-validate class="form-horizontal form-label-left">
                         <div class="form-group">
-                           <label class="mb-1">Email or Phone</label>
+                           <label class="mb-1">用户名</label>
                            <div class="position-relative icon-form-control">
                               <i class="mdi mdi-account position-absolute"></i>
-                              <input type="email" class="form-control">
+                              <input type="name" class="form-control" id="userName" name="userName">
                            </div>
                         </div>
                         <div class="form-group">
-                           <label class="mb-1">Password</label>
+                           <label class="mb-1">密码</label>
                            <div class="position-relative icon-form-control">
                               <i class="mdi mdi-key-variant position-absolute"></i>
-                              <input type="password" class="form-control">
+                              <input type="password" class="form-control" id="userPwd" name="userPwd">
                            </div>
                         </div>
                         <div class="custom-control custom-checkbox mb-3">
                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                           <label class="custom-control-label" for="customCheck1">Remember password</label>
+                           <label class="custom-control-label" for="customCheck1">记住密码</label>
                         </div>
-                        <button class="btn btn-success btn-block text-uppercase" type="submit"> Sign in </button>
+                        <button class="btn btn-success btn-block text-uppercase" type="button" id="loginIn"> 登录 </button>
                         <div class="text-center mt-3 border-bottom pb-3">
-                           <p class="small text-muted">Or login with</p>
+                           <p class="small text-muted">尝试其他登录方式</p>
                            <div class="row">
                               <div class="col-6">
                                  <button type="button" class="btn btn-outline-instagram btn-block"><i class="mdi mdi-instagram"></i> Instagram</button>
@@ -68,8 +68,9 @@
                            </div>
                         </div>
                         <div class="py-3 d-flex align-item-center">
-                           <a href="forgot-password.html">Forgot password?</a>
-                           <span class="ml-auto"> New to Miver? <a href="register.html">Join now</a></span>
+                           <a href="forgot-password.html">忘记密码?</a>
+                           <span class="ml-auto"> 新用户? <a href="register.html">立即加入</a></span>
+                           <!-- Small modal -->
                         </div>
                      </form>
                   </div>
@@ -77,6 +78,8 @@
             </div>
          </div>
       </div>
+
+
       <!-- End Login -->
       <!-- Bootstrap core JavaScript -->
       <script src="/frontdesk/vendor/jquery/jquery.min.js"></script>
@@ -86,12 +89,62 @@
       <script src="/frontdesk/js/jqBootstrapValidation.js"></script>
       <script src="/frontdesk/js/contact_me.js"></script>
       <!-- Slick -->
-      <script src="/static/frontdesk/vendor/slick-master/slick/slick.js" type="text/javascript" charset="utf-8"></script>
+      <script src="/frontdesk/vendor/slick-master/slick/slick.js" type="text/javascript" charset="utf-8"></script>
       <!-- lightgallery -->
       <script src="/frontdesk/vendor/lightgallery-master/dist/js/lightgallery-all.min.js"></script>
       <!-- select2 Js -->
       <script src="/frontdesk/vendor/select2/js/select2.min.js"></script>
       <!-- Custom -->
       <script src="/frontdesk/js/custom.js"></script>
+      <script>
+         $(function(){
+            $("#loginIn").bind("click",function () {
+                  checkform();
+            });
+
+            $("#loginIn").bind("click",function () {
+                  loginIn();
+            })
+         })
+
+         function checkform() {
+            if (document.getElementById('userName').value.length==0){
+               alert('用户名不能为空');
+               document.getElementById('userName').focus();
+               return false;
+            }
+            if (document.getElementById('userPwd').value.length==0){
+               alert('密码不能为空');
+               document.getElementById('userPwd').focus();
+               return false;
+            }
+         }
+
+         function loginIn() {
+            var user ={};
+            user.userName = $("#userName").val();
+            user.userPwd = $("#userPwd").val();
+
+            $.ajax({
+               url:"/test/loginIn",
+               type:"post",
+               contentType:"application/json",
+               data:JSON.stringify(user),
+               dataType:"json",
+               success:function (info) {
+                  if (info == "登陆成功"){
+                     location.href = "/test/index";
+                  }else {
+                     layer.alert(info);
+                  }
+               }
+            })
+
+         }
+
+
+
+      </script>
+
    </body>
 </html>

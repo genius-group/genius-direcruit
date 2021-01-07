@@ -18,7 +18,7 @@ import java.util.List;
 public interface UserDao {
 
     //用户名密码登录
-    @Select("select user_name,user_pwd from user where user_name = #{userName} and user_pwd =#{userPwd}")
+    @Select("select * from user where user_name = #{userName} and user_pwd =#{userPwd}")
     User selectUserByUserNameAndPwd(String userName,String userPwd);
     @Select("select * from user")
     List<User> selectAllUser();
@@ -53,4 +53,7 @@ public interface UserDao {
 
     @Delete("delete from user where user_id = #{userId}")
     void deleteUserByUserId(Integer userId);
+
+    @Select("select * from user where user_name = #{userName}")
+    User selectUserByUserName(String userName);
 }

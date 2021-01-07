@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,5 +66,22 @@ public class UserServiceImpl implements UserService {
         userDao.deleteUserByUserId(userId);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "Delete success");
+    }
+
+    @Override
+    public HashMap<Object, String> loginIn(User user) {
+        HashMap<Object,String> map = new HashMap<Object, String>();
+        User user_db = userDao.selectUserByUserName(user.getUserName());
+
+        System.err.println(user.getUserPwd());
+        System.err.println(user_db.getUserPwd());
+        if (user.getUserPwd().equals(user_db.getUserPwd())){
+            System.err.println(11111);
+            map.put("info","登录成功");
+            return map;
+        }else {
+            return null;
+        }
+
     }
 }
