@@ -18,7 +18,7 @@ import java.util.List;
 @Mapper
 public interface JobhunterDao {
 
-    @Select("select * from jobhunter")
+    @Select("select * from job_hunter")
     List<Jobhunter> getJobhunter();
     //分页排序
     @Select("<script>" +
@@ -39,10 +39,10 @@ public interface JobhunterDao {
             + "</script>")
     List<Jobhunter> getJobhunterBySearchBean();
 
-    @Select("select * from jobhunter where user_id = #{userId}")
+    @Select("select * from job_hunter where user_id = #{userId}")
     Jobhunter selectJobHunterByUserId(Integer userId);
 
-    @Delete("delete from jobhunter where user_id = #{userId}")
+    @Delete("delete from job_hunter where user_id = #{userId}")
     void deleteJobHunterByUserId(Integer userId);
 
 }
