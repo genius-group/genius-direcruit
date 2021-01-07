@@ -22,11 +22,9 @@ public class Company {
     private Integer userId;
 
     //企业名称
-    @Column
     private String companyName;
 
     //公司地址
-    @Column
     private String address;
 
     //公司描述

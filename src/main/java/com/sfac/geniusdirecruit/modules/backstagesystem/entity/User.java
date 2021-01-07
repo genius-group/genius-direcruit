@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -16,23 +17,21 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @Data
-public class User {
+public class User{
     //创建主键
     @Id//主键列
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
 
     //用户名
-    @Column
     private String userName;
 
     //密码
-    @Column
     private String userPwd;
 
     //创建时间
     @Column
-    @JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
     //电话
@@ -40,9 +39,9 @@ public class User {
     private String tel;
 
     //状态
-    @Column
     private Integer state;
 
     @Transient
     private List<Role> roles;
+
 }

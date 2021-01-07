@@ -1,5 +1,12 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.service;
 
+import com.github.pagehelper.PageInfo;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Company;
+import com.sfac.geniusdirecruit.modules.common.entity.ResultEntity;
+import com.sfac.geniusdirecruit.modules.common.entity.SearchBean;
+
+import java.util.List;
+
 /**
  * @Author: yzs
  * @Date: 2020/12/31 16:24
@@ -7,4 +14,11 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.service;
  * XXXXX
  */
 public interface CompanyService {
+    List<Company> selectCompanies();
+
+    PageInfo<Company> getCompaniesBySearchBean(SearchBean searchBean);
+
+    Company getCompanyByCompanyId(int companyId);
+
+    ResultEntity<Company> editCompany(Company company);
 }

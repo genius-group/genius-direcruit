@@ -1,5 +1,12 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.service;
 
+import com.github.pagehelper.PageInfo;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.JobCategory;
+import com.sfac.geniusdirecruit.modules.common.entity.ResultEntity;
+import com.sfac.geniusdirecruit.modules.common.entity.SearchBean;
+
+import java.util.List;
+
 /**
  * @Author: yzs
  * @Date: 2020/12/31 16:25
@@ -7,4 +14,15 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.service;
  * XXXXX
  */
 public interface JobCategoryService {
+    List<JobCategory> selectJobCategories();
+
+    PageInfo<JobCategory> getJobCategoriesBySearchBean(SearchBean searchBean);
+
+    ResultEntity<JobCategory> insertJobCategory(JobCategory jobCategory);
+
+    JobCategory getJobCategoryByJobCategoryId(int jobCategoryId);
+
+    ResultEntity<JobCategory> editJobCategory(JobCategory jobCategory);
+
+    ResultEntity<Object> deleteJobCategoryByJobCategoryId(Integer jobCategoryId);
 }
