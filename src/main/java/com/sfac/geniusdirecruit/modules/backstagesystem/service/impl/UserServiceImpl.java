@@ -3,7 +3,7 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.CompanyDao;
-import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobhunterDao;
+import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobHunterDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.UserDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.UserRoleDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Company;
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private CompanyDao companyDao;
     @Autowired
-    private JobhunterDao jobhunterDao;
+    private JobHunterDao jobhunterDao;
     @Autowired
     private UserRoleDao userRoleDao;
 

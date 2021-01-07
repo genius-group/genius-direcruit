@@ -3,7 +3,7 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
-import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobhunterDao;
+import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobHunterDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Jobhunter;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.JobhunterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import java.util.Optional;
 @Service
 public class JobhunterServiceImpl implements JobhunterService {
     @Autowired
-    private JobhunterDao jobhunterDao;
+    private JobHunterDao jobhunterDao;
     @Override
     public List<Jobhunter> getJobhunter() {
 

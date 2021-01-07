@@ -16,13 +16,13 @@ import java.util.List;
  */
 @Repository
 @Mapper
-public interface JobhunterDao {
+public interface JobHunterDao {
 
-    @Select("select * from job_hunter")
+    @Select("select * from jobhunter")
     List<Jobhunter> getJobhunter();
     //分页排序
     @Select("<script>" +
-            "select * from job_hunter "
+            "select * from jobhunter "
             + "<where> "
             + "<if test='keyWord != \"\" and keyWord != null'>"
             + " and (title like '%${keyWord}%') "
@@ -39,10 +39,10 @@ public interface JobhunterDao {
             + "</script>")
     List<Jobhunter> getJobhunterBySearchBean();
 
-    @Select("select * from job_hunter where user_id = #{userId}")
+    @Select("select * from jobhunter where user_id = #{userId}")
     Jobhunter selectJobHunterByUserId(Integer userId);
 
-    @Delete("delete from job_hunter where user_id = #{userId}")
+    @Delete("delete from jobhunter where user_id = #{userId}")
     void deleteJobHunterByUserId(Integer userId);
 
 }
