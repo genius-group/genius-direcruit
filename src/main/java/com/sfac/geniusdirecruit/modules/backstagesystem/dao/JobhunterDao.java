@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Repository
 @Mapper
-public interface JobHunterDao {
+public interface JobhunterDao {
 
     @Select("select * from jobhunter")
     List<Jobhunter> getJobhunter();
