@@ -125,17 +125,18 @@
             user.userName = $("#userName").val();
             user.userPwd = $("#userPwd").val();
 
+
             $.ajax({
                url:"/test/loginIn",
                type:"post",
                contentType:"application/json",
                data:JSON.stringify(user),
                dataType:"json",
-               success:function (info) {
-                  if (info == "登陆成功"){
+               success:function (data) {
+                  if (data.info == "登录成功"){
                      location.href = "/test/index";
                   }else {
-                     layer.alert(info);
+                     alert(data.info);
                   }
                }
             })

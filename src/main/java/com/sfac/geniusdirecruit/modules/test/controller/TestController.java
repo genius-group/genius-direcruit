@@ -52,4 +52,9 @@ public class TestController {
         return map;
     }
 
+    @RequestMapping("/index")
+    public String index(){
+        return "frontdesk/index";
+    }
+
 }
