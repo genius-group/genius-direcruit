@@ -38,7 +38,7 @@ public class TestController {
     @RequestMapping("/register")
     public String testRegister(){
         System.err.println("从注册页面跳过来了哟");
-        return "frontdesk/login";
+        return "frontdesk/register";
     }
 
     @RequestMapping("/login")
