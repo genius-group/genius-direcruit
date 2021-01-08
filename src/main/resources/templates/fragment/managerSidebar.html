@@ -9,7 +9,7 @@
         <!-- menu profile quick info -->
         <div class="profile clearfix">
             <div class="profile_pic">
-                <img src="/manager/images/img.jpg" alt="..." class="img-circle profile_img">
+                <img src="/backstage/manager/images/img.jpg" alt="..." class="img-circle profile_img">
             </div>
             <div class="profile_info">
                 <span>Welcome,</span>
@@ -28,17 +28,23 @@
                     <li><a href="/common/dashboard"><i class="fa fa-home"></i> Dashboard </a></li>
                     <li><a><i class="fa fa-user"></i> Account <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="/account/profile">Profile</a></li>
-                            <li><a href="/account/users">Users</a></li>
-                            <li><a href="/account/roles">Roles</a></li>
-                            <li><a href="/account/resources">Resources</a></li>
+                            <li><a href="/api/companies">companies</a></li>
+                            <li><a href="/api/jobhunters">jobhunters</a></li>
+                            <li><a href="#">admin</a></li>
                         </ul>
                     </li>
-                    <li><a><i class="fa fa-shopping-cart"></i> Shooping <span class="fa fa-chevron-down"></span></a>
+
+                    <li><a><i class="fa fa-shopping-cart"></i> job <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="/shopping/categories">Categories</a></li>
-                            <li><a href="/shopping/productes">Productes</a></li>
-                            <li><a href="/shopping/productProperties">ProductProperties</a></li>
+                            <li><a href="/api/jobs">jobs</a></li>
+                            <li><a href="/api/jobcategories">Jobcategories</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a><i class="fa fa-shopping-cart"></i> newses and blogrolls <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a href="/api/newses">newses</a></li>
+                            <li><a href="/api/blogrolls">blogrolls</a></li>
                         </ul>
                     </li>
                     <li><a><i class="fa fa-leaf"></i> Test <span class="fa fa-chevron-down"></span></a>
@@ -56,6 +62,8 @@
                             </li>
                         </ul>
                     </li>
+
+
                 </ul>
             </div>
         </div>

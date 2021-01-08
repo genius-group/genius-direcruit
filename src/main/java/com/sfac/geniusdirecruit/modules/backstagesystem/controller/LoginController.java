@@ -1,31 +1,42 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.controller;
 
-
+import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/user")
 public class LoginController {
+    @Autowired
+    private UserService userService;
     /**
-     * 127.0.0.1/user/manager/login ---- get
+     * http://127.0.0.1:8080/user/login ---- get
      */
-    @GetMapping("/manager/login")
+    @RequestMapping("/login")
     public String loginPage(ModelMap modelMap) {
-        modelMap.put("template", "login");
-        return "managerIndexSimple";
+        modelMap.put("template", "backstagesystem/login");
+        return "/common/managerIndexSimple";
     }
 
     /**
-     * 127.0.0.1/user/manager/register ---- get
+     * http://127.0.0.1:8080/user/register ---- get
      */
-    @GetMapping("/manager/register")
+    @RequestMapping("/register")
     public String registerPage(ModelMap modelMap) {
-        modelMap.put("template", "account/register");
-        return "managerIndexSimple";
+        modelMap.put("template", "backstagesystem/register");
+        return "/common/managerIndexSimple";
     }
 
+    @RequestMapping("/index")
+    public String index() {
+        return "common/managerIndex";
+    }
+    @RequestMapping("/logout")
+    public String tmallLogOut(ModelMap modelMap) {
+//        userService.logout();
+        return "redirect:/user/login";
+    }
 }

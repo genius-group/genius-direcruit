@@ -1,9 +1,9 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.service;
 
 import com.github.pagehelper.PageInfo;
+import com.sfac.geniusdirecruit.common.entity.ResultEntity;
+import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
-import com.sfac.geniusdirecruit.modules.common.entity.ResultEntity;
-import com.sfac.geniusdirecruit.modules.common.entity.SearchBean;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,4 +28,6 @@ public interface UserService {
     ResultEntity<Object> deleteUserByUserId(Integer userId);
 
     HashMap<Object, String> loginIn(User user);
+
+    void logout();
 }

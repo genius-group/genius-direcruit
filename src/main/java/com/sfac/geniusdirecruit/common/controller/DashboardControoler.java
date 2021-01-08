@@ -17,9 +17,9 @@ public class DashboardControoler {
     /**
      * 127.0.0.1/common/dashboard ---- get
      */
-    @GetMapping("/dashboard")
+    @RequestMapping("/dashboard")
     public String dashboardPage(ModelMap modelMap) {
         modelMap.put("template", "common/dashboard");
-        return "managerIndex";
+        return "common/managerIndex";
     }
 }

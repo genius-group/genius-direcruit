@@ -1,11 +1,10 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.sfac.geniusdirecruit.common.entity.ResultEntity;
+import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.JobCategory;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.JobCategoryService;
-import com.sfac.geniusdirecruit.modules.common.entity.ResultEntity;
-import com.sfac.geniusdirecruit.modules.common.entity.SearchBean;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

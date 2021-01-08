@@ -2,6 +2,8 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sfac.geniusdirecruit.common.entity.ResultEntity;
+import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.CompanyDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobhunterDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.UserDao;
@@ -11,8 +13,9 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Jobhunter;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.UserRole;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
-import com.sfac.geniusdirecruit.modules.common.entity.ResultEntity;
-import com.sfac.geniusdirecruit.modules.common.entity.SearchBean;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -108,5 +111,13 @@ public class UserServiceImpl implements UserService {
             }
         }
         return map;
+    }
+
+    @Override
+    public void logout() {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        Session session = subject.getSession();
+        session.removeAttribute("userId");
     }
 }

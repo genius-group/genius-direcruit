@@ -1,8 +1,8 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 
+import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Job;
-import com.sfac.geniusdirecruit.modules.common.entity.ResultEntity;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
