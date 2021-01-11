@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 /**
@@ -65,16 +66,12 @@ public class TestController {
         return "common/managerIndex";
     }
 
-    @GetMapping("/blogrolls")
-    public String biogrolls(ModelMap modelMap){
-        modelMap.put("template", "backstagesystem/blogroll/blogrolls");
-        return "common/managerIndex";
-    }
+    @GetMapping("/emailSend")
+    @ResponseBody
+    public HashMap<String,Object> emailSend(@RequestParam String email, HttpServletRequest request){
 
-    @GetMapping("/newses")
-    public String newses(ModelMap modelMap){
-        modelMap.put("template", "backstagesystem/news/newses");
-        return "common/managerIndex";
+
+        return userService.sendCode(email,request);
     }
 
 }

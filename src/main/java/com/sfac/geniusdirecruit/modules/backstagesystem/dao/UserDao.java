@@ -54,7 +54,7 @@ public interface UserDao {
     @Delete("delete from user where user_id = #{userId}")
     void deleteUserByUserId(Integer userId);
 
-    @Select("select * from user where user_name = #{userName}")
+    @Select("select * from user where user_name = #{userName} or tel = #{userName}")
     User selectUserByUserName(String userName);
 
 
@@ -71,4 +71,20 @@ public interface UserDao {
     @Insert("insert into user (user_name,user_pwd,create_time,tel,state) values (#{userName},#{userPwd},#{createTime},#{tel},#{state})")
     @Options(useGeneratedKeys = true, keyProperty = "userId",keyColumn = "user_id")
     void insertRegisterUser(User user_db);
+
+    @Select("SELECT\n" +
+            "jobhunter.job_hunter_id,\n" +
+            "jobhunter.user_id,\n" +
+            "jobhunter.job_hunter_name,\n" +
+            "jobhunter.sex,\n" +
+            "jobhunter.birth,\n" +
+            "jobhunter.photo,\n" +
+            "jobhunter.educate,\n" +
+            "jobhunter.email,\n" +
+            "jobhunter.address\n" +
+            "FROM\n" +
+            "`user`\n" +
+            "INNER JOIN jobhunter ON `user`.user_id = jobhunter.user_id\n" +
+            "where email = #{email}")
+    User selectUserByEmail(String email);
 }

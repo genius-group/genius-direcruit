@@ -5,6 +5,7 @@ import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,4 +48,11 @@ public interface UserService {
     //判断注册用户是否存在，根据输入电话
     boolean selectUserByTel(String tel);
 
+
+
+    //新增注册后的用户，那么就把注册的电话号码送入数据库
+//    void insertRegisterUserTel(String tel);
+
+
+    HashMap<String, Object> sendCode(String email, HttpServletRequest request);
 }

@@ -2,6 +2,7 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sfac.geniusdirecruit.common.utile.EmailSend;
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.common.utile.MD5Util;
@@ -19,13 +20,18 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.*;
 
 /**
  * @Author: yzs
@@ -64,20 +70,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public ResultEntity<User> insertUser(User user) {
-        User userTemp=userDao.selectUserByUserName(user.getUserName());
-        if (userTemp != null && userTemp.getUserId() != user.getUserId()) {
-                return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
-                        "User name is repeat.",user);
-        }
-
-            user.setUserPwd(MD5Util.getMD5(user.getUserPwd()));
-            user.setCreateTime(LocalDateTime.now());
-            userDao.insertUser(user);
-            // 管理员编辑用户信息时，只修改用户角色
-            return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
-                "register success", user);
-
-}
+        userDao.insertUser(user);
+        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                "insert success",user);
+    }
 
     @Override
     public User getUserById(int userId) {
@@ -215,7 +211,6 @@ public class UserServiceImpl implements UserService {
         } else {
             return true;
         }
-
     }
 
 
