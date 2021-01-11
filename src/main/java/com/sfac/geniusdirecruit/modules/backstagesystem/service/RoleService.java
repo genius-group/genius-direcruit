@@ -1,9 +1,10 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.service;
 
 import com.github.pagehelper.PageInfo;
+import com.sfac.geniusdirecruit.common.entity.ResultEntity;
+import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Role;
-import com.sfac.geniusdirecruit.modules.common.entity.ResultEntity;
-import com.sfac.geniusdirecruit.modules.common.entity.SearchBean;
+
 
 import java.util.List;
 
@@ -25,4 +26,5 @@ public interface RoleService {
     ResultEntity<Role> editRole(Role role);
 
     ResultEntity<Object> deleteRoleByRoleId(Integer roleId);
+    Role selectRoleByUserId(Integer userId);
 }

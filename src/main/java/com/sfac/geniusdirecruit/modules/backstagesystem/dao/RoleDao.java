@@ -1,7 +1,7 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 
+import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Role;
-import com.sfac.geniusdirecruit.modules.common.entity.SearchBean;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -49,4 +49,7 @@ public interface RoleDao {
 
     @Delete("delete from role where role_id = #{roleId}")
     void deleteRoleByRoleId(Integer roleId);
+
+    @Select("select * from role r,user_role ur where r.role_id=ur.role_id and user_id=#{userId}")
+    Role selectRoleByUserId(Integer userId);
 }

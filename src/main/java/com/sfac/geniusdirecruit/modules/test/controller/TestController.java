@@ -4,6 +4,7 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,6 +59,11 @@ public class TestController {
     @RequestMapping("/index")
     public String index(){
         return "frontdesk/index";
+    }
+
+    @RequestMapping("/managerIndex")
+    public String managerIndex(){
+        return "common/managerIndex";
     }
 
     @GetMapping("/emailSend")

@@ -3,6 +3,9 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.utile.EmailSend;
+import com.sfac.geniusdirecruit.common.entity.ResultEntity;
+import com.sfac.geniusdirecruit.common.entity.SearchBean;
+import com.sfac.geniusdirecruit.common.utile.MD5Util;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.CompanyDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobhunterDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.UserDao;
@@ -12,8 +15,10 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Jobhunter;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.UserRole;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
-import com.sfac.geniusdirecruit.modules.common.entity.ResultEntity;
-import com.sfac.geniusdirecruit.modules.common.entity.SearchBean;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
@@ -31,6 +36,9 @@ import java.util.*;
  */
 @Service
 public class UserServiceImpl implements UserService {
+
+
+
     @Autowired
     private UserDao userDao;
     @Autowired
@@ -137,4 +145,98 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public ResultEntity<User> login(User user) {
+        try {
+            Subject subject = SecurityUtils.getSubject();
+
+            UsernamePasswordToken usernamePasswordToken =
+                    new UsernamePasswordToken(user.getUserName(), MD5Util.getMD5(user.getUserPwd()));
+//			usernamePasswordToken.setRememberMe(user.getRememberMe());
+
+            subject.login(usernamePasswordToken);
+            subject.checkRoles();
+
+            Session session = subject.getSession();
+            User userTemp = (User) subject.getPrincipal();
+            session.setAttribute("userId", userTemp.getUserId());
+            session.setAttribute("userName", userTemp.getUserName());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultEntity<User>(ResultEntity.ResultStatus.SUCCESS.status, "User name or password error.");
+        }
+
+        return new ResultEntity<User>(ResultEntity.ResultStatus.SUCCESS.status, "Login success.", user);
+    }
+
+    @Override
+    public User selectUserByUserName(String userName) {
+        return userDao.selectUserByUserName(userName);
+    }
+
+
+    @Override
+    public void logout() {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        Session session = subject.getSession();
+        session.removeAttribute("userId");
+    }
+
+    //判断注册用户名是否唯一
+    @Override
+    public boolean isUserExist(String userName) {
+        if (userDao.findUsersByUsername(userName) == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    //新增注册后的用户
+    @Override
+    @Transactional
+    public void insertRegisterUser(User user) {
+
+
+        User user_db = new User();
+        user_db.setUserName(user.getUserName());
+        user_db.setUserPwd(user.getUserPwd());
+        user_db.setCreateTime(user.getCreateTime());
+        user_db.setTel(user.getTel());
+        user_db .setState(1);
+
+        userDao.insertRegisterUser(user_db);
+
+
+        //操作中间表
+        UserRole userRole = new UserRole();
+        userRole.setRoleId(2);
+        userRole.setUserId(user_db.getUserId());
+
+        userRoleDao.insertRegisterUser(userRole);
+
+
+    }
+
+
+
+    //判断注册用户是否存在，根据输入电话
+    @Override
+    public boolean selectUserByTel(String tel) {
+
+        if (userDao.findUsersByTel(tel) == null) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+
+
+
 }
+
+

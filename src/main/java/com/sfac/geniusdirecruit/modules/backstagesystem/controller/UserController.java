@@ -1,10 +1,10 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.sfac.geniusdirecruit.common.entity.ResultEntity;
+import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
-import com.sfac.geniusdirecruit.modules.common.entity.ResultEntity;
-import com.sfac.geniusdirecruit.modules.common.entity.SearchBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,4 +79,11 @@ public class UserController {
     public ResultEntity<Object> deleteUserByUserId(@PathVariable Integer userId){
         return userService.deleteUserByUserId(userId);
     }
+    // http://127.0.0.1:8080/api/login---------post
+    @PostMapping(value = "/login", consumes = "application/json")
+    public ResultEntity<User> login(@RequestBody User user) {
+        return userService.login(user);
+    }
+
+
 }

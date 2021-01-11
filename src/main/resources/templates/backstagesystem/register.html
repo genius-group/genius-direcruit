@@ -2,36 +2,83 @@
     <div id="register" class="animate form">
         <section class="login_content">
             <form>
-                <h1>牛人招聘系统登录</h1>
+                <img src="/frontdesk/images/fav.svg" alt="..." class="img-circle mb-lg-3">
+                <h1>牛人招聘系统后台注册</h1>
                 <div>
-                    <input type="text" class="form-control" placeholder="userName" required="" />
+                    <input type="text" class="form-control" placeholder="请输入注册名" required="" />
                 </div>
                 <div>
-                    <input type="email" class="form-control" placeholder="email" required="" />
+                    <input type="tel" class="form-control" placeholder="请输入手机号" required="" />
+                </div>
+
+                <div class="form-group" style="float: left">
+                    <input type="text" style="width: 200px;display: inline-block" class="form-control" id="inputPassword" placeholder="验证码" >
+
+                    <div id="send" class="text-right" style="float: right;padding-left: 30px">
+                        <button type="button" class="btn btn-primary mb-2" onclick="sendSms()" >发送验证码</button>
+
+                    </div>
+
                 </div>
                 <div>
-                    <input type="password" class="form-control" placeholder="userPwd" required="" />
+                    <input type="password" class="form-control" placeholder="请输入密码" required="" />
+                    <input type="password" class="form-control" placeholder="确认密码" required="" />
                 </div>
                 <div>
-                    <a class="btn btn-default submit" href="javascript:void(0);">登录</a>
+                    <a class="btn btn-default submit" href="javascript:void(0);">Submit</a>
                 </div>
 
                 <div class="clearfix"></div>
 
                 <div class="separator">
                     <p class="change_link">已有账户 ?
-                        <a href="/manager/login" class="to_register"> 登录 </a>
+                        <a href="/user/login" class="to_register"> 登录 </a>
                     </p>
 
                     <div class="clearfix"></div>
                     <br />
 
                     <div>
-                        <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
-                        <p>©2016 All Rights Reserved.</p>
+                        <h1><i class="fa fa-paw"></i> 找工作，上牛人!</h1>
+                        <p>©2021 All Rights Reserved.</p>
                     </div>
+                </div>
+
+                <div style="margin-top:20px">
+                    <button id="registerBtn" class="btn btn-block redButton" type="button">注册</button>
                 </div>
             </form>
         </section>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function() {
+        $("#registerBtn").bind("click", function() {
+            register();
+        });
+    });
+
+    function register() {
+        var user = {};
+        user.userName = $("#userName").val();
+        user.password = $("#password").val();
+
+        $.ajax({
+            url : "/api/user",
+            type : "post",
+            contentType: "application/json",
+            data : JSON.stringify(user),
+            success : function (data) {
+                if (data.status == 200) {
+                    location.href = "/api/login";
+                } else {
+                    layer.msg(data.message, {icon: 0});
+                }
+            },
+            error : function (data) {
+                layer.msg(data.responseText, {icon: 0});
+            }
+        });
+    }
+</script>

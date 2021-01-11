@@ -1,7 +1,7 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 
+import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Company;
-import com.sfac.geniusdirecruit.modules.common.entity.SearchBean;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

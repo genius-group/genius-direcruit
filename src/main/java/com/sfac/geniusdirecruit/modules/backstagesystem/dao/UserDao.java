@@ -1,7 +1,7 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 
+import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
-import com.sfac.geniusdirecruit.modules.common.entity.SearchBean;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -56,6 +56,21 @@ public interface UserDao {
 
     @Select("select * from user where user_name = #{userName} or tel = #{userName}")
     User selectUserByUserName(String userName);
+
+
+    //通过用户名查找用户
+    @Select("select * from user where user_name = #{userName}")
+    User findUsersByUsername(String userName);
+
+    //通过电话查找用户
+    @Select("select * from user where tel = #{tel}")
+    User findUsersByTel(String tel);
+
+
+    //新增注册后的用户
+    @Insert("insert into user (user_name,user_pwd,create_time,tel,state) values (#{userName},#{userPwd},#{createTime},#{tel},#{state})")
+    @Options(useGeneratedKeys = true, keyProperty = "userId",keyColumn = "user_id")
+    void insertRegisterUser(User user_db);
 
     @Select("SELECT\n" +
             "jobhunter.job_hunter_id,\n" +

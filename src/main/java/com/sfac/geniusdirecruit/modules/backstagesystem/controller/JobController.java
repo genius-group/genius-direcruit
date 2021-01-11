@@ -1,14 +1,12 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Job;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.JobService;
-import com.sfac.geniusdirecruit.modules.common.entity.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.xml.ws.Action;
 import java.util.List;
 
 /**
@@ -46,7 +44,10 @@ public class JobController {
     @PostMapping(value = "/jobs", consumes = "application/json")
     public PageInfo<Job> getJobBySearchBean(
             @RequestBody SearchBean searchBean) {
-        return jobService.getJobBySearchBean(searchBean);
+        System.err.println(123456789);
+        PageInfo<Job> jobBySearchBean = jobService.getJobBySearchBean(searchBean);
+        System.err.println(jobBySearchBean);
+        return jobBySearchBean;
     }
     //编辑  http://127.0.0.1:8080/api/job
     @PutMapping(value = "/job", consumes = "application/json")
@@ -54,9 +55,9 @@ public class JobController {
         return jobService.updateJob(job);
     }
 
-    //删除news http://127.0.0.1:8080/api/job/1
+    //删除 http://127.0.0.1:8080/api/job/1
     @DeleteMapping("/job/{jobId}")
-    public ResultEntity<Object> deleteJobById(@PathVariable("newId") Integer jobId) {
+    public ResultEntity<Object> deleteJobById(@PathVariable("jobId") Integer jobId) {
         return jobService.deleteJobById(jobId);
     }
 
