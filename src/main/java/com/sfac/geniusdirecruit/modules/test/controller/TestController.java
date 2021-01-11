@@ -4,6 +4,7 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -57,6 +58,23 @@ public class TestController {
     @RequestMapping("/index")
     public String index(){
         return "frontdesk/index";
+    }
+
+    @RequestMapping("/managerIndex")
+    public String managerIndex(){
+        return "common/managerIndex";
+    }
+
+    @GetMapping("/blogrolls")
+    public String biogrolls(ModelMap modelMap){
+        modelMap.put("template", "backstagesystem/blogroll/blogrolls");
+        return "common/managerIndex";
+    }
+
+    @GetMapping("/newses")
+    public String newses(ModelMap modelMap){
+        modelMap.put("template", "backstagesystem/news/newses");
+        return "common/managerIndex";
     }
 
 }

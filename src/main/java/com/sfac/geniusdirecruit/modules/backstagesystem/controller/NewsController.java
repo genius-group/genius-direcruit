@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,6 +32,13 @@ public class NewsController {
     //{"title":"习大大","content":"ygfeueuigvdu","createTime":"2020-01-05 14:33:34"}
     @PostMapping(value = "/news", consumes = "application/json")
     public ResultEntity<News> insertNews(@RequestBody News news) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        String format = simpleDateFormat.format(new Date());
+
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        LocalDateTime ldt = LocalDateTime.parse(format,df);
+        news.setCreateTime(ldt);
         return newsService.insertNews(news);
     }
 

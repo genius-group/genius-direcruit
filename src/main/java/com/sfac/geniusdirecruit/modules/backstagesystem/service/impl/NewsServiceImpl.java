@@ -61,7 +61,7 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public ResultEntity<News> updateNews(News news) {
         News temp = newsDao.selectNewsByTitle(news.getTitle());
-        if (temp == null) {
+        if (temp == null||temp.getNewId()==news.getNewId()) {
             newsDao.updateNews(news);
             return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                     "Update success", news);
