@@ -20,7 +20,7 @@ import java.util.List;
 public interface UserService {
     List<User> selectAllUser();
 
-    ResultEntity<User> insertUser(UserVo userVo);
+    ResultEntity<User> insertUser(UserVo userVo,HttpServletRequest request);
 
     User getUserById(int userId);
 

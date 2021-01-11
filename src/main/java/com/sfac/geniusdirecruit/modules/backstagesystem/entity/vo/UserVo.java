@@ -32,5 +32,5 @@ public class UserVo {
     @Transient
     private List<Role> roles;
 
-    private int code;
+    private String code;
 }

@@ -9,6 +9,7 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -49,9 +50,9 @@ public class UserController {
      *{"userName":"lisi","userPwd":"444","createTime":"2021-01-05 12:30:00","tel":"18398103075","state":1}
      */
     @PostMapping(value = "/user",consumes = "application/json")
-    public ResultEntity<User> insertUser(@RequestBody UserVo userVo) {
+    public ResultEntity<User> insertUser(@RequestBody UserVo userVo, HttpServletRequest request) {
         System.err.println(userVo);
-        return userService.insertUser(userVo);
+        return userService.insertUser(userVo,request);
     }
 
     /**
