@@ -44,7 +44,10 @@ public class JobController {
     @PostMapping(value = "/jobs", consumes = "application/json")
     public PageInfo<Job> getJobBySearchBean(
             @RequestBody SearchBean searchBean) {
-        return jobService.getJobBySearchBean(searchBean);
+        System.err.println(123456789);
+        PageInfo<Job> jobBySearchBean = jobService.getJobBySearchBean(searchBean);
+        System.err.println(jobBySearchBean);
+        return jobBySearchBean;
     }
     //编辑  http://127.0.0.1:8080/api/job
     @PutMapping(value = "/job", consumes = "application/json")
@@ -52,9 +55,9 @@ public class JobController {
         return jobService.updateJob(job);
     }
 
-    //删除news http://127.0.0.1:8080/api/job/1
+    //删除 http://127.0.0.1:8080/api/job/1
     @DeleteMapping("/job/{jobId}")
-    public ResultEntity<Object> deleteJobById(@PathVariable("newId") Integer jobId) {
+    public ResultEntity<Object> deleteJobById(@PathVariable("jobId") Integer jobId) {
         return jobService.deleteJobById(jobId);
     }
 

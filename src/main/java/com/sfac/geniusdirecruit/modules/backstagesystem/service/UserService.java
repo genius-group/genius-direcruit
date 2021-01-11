@@ -30,4 +30,8 @@ public interface UserService {
     HashMap<Object, String> loginIn(User user);
 
     void logout();
+
+    ResultEntity<User> login(User user);
+
+    User selectUserByUserName(String userName);
 }

@@ -9,7 +9,6 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Job;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -61,7 +60,7 @@ public class JobServiceImpl implements JobService {
 
         Job temp = jobDao.selectJobByJobName(job.getJobName());
         if (temp == null) {
-            jobDao.updateJob();
+            jobDao.updateJob(job);
             return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                     "update success", job);
         }
@@ -71,7 +70,9 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public ResultEntity<Object> deleteJobById(Integer jobId) {
-        return jobDao.deleteJobById();
+       jobDao.deleteJobById(jobId);
+        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                "Delete success");
     }
 
 }

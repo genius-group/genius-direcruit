@@ -56,4 +56,5 @@ public interface UserDao {
 
     @Select("select * from user where user_name = #{userName}")
     User selectUserByUserName(String userName);
+
 }

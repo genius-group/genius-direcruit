@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * @Description DashboardControoler
+ * @Description DashboardController
  * @Author huangheyi
  * @Date 2020/01/07 11:21
  */

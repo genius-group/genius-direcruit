@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
+import com.sfac.geniusdirecruit.common.utile.MD5Util;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.CompanyDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobhunterDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.UserDao;
@@ -14,6 +15,7 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.UserRole;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,6 +114,37 @@ public class UserServiceImpl implements UserService {
         }
         return map;
     }
+
+    @Override
+    public ResultEntity<User> login(User user) {
+        try {
+            Subject subject = SecurityUtils.getSubject();
+
+            UsernamePasswordToken usernamePasswordToken =
+                    new UsernamePasswordToken(user.getUserName(), MD5Util.getMD5(user.getUserPwd()));
+//			usernamePasswordToken.setRememberMe(user.getRememberMe());
+
+            subject.login(usernamePasswordToken);
+            subject.checkRoles();
+
+            Session session = subject.getSession();
+            User userTemp = (User) subject.getPrincipal();
+            session.setAttribute("userId", userTemp.getUserId());
+            session.setAttribute("userName", userTemp.getUserName());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultEntity<User>(ResultEntity.ResultStatus.SUCCESS.status, "User name or password error.");
+        }
+
+        return new ResultEntity<User>(ResultEntity.ResultStatus.SUCCESS.status, "Login success.", user);
+    }
+
+    @Override
+    public User selectUserByUserName(String userName) {
+        return userDao.selectUserByUserName(userName);
+    }
+
 
     @Override
     public void logout() {

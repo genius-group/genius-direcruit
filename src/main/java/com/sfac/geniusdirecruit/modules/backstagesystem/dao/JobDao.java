@@ -20,7 +20,7 @@ public interface JobDao {
     //添加job
     @Insert("Insert into job (job_category_id,job_name,description,pay,numbers,degree,expiry_date,area,address,view_count,release_time) " +
             "values (#{jobCategoryId},#{jobName},#{description},#{pay},#{numbers},#{degree},#{expiryDate},#{area},#{address},#{viewCount},#{releaseTime})")
-    ResultEntity<Job> insertJob(Job job);
+    void insertJob(Job job);
 
     //根据jobName查询job
     @Select("select* from job where job_name=#{jobName}")
@@ -53,10 +53,10 @@ public interface JobDao {
             + "</script>")
     List<Job> getJobBySearchBean(SearchBean searchBean);
     //修改job
-    @Update("update job set job_ategory_id=#{jobCategoryId},jobName=#{jobName},description=#{description},pay=#{pay},numbers=#{numbers},degree=#{degree},expiryDate=#{expiryDate},area=#{area},address=#{address},viewCount=#{viewCount},releaseTime=#{releaseTime} where job_id = #{jobId}")
-    ResultEntity<Job> updateJob();
+    @Update("update job set job_category_id=#{jobCategoryId},job_name=#{jobName},description=#{description},pay=#{pay},numbers=#{numbers},degree=#{degree},expiry_date=#{expiryDate},area=#{area},address=#{address},view_count=#{viewCount},release_time=#{releaseTime} where job_id = #{jobId}")
+    void updateJob(Job job);
 
     //删除job
     @Delete("delete from job where job_id = #{jobId}")
-    ResultEntity<Object> deleteJobById();
+    void deleteJobById(int jobId);
 }
