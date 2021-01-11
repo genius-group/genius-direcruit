@@ -14,6 +14,7 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Company;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Jobhunter;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.UserRole;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.UserVo;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -42,8 +43,6 @@ import java.util.*;
 @Service
 public class UserServiceImpl implements UserService {
 
-
-
     @Autowired
     private UserDao userDao;
     @Autowired
@@ -69,10 +68,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public ResultEntity<User> insertUser(User user) {
-        userDao.insertUser(user);
-        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
-                "insert success",user);
+    public ResultEntity<User> insertUser(UserVo userVo) {
+        User user = new User();
+        User userTemp=userDao.selectUserByUserName(user.getUserName());
+        if (userTemp != null && userTemp.getUserId() != user.getUserId()) {
+            return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                    "User name is repeat.",user);
+        }
+            user.setUserPwd(MD5Util.getMD5(user.getUserPwd()));
+            user.setCreateTime(LocalDateTime.now());
+            userDao.insertUser(user);
+            // 管理员编辑用户信息时，只修改用户角色
+            return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                "register success", user);
     }
 
     @Override
@@ -213,7 +221,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-
+    @Override
+    public HashMap<String, Object> sendCode(String email, HttpServletRequest request) {
+        return null;
+    }
 
 
 }

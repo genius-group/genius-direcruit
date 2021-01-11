@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.UserVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ import java.util.List;
 public interface UserService {
     List<User> selectAllUser();
 
-    ResultEntity<User> insertUser(User user);
+    ResultEntity<User> insertUser(UserVo userVo);
 
     User getUserById(int userId);
 

@@ -51,9 +51,7 @@ public class UserController {
     @PostMapping(value = "/user",consumes = "application/json")
     public ResultEntity<User> insertUser(@RequestBody UserVo userVo) {
         System.err.println(userVo);
-        User user = new User();
-
-        return userService.insertUser(user);
+        return userService.insertUser(userVo);
     }
 
     /**
