@@ -34,6 +34,9 @@ import java.util.Optional;
  */
 @Service
 public class UserServiceImpl implements UserService {
+
+
+
     @Autowired
     private UserDao userDao;
     @Autowired
@@ -153,4 +156,58 @@ public class UserServiceImpl implements UserService {
         Session session = subject.getSession();
         session.removeAttribute("userId");
     }
+
+    //判断注册用户名是否唯一
+    @Override
+    public boolean isUserExist(String userName) {
+        if (userDao.findUsersByUsername(userName) == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    //新增注册后的用户
+    @Override
+    @Transactional
+    public void insertRegisterUser(User user) {
+
+
+        User user_db = new User();
+        user_db.setUserName(user.getUserName());
+        user_db.setUserPwd(user.getUserPwd());
+        user_db.setCreateTime(user.getCreateTime());
+        user_db.setTel(user.getTel());
+        user_db .setState(1);
+
+        userDao.insertRegisterUser(user_db);
+
+
+        //操作中间表
+        UserRole userRole = new UserRole();
+        userRole.setRoleId(2);
+        userRole.setUserId(user_db.getUserId());
+
+        userRoleDao.insertRegisterUser(userRole);
+
+
+    }
+
+
+
+    //判断注册用户是否存在，根据输入电话
+    @Override
+    public boolean selectUserByTel(String tel) {
+
+        if (userDao.findUsersByTel(tel) == null) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+
+
+
 }

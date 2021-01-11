@@ -49,4 +49,7 @@ public interface RoleDao {
 
     @Delete("delete from role where role_id = #{roleId}")
     void deleteRoleByRoleId(Integer roleId);
+
+    @Select("select * from role r,user_role ur where r.role_id=ur.role_id and user_id=#{userId}")
+    Role selectRoleByUserId(Integer userId);
 }

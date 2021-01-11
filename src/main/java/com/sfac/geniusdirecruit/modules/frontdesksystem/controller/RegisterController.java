@@ -4,16 +4,16 @@ package com.sfac.geniusdirecruit.modules.frontdesksystem.controller;/*
  * @author: WJM
  * @date:2021/1/6 14:05
  */
-
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.utile.SmsSend;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.UserRole;
+import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -24,19 +24,83 @@ import java.util.Random;
 @RequestMapping("/frontdesk")
 public class RegisterController {
 
+
+    @Autowired
+   UserService userService;
+
+
     @Autowired
     SmsSend smsSend;
+
+/*
+*  127.0.0.1:8080/frontdesk/SubmissionPage
+* */
+
+    @RequestMapping("/SubmissionPage")
+    public String submissionPage() {
+
+        return "frontdesk/registerSubmission";
+
+    }
+
+
+//    @RequestMapping(value = "/SubmissionDo")
+//    public String submissionDo() {
+//        System.out.println("-------register.do------");
+
+//        if (userService.isUserExist(username)){
+//            model.addAttribute("msg","账号信息已存在，请重新输入！");
+//        }else{
+//
+//            userService.addUserByAll(name,sex,adress,tel,username,password);
+//            model.addAttribute("msg","新用户注册成功!");
+//        }
+//        return "login";
+//    }
+
+
+
+
+    /**
+     * 增加注册后的用户
+     * http://127.0.0.1:8080/api/user---------post
+     *{"userName":"lisi","userPwd":"444","createTime":"2021-01-05 12:30:00","tel":"18398103075","state":1}
+     */
+
+    @PostMapping(value = "/SubmissionOne",consumes = "application/json")
+    @ResponseBody
+    public HashMap<Object,String> SubmissionDo(@RequestBody User user){
+
+        HashMap<Object, String> map = new HashMap<Object, String>();
+
+        System.err.println("进来了SubmissionOne》》》》》》》》"+user);
+
+        //判断注册用户名是否唯一
+        if (userService.isUserExist(user.getUserName())){
+            map.put("info","该用户名已被注册，请重新输入");
+
+        }else{
+
+            //新增注册后的用户
+            userService.insertRegisterUser(user);
+            map.put("info","注册成功");
+        }
+
+      return map;
+    }
+
+
 
     /**
      * 127.0.0.1:8080/frontdesk/register ---- get
      *
      * http://localhost:8080/frontdesk/register----get
      */
-//    @GetMapping("/register")
+
     @RequestMapping("/register")
     public String registerPage() {
 
-//        modelMap.put("template", "account/register");
+
         return "frontdesk/register";
 
     }
@@ -44,28 +108,73 @@ public class RegisterController {
     /*
     * 127.0.0.1:8080/frontdesk/sendSms ---- get
     *"phone":tel
-    * */
+    *
+     * */
 
     //发送短信
-    @GetMapping("/sendSms/{phone}")
+//    @GetMapping("/sendSms/{phone}")
+    @RequestMapping("/sendSms")
     @ResponseBody
-    public HashMap<String,Object> sendSms(@PathVariable String phone, HttpServletRequest request){
+    public HashMap<String,Object> sendSms(String phone, HttpServletRequest request){
+
+        System.err.println("进来了sendSms》》》》》》》》"+phone);
+
+
         HashMap<String,Object> map = new HashMap<String,Object>();
-        Random rd = new Random();
-        int code = rd.nextInt(1000);
-        //发送短信
-        String info = smsSend.send(phone,code+"");
-        //判断是否成功
-        if(info.equals("OK")){
-            //存入session中
-            request.getSession().setAttribute("smsCode",code);
-            map.put("info","短信发送成功");
+//        Random rd = new Random();
+//        int code = rd.nextInt(1000);
+//        //发送短信
+//        String info = smsSend.send(phone,code+"");
+//        //判断是否成功
+//        if(info.equals("OK")){
+//            //存入session中
+//            request.getSession().setAttribute("smsCode",code);
+//            map.put("info","短信发送成功");
+//        }else{
+//            map.put("info","短信发送失败");
+//        }
+
+        request.getSession().setAttribute("smsCode",1111);
+
+
+
+        return map;
+    }
+
+
+
+    //手机短信进入
+    @RequestMapping("/smsLogin/{code}/{tel}")
+    @ResponseBody
+    public HashMap<String,Object> smsLogin(@PathVariable String code,@PathVariable String tel,HttpServletRequest request,User user){
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        String sessionCode = request.getSession().getAttribute("smsCode")+"";
+        if(code.equals(sessionCode)){
+
+            System.err.println("smsLogin>>>>>>>>>>>>>>>"+tel);
+
+            System.err.println("smsLogin>>>>>>>>>>>>>>>"+code);
+
+            //根据电话去查询用户，如果已注册，则去登录页面
+            //判断注册用户是否存在，根据输入电话
+            if (userService.selectUserByTel(tel)){
+                System.err.println("smsLogin>>>>>>>>>>>>>>>进来找打啊！！");
+                map.put("info","用户已注册，请登录");
+            }else {
+
+                //新增注册后的用户，那么就把注册的电话号码送入数据库
+//                userService.insertRegisterUserTel(tel);
+                map.put("info","登入成功");
+            }
+
+
         }else{
-            map.put("info","短信发送失败");
+            map.put("info","登入失败");
         }
 
         return map;
     }
+
 
 
 

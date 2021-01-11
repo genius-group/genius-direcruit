@@ -65,4 +65,9 @@ public class RoleServiceImpl implements RoleService {
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "Delete success");
     }
+
+    @Override
+    public Role selectRoleByUserId(Integer userId) {
+        return roleDao.selectRoleByUserId(userId);
+    }
 }
