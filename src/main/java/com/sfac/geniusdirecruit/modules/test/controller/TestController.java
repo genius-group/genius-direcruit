@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 /**
@@ -57,6 +58,14 @@ public class TestController {
     @RequestMapping("/index")
     public String index(){
         return "frontdesk/index";
+    }
+
+    @GetMapping("/emailSend")
+    @ResponseBody
+    public HashMap<String,Object> emailSend(@RequestParam String email, HttpServletRequest request){
+
+
+        return userService.sendCode(email,request);
     }
 
 }

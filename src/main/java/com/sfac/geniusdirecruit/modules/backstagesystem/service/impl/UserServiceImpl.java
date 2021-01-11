@@ -2,6 +2,7 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sfac.geniusdirecruit.common.utile.EmailSend;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.CompanyDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobhunterDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.UserDao;
@@ -14,12 +15,13 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import com.sfac.geniusdirecruit.modules.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.modules.common.entity.SearchBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @Author: yzs
@@ -37,6 +39,8 @@ public class UserServiceImpl implements UserService {
     private JobhunterDao jobhunterDao;
     @Autowired
     private UserRoleDao userRoleDao;
+    @Autowired
+    private EmailSend emailSend;
 
     @Override
     public List<User> selectAllUser() {
@@ -109,4 +113,28 @@ public class UserServiceImpl implements UserService {
         }
         return map;
     }
+
+    @Override
+    public HashMap<String, Object> sendCode(String email, HttpServletRequest request) {
+        HashMap<String,Object> map = new HashMap<String, Object>();
+        try {
+          User user = userDao.selectUserByEmail(email);
+            System.err.println(user);
+          if (user==null){
+            map.put("info","邮箱未注册，请先前往注册页面注册");
+            return map;
+            }else {
+                int code = (int)((Math.random()*9+1)*1000);
+                emailSend.send(email,"牛人直聘","您的验证码是："+code+"，请不要告诉他人");
+                request.getSession().setAttribute("code",code);
+                request.getSession().setAttribute("email",email);
+                map.put("info","邮件发送成功，请查收");
+                return map;
+          }
+        }catch (Exception e){
+            map.put("info","邮件发送失败");
+            return map;
+        }
+    }
+
 }

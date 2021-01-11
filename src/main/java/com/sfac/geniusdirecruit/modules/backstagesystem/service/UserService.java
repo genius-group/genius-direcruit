@@ -5,6 +5,7 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.modules.common.entity.SearchBean;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,4 +29,6 @@ public interface UserService {
     ResultEntity<Object> deleteUserByUserId(Integer userId);
 
     HashMap<Object, String> loginIn(User user);
+
+    HashMap<String, Object> sendCode(String email, HttpServletRequest request);
 }
