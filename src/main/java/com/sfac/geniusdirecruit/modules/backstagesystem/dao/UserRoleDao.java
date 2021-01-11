@@ -2,6 +2,7 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.UserRole;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -22,4 +23,9 @@ public interface UserRoleDao {
 
     @Delete("delete from user_role where user_id = #{userId}")
     void deleteByUserId(Integer userId);
+
+
+    //增加中间表
+    @Insert("insert into user_role(user_id,role_id) values (#{userId},#{roleId}) ")
+    void insertRegisterUser(UserRole userRole);
 }
