@@ -65,16 +65,4 @@ public class TestController {
         return "common/managerIndex";
     }
 
-    @GetMapping("/blogrolls")
-    public String biogrolls(ModelMap modelMap){
-        modelMap.put("template", "backstagesystem/blogroll/blogrolls");
-        return "common/managerIndex";
-    }
-
-    @GetMapping("/newses")
-    public String newses(ModelMap modelMap){
-        modelMap.put("template", "backstagesystem/news/newses");
-        return "common/managerIndex";
-    }
-
 }
