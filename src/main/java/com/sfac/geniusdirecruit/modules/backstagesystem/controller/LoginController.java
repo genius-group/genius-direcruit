@@ -36,7 +36,7 @@ public class LoginController {
     }
     @RequestMapping("/logout")
     public String tmallLogOut(ModelMap modelMap) {
-//        userService.logout();
+        userService.logout();
         return "redirect:/user/login";
     }
 }

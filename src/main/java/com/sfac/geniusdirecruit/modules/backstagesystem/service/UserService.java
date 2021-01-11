@@ -31,7 +31,10 @@ public interface UserService {
     HashMap<Object, String> loginIn(User user);
 
     void logout();
+	
+    ResultEntity<User> login(User user);
 
+    User selectUserByUserName(String userName);
 
     //判断注册用户名是否唯一
     boolean isUserExist(String userName);
@@ -49,4 +52,5 @@ public interface UserService {
     //新增注册后的用户，那么就把注册的电话号码送入数据库
 //    void insertRegisterUserTel(String tel);
 
+>>>>>>> 76435fe964f6dd8d9fa40064120200a68350a466
 }

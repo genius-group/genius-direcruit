@@ -79,4 +79,11 @@ public class UserController {
     public ResultEntity<Object> deleteUserByUserId(@PathVariable Integer userId){
         return userService.deleteUserByUserId(userId);
     }
+    // http://127.0.0.1:8080/api/login---------post
+    @PostMapping(value = "/login", consumes = "application/json")
+    public ResultEntity<User> login(@RequestBody User user) {
+        return userService.login(user);
+    }
+
+
 }
