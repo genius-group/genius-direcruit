@@ -21,6 +21,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -63,10 +64,20 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public ResultEntity<User> insertUser(User user) {
-        userDao.insertUser(user);
-        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
-                "insert success",user);
-    }
+        User userTemp=userDao.selectUserByUserName(user.getUserName());
+        if (userTemp != null && userTemp.getUserId() != user.getUserId()) {
+                return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                        "User name is repeat.",user);
+        }
+
+            user.setUserPwd(MD5Util.getMD5(user.getUserPwd()));
+            user.setCreateTime(LocalDateTime.now());
+            userDao.insertUser(user);
+            // 管理员编辑用户信息时，只修改用户角色
+            return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                "register success", user);
+
+}
 
     @Override
     public User getUserById(int userId) {

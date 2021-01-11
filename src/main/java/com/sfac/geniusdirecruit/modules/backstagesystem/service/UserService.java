@@ -47,10 +47,4 @@ public interface UserService {
     //判断注册用户是否存在，根据输入电话
     boolean selectUserByTel(String tel);
 
-
-
-    //新增注册后的用户，那么就把注册的电话号码送入数据库
-//    void insertRegisterUserTel(String tel);
-
->>>>>>> 76435fe964f6dd8d9fa40064120200a68350a466
 }

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.UserVo;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +49,10 @@ public class UserController {
      *{"userName":"lisi","userPwd":"444","createTime":"2021-01-05 12:30:00","tel":"18398103075","state":1}
      */
     @PostMapping(value = "/user",consumes = "application/json")
-    public ResultEntity<User> insertUser(@RequestBody User user) {
+    public ResultEntity<User> insertUser(@RequestBody UserVo userVo) {
+        System.err.println(userVo);
+        User user = new User();
+
         return userService.insertUser(user);
     }
 
