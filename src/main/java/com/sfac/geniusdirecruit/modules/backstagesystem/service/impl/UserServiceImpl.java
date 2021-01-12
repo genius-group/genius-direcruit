@@ -24,7 +24,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -61,6 +63,8 @@ public class UserServiceImpl implements UserService {
                 .orElse(Collections.emptyList()));
     }
 
+
+
     @Override
     @Transactional
     public ResultEntity<User> insertUser(UserVo userVo,HttpServletRequest request) {
@@ -92,6 +96,7 @@ public class UserServiceImpl implements UserService {
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "code is error.", user);
     }
+
     @Override
     public User getUserById(int userId) {
         return  userDao.getUserById(userId);
@@ -142,6 +147,7 @@ public class UserServiceImpl implements UserService {
         return map;
     }
 
+
     @Override
     public ResultEntity<User> login(User user) {
         try {
@@ -167,10 +173,12 @@ public class UserServiceImpl implements UserService {
         return new ResultEntity<User>(ResultEntity.ResultStatus.SUCCESS.status, "Login success.", user);
     }
 
+
     @Override
     public User selectUserByUserName(String userName) {
         return userDao.selectUserByUserName(userName);
     }
+
 
 
     @Override
@@ -191,30 +199,41 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    //新增注册后的用户
+
+    //已弃用
     @Override
     @Transactional
     public void insertRegisterUser(User user) {
 
 
-        User user_db = new User();
-        user_db.setUserName(user.getUserName());
-        user_db.setUserPwd(user.getUserPwd());
-        user_db.setCreateTime(user.getCreateTime());
-        user_db.setTel(user.getTel());
-        user_db .setState(1);
 
-        userDao.insertRegisterUser(user_db);
+        //设置时间
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        String format = simpleDateFormat.format(new Date());
+
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        LocalDateTime createTime = LocalDateTime.parse(format, df);
+        user.setCreateTime(createTime);
+
+        //设置状态
+        user.setState(1);
+        userDao.insertRegisterUser(user);
+
+        user.getRoles().stream().forEach(item -> {
+
+            UserRole userRole = new UserRole(user.getUserId(), item.getRoleId());
+            userRoleDao.insertRegisterUser(userRole);
+
+        });
 
 
-        //操作中间表
-        UserRole userRole = new UserRole();
-        userRole.setRoleId(2);
-        userRole.setUserId(user_db.getUserId());
-
-        userRoleDao.insertRegisterUser(userRole);
-
-
+        /*if (user.getRoles() != null) {
+            for(Role role : user.getRoles()) {
+                UserRole userRole = new UserRole(user.getUserId(), role.getRoleId());
+                userRoleDao.insertRegisterUser(userRole);
+            }
+        }*/
     }
 
 
@@ -251,6 +270,48 @@ public class UserServiceImpl implements UserService {
             map.put("info","邮件发送失败");
             return map;
         }
+    }
+
+
+    //求职者的注册
+    @Override
+    public HashMap<Object, String> registerStaff(User user) {
+
+        HashMap<Object, String> map = new HashMap<Object, String>();
+
+
+        User userTemp = userDao.findUsersByUsername(user.getUserName());
+
+        if (userTemp !=null) {
+            map.put("info","该用户名已被注册，请重新输入");
+        }else {
+            //设置时间
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+            String format = simpleDateFormat.format(new Date());
+
+            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            LocalDateTime createTime = LocalDateTime.parse(format, df);
+            user.setCreateTime(createTime);
+
+            //设置状态
+            user.setState(1);
+            userDao.insertRegisterUser(user);
+
+            //操作中间表
+            user.getRoles().stream().forEach(item -> {
+
+                UserRole userRole = new UserRole(user.getUserId(), item.getRoleId());
+                userRoleDao.insertRegisterUser(userRole);
+
+            });
+
+            map.put("info","注册成功");
+
+        }
+
+        return map;
+
     }
 
 

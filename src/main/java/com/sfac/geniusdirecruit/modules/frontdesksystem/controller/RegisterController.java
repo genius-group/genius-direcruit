@@ -4,15 +4,12 @@ package com.sfac.geniusdirecruit.modules.frontdesksystem.controller;/*
  * @author: WJM
  * @date:2021/1/6 14:05
  */
-import com.sfac.geniusdirecruit.common.entity.ResultEntity;
+
 import com.sfac.geniusdirecruit.common.utile.SmsSend;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
-import com.sfac.geniusdirecruit.modules.backstagesystem.entity.UserRole;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +23,7 @@ public class RegisterController {
 
 
     @Autowired
-   UserService userService;
+    UserService userService;
 
 
     @Autowired
@@ -44,32 +41,28 @@ public class RegisterController {
     }
 
 
-//    @RequestMapping(value = "/SubmissionDo")
-//    public String submissionDo() {
-//        System.out.println("-------register.do------");
 
-//        if (userService.isUserExist(username)){
-//            model.addAttribute("msg","账号信息已存在，请重新输入！");
-//        }else{
-//
-//            userService.addUserByAll(name,sex,adress,tel,username,password);
-//            model.addAttribute("msg","新用户注册成功!");
-//        }
-//        return "login";
-//    }
-
-
-
-
-    /**
-     * 增加注册后的用户
-     * http://127.0.0.1:8080/api/user---------post
-     *{"userName":"lisi","userPwd":"444","createTime":"2021-01-05 12:30:00","tel":"18398103075","state":1}
-     */
-
+    //求职者注册
     @PostMapping(value = "/SubmissionOne",consumes = "application/json")
     @ResponseBody
-    public HashMap<Object,String> SubmissionDo(@RequestBody User user){
+    public HashMap<Object,String> SubmissionTwo(@RequestBody User user){
+
+        System.err.println("SubmissionOne......................"+user);
+
+        HashMap<Object, String> map = userService.registerStaff(user);
+
+        System.err.println("SubmissionOne......................"+map);
+
+        return map;
+    }
+
+
+
+
+    //已弃用
+    @PostMapping(value = "/SubmissionTwo",consumes = "application/json")
+    @ResponseBody
+    public HashMap<Object,String> SubmissionOne(@RequestBody User user){
 
         HashMap<Object, String> map = new HashMap<Object, String>();
 
@@ -111,7 +104,8 @@ public class RegisterController {
     *
      * */
 
-    //发送短信
+
+    //发送短信,待改写
 //    @GetMapping("/sendSms/{phone}")
     @RequestMapping("/sendSms")
     @ResponseBody
@@ -121,20 +115,20 @@ public class RegisterController {
 
 
         HashMap<String,Object> map = new HashMap<String,Object>();
-//        Random rd = new Random();
-//        int code = rd.nextInt(1000);
-//        //发送短信
-//        String info = smsSend.send(phone,code+"");
-//        //判断是否成功
-//        if(info.equals("OK")){
-//            //存入session中
-//            request.getSession().setAttribute("smsCode",code);
-//            map.put("info","短信发送成功");
-//        }else{
-//            map.put("info","短信发送失败");
-//        }
+        Random rd = new Random();
+        int code = rd.nextInt(1000);
+        //发送短信
+        String info = smsSend.send(phone,code+"");
+        //判断是否成功
+        if(info.equals("OK")){
+            //存入session中
+            request.getSession().setAttribute("smsCode",code);
+            map.put("info","短信发送成功");
+        }else{
+            map.put("info","短信发送失败");
+        }
 
-        request.getSession().setAttribute("smsCode",1111);
+//        request.getSession().setAttribute("smsCode",1111);
 
 
 
@@ -143,12 +137,13 @@ public class RegisterController {
 
 
 
-    //手机短信进入
+    //手机短信进入，待改写
     @RequestMapping("/smsLogin/{code}/{tel}")
     @ResponseBody
-    public HashMap<String,Object> smsLogin(@PathVariable String code,@PathVariable String tel,HttpServletRequest request,User user){
+    public HashMap<String,Object> smsLogin(@PathVariable String code, @PathVariable String tel, HttpServletRequest request, User user){
         HashMap<String,Object> map = new HashMap<String,Object>();
         String sessionCode = request.getSession().getAttribute("smsCode")+"";
+
         if(code.equals(sessionCode)){
 
             System.err.println("smsLogin>>>>>>>>>>>>>>>"+tel);
@@ -157,6 +152,7 @@ public class RegisterController {
 
             //根据电话去查询用户，如果已注册，则去登录页面
             //判断注册用户是否存在，根据输入电话
+
             if (userService.selectUserByTel(tel)){
                 System.err.println("smsLogin>>>>>>>>>>>>>>>进来找打啊！！");
                 map.put("info","用户已注册，请登录");

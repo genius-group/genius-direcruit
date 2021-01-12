@@ -56,4 +56,8 @@ public interface UserService {
 
 
     HashMap<String, Object> sendCode(String email, HttpServletRequest request);
+
+    //求职者注册
+    HashMap<Object, String> registerStaff(User user);
+
 }
