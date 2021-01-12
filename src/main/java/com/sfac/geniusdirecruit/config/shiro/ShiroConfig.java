@@ -31,21 +31,21 @@ public class ShiroConfig {
 	@Autowired
 	private MyRealm myRealm;
 	
-	@Bean
-	public DefaultWebSecurityManager securityManager() {
-		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-		securityManager.setRealm(myRealm);
-		securityManager.setRememberMeManager(rememberMeManager());
-		return securityManager;
-	}
-	
-
-	@Bean
-	public ShiroFilterFactoryBean shiroFilterFactoryBean() {
-		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-		shiroFilterFactoryBean.setSecurityManager(securityManager());
-		shiroFilterFactoryBean.setLoginUrl("/user/login");
-		shiroFilterFactoryBean.setSuccessUrl("/common/dashboard");
+//	@Bean
+//	public DefaultWebSecurityManager securityManager() {
+//		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+//		securityManager.setRealm(myRealm);
+//		securityManager.setRememberMeManager(rememberMeManager());
+//		return securityManager;
+//	}
+//
+//
+//	@Bean
+//	public ShiroFilterFactoryBean shiroFilterFactoryBean() {
+//		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+//		shiroFilterFactoryBean.setSecurityManager(securityManager());
+//		shiroFilterFactoryBean.setLoginUrl("/user/login");
+//		shiroFilterFactoryBean.setSuccessUrl("/common/dashboard");
 		
 		// 自定义过滤器
 		/*FormAuthenticationFilter managerAuthc = new FormAuthenticationFilter();
@@ -68,7 +68,7 @@ public class ShiroConfig {
 		shiroFilterFactoryBean.setFilters(filters);*/
 		
 		// 设置访问规则
-		Map<String, String> map = new LinkedHashMap<String, String>();
+//		Map<String, String> map = new LinkedHashMap<String, String>();
 		// 匿名访问规则
 		// ---- 静态资源文件 ----
 		/*map.put("/manager/css/**", "anon");
@@ -102,54 +102,54 @@ public class ShiroConfig {
 		map.put("/account/**", "managerUser");
 		map.put("/shopping/**", "managerUser");*/
 		
-		shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
-		
-		return shiroFilterFactoryBean;
-	}
-	
-
-	@Bean
-	public ShiroDialect shiroDialect(){
-		return new ShiroDialect();
-	}
-
-	@Bean
-	@DependsOn({"lifecycleBeanPostProcessor"})
-	public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator(){
-		DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
-		advisorAutoProxyCreator.setProxyTargetClass(true);
-		return advisorAutoProxyCreator;
-	}
-
-
-	@Bean
-	public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(){
-		AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-		authorizationAttributeSourceAdvisor.setSecurityManager(securityManager());
-		return authorizationAttributeSourceAdvisor;
-	}
-
-	@Bean
-	public SimpleCookie rememberMeCookie() {
-	    //这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
-	    SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
-	    //如果httyOnly设置为true，则客户端不会暴露给客户端脚本代码，
-	    //使用HttpOnly cookie有助于减少某些类型的跨站点脚本攻击；
-	    simpleCookie.setHttpOnly(true);
-	    //记住我cookie生效时间,单位是秒
-	    simpleCookie.setMaxAge(1 * 24 * 60 * 60);
-	    return simpleCookie;
-	}
-	
-
-	@Bean
-	public CookieRememberMeManager rememberMeManager() {
-	    CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
-	    cookieRememberMeManager.setCookie(rememberMeCookie());
-	    byte[] cipherKey = Base64.decode("wGiHplamyXlVB11UXWol8g==");
-	    cookieRememberMeManager.setCipherService(new AesCipherService());
-	    cookieRememberMeManager.setCipherKey(cipherKey);
-	    return cookieRememberMeManager;
-	}
+//		shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
+//
+//		return shiroFilterFactoryBean;
+//	}
+//
+//
+//	@Bean
+//	public ShiroDialect shiroDialect(){
+//		return new ShiroDialect();
+//	}
+//
+//	@Bean
+//	@DependsOn({"lifecycleBeanPostProcessor"})
+//	public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator(){
+//		DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+//		advisorAutoProxyCreator.setProxyTargetClass(true);
+//		return advisorAutoProxyCreator;
+//	}
+//
+//
+//	@Bean
+//	public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(){
+//		AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+//		authorizationAttributeSourceAdvisor.setSecurityManager(securityManager());
+//		return authorizationAttributeSourceAdvisor;
+//	}
+//
+//	@Bean
+//	public SimpleCookie rememberMeCookie() {
+//	    //这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
+//	    SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
+//	    //如果httyOnly设置为true，则客户端不会暴露给客户端脚本代码，
+//	    //使用HttpOnly cookie有助于减少某些类型的跨站点脚本攻击；
+//	    simpleCookie.setHttpOnly(true);
+//	    //记住我cookie生效时间,单位是秒
+//	    simpleCookie.setMaxAge(1 * 24 * 60 * 60);
+//	    return simpleCookie;
+//	}
+//
+//
+//	@Bean
+//	public CookieRememberMeManager rememberMeManager() {
+//	    CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
+//	    cookieRememberMeManager.setCookie(rememberMeCookie());
+//	    byte[] cipherKey = Base64.decode("wGiHplamyXlVB11UXWol8g==");
+//	    cookieRememberMeManager.setCipherService(new AesCipherService());
+//	    cookieRememberMeManager.setCipherKey(cipherKey);
+//	    return cookieRememberMeManager;
+//	}
 	
 }

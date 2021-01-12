@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
+import com.sfac.geniusdirecruit.common.utile.EmailSend;
 import com.sfac.geniusdirecruit.common.utile.MD5Util;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.CompanyDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobhunterDao;
@@ -43,6 +44,8 @@ public class UserServiceImpl implements UserService {
     private JobhunterDao jobhunterDao;
     @Autowired
     private UserRoleDao userRoleDao;
+    @Autowired
+    private EmailSend emailSend;
 
     @Override
     public List<User> selectAllUser() {
@@ -229,7 +232,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public HashMap<String, Object> sendCode(String email, HttpServletRequest request) {
-        return null;
+        HashMap<String,Object> map = new HashMap<String, Object>();
+        try {
+            User user = userDao.selectUserByEmail(email);
+            System.err.println(user);
+            if (user==null){
+                map.put("info","邮箱未注册，请先前往注册页面注册");
+                return map;
+            }else {
+                int code = (int)((Math.random()*9+1)*1000);
+                emailSend.send(email,"牛人直聘","您的验证码是："+code+"，请不要告诉他人");
+                request.getSession().setAttribute("code",code);
+                request.getSession().setAttribute("email",email);
+                map.put("info","邮件发送成功，请查收");
+                return map;
+            }
+        }catch (Exception e){
+            map.put("info","邮件发送失败");
+            return map;
+        }
     }
 
 
