@@ -1,4 +1,4 @@
-package com.sfac.geniusdirecruit.config;
+package com.sfac.geniusdirecruit.config.web;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -15,7 +15,6 @@ import java.time.*;
 
 /**
  * @Description: Jackson Config
- * @author: HymanHu
  * @date: 2020年4月17日
  */
 @Configuration

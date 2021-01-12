@@ -2,7 +2,6 @@ package com.sfac.geniusdirecruit.config.shiro;
 
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Role;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
-import com.sfac.geniusdirecruit.modules.backstagesystem.entity.UserRole;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.RoleService;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.apache.shiro.authc.*;
@@ -33,24 +32,14 @@ public class MyRealm extends AuthorizingRealm {
 		if (user == null) {
 			throw new UnknownAccountException("This user name do not exist.");
 		}
-		
-		List<Role> roles = new ArrayList<Role>();
-		if (user.getUserName().equals("admin")) {
-			roles = roleService.selectAllRoles();
-			if (roles.isEmpty()) {
-				simpleAuthorizationInfo.addRole("admin");
-			}
-		} else {
-			//roles = roleService.getRolesByUserId(user.getUserId());
-		}
-		for (Role role :roles) {
-			simpleAuthorizationInfo.addRole(role.getRoleName());
-			/*List<UserRole> resources = resourceService.getResourcesByRoleId(role.getRoleId());
-			for (UserRole resource : resources) {
-				simpleAuthorizationInfo.addStringPermission(resource.getPermission());
-			}*/
-		}
-		
+
+		// TODO
+		List<Role> roles = new ArrayList<>();
+
+		//给当前用户分配角色
+		List<String> listRole = new ArrayList<>();
+		listRole.add("admin");
+		simpleAuthorizationInfo.addRoles(listRole);
 		return simpleAuthorizationInfo;
 	}
 

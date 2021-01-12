@@ -85,6 +85,7 @@ public class UserController {
     // http://127.0.0.1:8080/api/login---------post
     @PostMapping(value = "/login", consumes = "application/json")
     public ResultEntity<User> login(@RequestBody User user) {
+        System.err.println(user);
         return userService.login(user);
     }
 

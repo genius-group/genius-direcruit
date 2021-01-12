@@ -26,5 +26,6 @@ public interface RoleService {
     ResultEntity<Role> editRole(Role role);
 
     ResultEntity<Object> deleteRoleByRoleId(Integer roleId);
+
     Role selectRoleByUserId(Integer userId);
 }

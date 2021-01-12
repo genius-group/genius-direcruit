@@ -1,14 +1,14 @@
 <div class="login_wrapper">
-    <div class="animate form login_form">
+    <div class="animate form">
         <section class="login_content">
             <form>
                 <img src="/frontdesk/images/fav.svg" alt="..." class="img-circle mb-lg-3">
                 <h1>牛人招聘系统后台登录</h1>
                 <div>
-                    <input name="userName" type="text" class="form-control" placeholder="userName" required="" />
+                    <input name="userName" type="text" class="form-control" placeholder="userName" required=""/>
                 </div>
                 <div>
-                    <input name="userPwd" type="password" class="form-control" placeholder="userPwd" required="" />
+                    <input name="userPwd" type="password" class="form-control" placeholder="userPwd" required=""/>
                 </div>
                 <div>
                     <input class="form-control input-val" type="text" value="" placeholder="请输入验证码（不区分大小写）"
@@ -17,7 +17,7 @@
                 </div>
                 <div style="text-align:left; margin-top: 5px; margin-left: 3px;">
                     <input type="checkbox" lay-filter="filter" name="rememberMe" style="float: left;"
-                           lay-skin="primary" title="30天内自动登录" >30天内自动登录
+                           lay-skin="primary" title="30天内自动登录">30天内自动登录
                 </div>
 
                 <div style="text-align:center;">
@@ -34,7 +34,7 @@
                     </p>
 
                     <div class="clearfix"></div>
-                    <br />
+                    <br/>
                     <div>
                         <h1><i class="fa fa-paw"></i>找工作，上牛人!</h1>
                         <p>©2021 All Rights Reserved.</p>
@@ -44,15 +44,16 @@
         </section>
     </div>
 </div>
+</div>
 <script type="text/javascript">
     var show_num = [];
-    $(document).ready(function() {
+    $(document).ready(function () {
         draw(show_num);
-        $("#canvas").on('click',function(){
+        $("#canvas").on('click', function () {
             draw(show_num);
         })
 
-        $("#loginButton").bind("click", function() {
+        $("#loginButton").bind("click", function () {
             login();
         });
     });
@@ -70,21 +71,21 @@
 
         var user = {};
         user.userName = $("[name='userName']").val();
-        user.password = $("[name='userPwd']").val();
+        user.userPwd = $("[name='userPwd']").val();
         //user.rememberMe = $("[name='rememberMe']").prop('checked');
         $.ajax({
-            url : "/user/login",
-            type : "post",
+            url: "/api/login",
+            type: "post",
             contentType: "application/json",
-            data : JSON.stringify(user),
-            success : function (data) {
+            data: JSON.stringify(user),
+            success: function (data) {
                 if (data.status == 200) {
                     location.href = "/common/dashboard";
                 } else {
                     layer.msg(data.message, {icon: 0});
                 }
             },
-            error : function (data) {
+            error: function (data) {
                 layer.msg(data.responseText, {icon: 0});
             }
         });
@@ -92,8 +93,8 @@
 
     //动态验证码
     function draw(show_num) {
-        var canvas_width=$('#canvas').width();
-        var canvas_height=$('#canvas').height();
+        var canvas_width = $('#canvas').width();
+        var canvas_height = $('#canvas').height();
         var canvas = document.getElementById("canvas");//获取到canvas的对象，演员
         var context = canvas.getContext("2d");//获取到canvas画图的环境，演员表演的舞台
         canvas.width = canvas_width;

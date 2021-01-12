@@ -1,4 +1,4 @@
-package com.sfac.geniusdirecruit.config;
+package com.sfac.geniusdirecruit.config.web;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
