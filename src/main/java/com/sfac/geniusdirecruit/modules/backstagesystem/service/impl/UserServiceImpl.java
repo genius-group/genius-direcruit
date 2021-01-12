@@ -23,8 +23,6 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
@@ -51,6 +49,8 @@ public class UserServiceImpl implements UserService {
     private UserRoleDao userRoleDao;
     @Autowired
     private EmailSend emailSend;
+
+
     @Autowired
     private SmsSend smsSend;
 
@@ -194,65 +194,7 @@ public class UserServiceImpl implements UserService {
         session.removeAttribute("userId");
     }
 
-    //判断注册用户名是否唯一
-    @Override
-    public boolean isUserExist(String userName) {
-        if (userDao.findUsersByUsername(userName) == null) {
-            return false;
-        } else {
-            return true;
-        }
-    }
 
-
-    //已弃用
-    @Override
-    @Transactional
-    public void insertRegisterUser(User user) {
-
-
-
-        //设置时间
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-        String format = simpleDateFormat.format(new Date());
-
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        LocalDateTime createTime = LocalDateTime.parse(format, df);
-        user.setCreateTime(createTime);
-
-        //设置状态
-        user.setState(1);
-        userDao.insertRegisterUser(user);
-
-        user.getRoles().stream().forEach(item -> {
-
-            UserRole userRole = new UserRole(user.getUserId(), item.getRoleId());
-            userRoleDao.insertRegisterUser(userRole);
-
-        });
-
-
-        /*if (user.getRoles() != null) {
-            for(Role role : user.getRoles()) {
-                UserRole userRole = new UserRole(user.getUserId(), role.getRoleId());
-                userRoleDao.insertRegisterUser(userRole);
-            }
-        }*/
-    }
-
-
-
-    //判断注册用户是否存在，根据输入电话
-    @Override
-    public boolean selectUserByTel(String tel) {
-
-        if (userDao.findUsersByTel(tel) == null) {
-            return false;
-        } else {
-            return true;
-        }
-    }
 
     @Override
     public HashMap<String, Object> sendCode(String email, HttpServletRequest request) {
@@ -311,6 +253,14 @@ public class UserServiceImpl implements UserService {
 
             });
 
+
+        /*if (user.getRoles() != null) {
+            for(Role role : user.getRoles()) {
+                UserRole userRole = new UserRole(user.getUserId(), role.getRoleId());
+                userRoleDao.insertRegisterUser(userRole);
+            }
+        }*/
+
             map.put("info","注册成功");
 
         }
@@ -319,6 +269,62 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    //发送短信
+    @Override
+    public HashMap<String, Object> sendSms(String phone, HttpServletRequest request) {
+
+        HashMap<String,Object> map = new HashMap<String,Object>();
+
+        Random rd = new Random();
+        int code = rd.nextInt(1000);
+        //发送短信
+        String info = smsSend.send(phone,code+"");
+        //判断是否成功
+        if(info.equals("OK")){
+            //存入session中
+            request.getSession().setAttribute("smsCode",code);
+            map.put("info","短信发送成功");
+        }else{
+            map.put("info","短信发送失败");
+        }
+
+//        request.getSession().setAttribute("smsCode",1111);
+
+        return map;
+    }
+
+    //手机短信进入
+    @Override
+    public HashMap<String, Object> smsEnter(UserVo userVo, HttpServletRequest request) {
+
+
+                HashMap<String,Object> map = new HashMap<String,Object>();
+
+        String sessionCode = request.getSession().getAttribute("smsCode")+"";
+
+        if(userVo.getCode().equals(sessionCode)){
+
+            System.err.println("smsEnter>>>>>>>>>>>>>>>"+userVo.getTel());
+
+            System.err.println("smsEnter>>>>>>>>>>>>>>>"+userVo.getCode());
+
+
+            //根据电话去查询用户，如果已注册，则会去登录页面
+            User userTemp = userDao.selectUsersByTel(userVo.getTel());
+            if (userTemp!=null){
+                map.put("info","用户已注册，请登录");
+            }else {
+
+                map.put("info","登入成功");
+            }
+
+        }else{
+            map.put("info","登入失败");
+        }
+
+        return map;
+
+    }
     @Override
     public HashMap<String, Object> emailLogin(String email, Integer code, HttpServletRequest request) {
         HashMap<String,Object> map = new HashMap<String, Object>();
@@ -367,4 +373,10 @@ public class UserServiceImpl implements UserService {
             return map;
         }
     }
+
+
+
+
+
+
 }

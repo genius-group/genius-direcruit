@@ -71,7 +71,9 @@ public class TestController {
     @GetMapping("/emailSend")
     @ResponseBody
     public HashMap<String,Object> emailSend(@RequestParam String email, HttpServletRequest request){
+
         return userService.sendCode(email,request);
+
     }
 
     //向手机发送验证码

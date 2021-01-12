@@ -88,4 +88,9 @@ public interface UserDao {
             "INNER JOIN jobhunter ON `user`.user_id = jobhunter.user_id\n" +
             "where email = #{email}")
     User selectUserByEmail(String email);
+
+    //通过电话查找用户
+    @Select("select * from user where tel = #{tel}")
+    User selectUsersByTel(String tel);
+
 }

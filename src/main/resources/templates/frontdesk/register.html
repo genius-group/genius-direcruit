@@ -223,17 +223,18 @@
       $("#smsForm").show()
    }
 
-
-
-   //短信进入
+   //短信进入,改写
    function smsEnter() {
+      var userVo ={};
+      userVo.tel = $("#tel").val();
+      userVo.code = $("#code").val();
 
       $.ajax({
-
-         url:"/frontdesk/smsLogin/" + $("#code").val()+"/"+ $("#tel").val(),
-         type:"get",
-         //contentType: "application/json",
-         //data : JSON.stringify(sms),
+         url:"/frontdesk/smsEnter",
+         type:"post",
+         contentType:"application/json",
+         data:JSON.stringify(userVo),
+         dataType:"json",
          success:function(data){
 
             console.log("==========>>>"+data)
@@ -255,6 +256,36 @@
       })
       return false;
    }
+
+
+   //短信进入
+   // function smsEnter() {
+   //    $.ajax({
+   //       url:"/frontdesk/smsLogin/" + $("#code").val()+"/"+ $("#tel").val(),
+   //       type:"get",
+   //       //contentType: "application/json",
+   //       //data : JSON.stringify(sms),
+   //       success:function(data){
+   //
+   //          console.log("==========>>>"+data)
+   //
+   //          alert(data.info);
+   //          if(data.info=="用户已注册，请登录"){
+   //             //访问主页面
+   //             location.href="/test/login"
+   //
+   //
+   //          }else {
+   //             if (data.info=="登入成功"){
+   //
+   //                location.href="/frontdesk/SubmissionPage"
+   //             }
+   //
+   //          }
+   //       }
+   //    })
+   //    return false;
+   // }
 
 
 var s = 3;

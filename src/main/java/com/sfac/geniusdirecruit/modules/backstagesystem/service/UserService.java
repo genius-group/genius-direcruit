@@ -38,31 +38,24 @@ public interface UserService {
 
     User selectUserByUserName(String userName);
 
-    //判断注册用户名是否唯一
-    boolean isUserExist(String userName);
-
-    //新增注册后的用户
-    void insertRegisterUser(User user);
-
-
-
-    //判断注册用户是否存在，根据输入电话
-    boolean selectUserByTel(String tel);
-
-
-
-    //新增注册后的用户，那么就把注册的电话号码送入数据库
-//    void insertRegisterUserTel(String tel);
-
 
     HashMap<String, Object> sendCode(String email, HttpServletRequest request);
 
     //求职者注册
     HashMap<Object, String> registerStaff(User user);
 
-    HashMap<String, Object> emailLogin(String email, Integer code,HttpServletRequest request);
+
+    //发送短信
+    HashMap<String, Object> sendSms(String phone, HttpServletRequest request);
+
+    //手机短信进入
+    HashMap<String, Object> smsEnter(UserVo userVo, HttpServletRequest request);
 
     HashMap<String, Object> sendMessage(String tel, HttpServletRequest request);
 
+    HashMap<String, Object> emailLogin(String email, Integer code, HttpServletRequest request);
+
     HashMap<String, Object> messageLogin(String tel, Integer code, HttpServletRequest request);
+
+
 }
