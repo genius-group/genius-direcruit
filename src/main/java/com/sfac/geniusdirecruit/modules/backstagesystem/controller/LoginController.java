@@ -34,9 +34,11 @@ public class LoginController {
     public String index() {
         return "common/managerIndex";
     }
+
     @RequestMapping("/logout")
-    public String tmallLogOut(ModelMap modelMap) {
+    public String logOut(ModelMap modelMap) {
         userService.logout();
-        return "redirect:/user/login";
+        modelMap.addAttribute("template", "backstagesystem/login");
+        return "/common/managerIndexSimple";
     }
 }
