@@ -27,19 +27,18 @@ public class MyRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-		
 		User user = (User) principals.getPrimaryPrincipal();
 		if (user == null) {
 			throw new UnknownAccountException("This user name do not exist.");
 		}
-
 		// TODO
-		List<Role> roles = new ArrayList<>();
-
-		//给当前用户分配角色
-		List<String> listRole = new ArrayList<>();
-		listRole.add("admin");
-		simpleAuthorizationInfo.addRoles(listRole);
+		Role role = roleService.selectRoleByUserId(user.getUserId());
+		if (role.getRoleName().equals("admin")) {
+			if (role == null) {
+				simpleAuthorizationInfo.addRole("admin");
+			}
+			simpleAuthorizationInfo.addStringPermission(role.getRoleName());
+		}
 		return simpleAuthorizationInfo;
 	}
 
