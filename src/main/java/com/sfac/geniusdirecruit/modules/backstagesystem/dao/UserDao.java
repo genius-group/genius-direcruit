@@ -72,6 +72,7 @@ public interface UserDao {
     @Options(useGeneratedKeys = true, keyProperty = "userId",keyColumn = "user_id")
     void insertRegisterUser(User user_db);
 
+    //通过email查询User
     @Select("SELECT\n" +
             "jobhunter.job_hunter_id,\n" +
             "jobhunter.user_id,\n" +

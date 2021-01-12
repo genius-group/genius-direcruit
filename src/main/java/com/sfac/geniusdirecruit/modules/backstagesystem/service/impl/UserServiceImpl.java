@@ -6,6 +6,7 @@ import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.common.utile.EmailSend;
 import com.sfac.geniusdirecruit.common.utile.MD5Util;
+import com.sfac.geniusdirecruit.common.utile.SmsSend;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.CompanyDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobhunterDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.UserDao;
@@ -22,6 +23,8 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
@@ -48,6 +51,8 @@ public class UserServiceImpl implements UserService {
     private UserRoleDao userRoleDao;
     @Autowired
     private EmailSend emailSend;
+    @Autowired
+    private SmsSend smsSend;
 
     @Override
     public List<User> selectAllUser() {
@@ -314,5 +319,52 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public HashMap<String, Object> emailLogin(String email, Integer code, HttpServletRequest request) {
+        HashMap<String,Object> map = new HashMap<String, Object>();
+        Integer code0 = (Integer) request.getSession().getAttribute("code");
+        System.err.println(code0);
+        String email0 = (String) request.getSession().getAttribute("email");
+        System.err.println(email0);
+        if (code.equals(code0)&&email.equals(email0)){
+            map.put("info","登录成功");
+            return map;
+        }else {
+            map.put("info","登录失败，请稍后重试");
+            return map;
+        }
+    }
 
+    @Override
+    public HashMap<String, Object> sendMessage(String tel, HttpServletRequest request) {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+
+            int code = (int)((Math.random()*9+1)*1000);
+            String info = smsSend.send(tel,code+"");
+            System.err.println(info);
+            if (info.equals("OK")){
+                //存入session中
+                request.getSession().setAttribute("smsCode",code);
+                request.getSession().setAttribute("tel",tel);
+                map.put("info","短信发送成功");
+                return map;
+            }else{
+                map.put("info","短信发送失败");
+                return map;
+            }
+    }
+
+    @Override
+    public HashMap<String, Object> messageLogin(String tel, Integer code, HttpServletRequest request) {
+        HashMap<String,Object> map = new HashMap<String, Object>();
+        Integer code0 = (Integer) request.getSession().getAttribute("smsCode");
+        String tel0 = (String) request.getSession().getAttribute("tel");
+        if (code.equals(code0)&&tel.equals(tel0)){
+            map.put("info","登录成功");
+            return map;
+        }else {
+            map.put("info","登录失败，请稍后重试");
+            return map;
+        }
+    }
 }

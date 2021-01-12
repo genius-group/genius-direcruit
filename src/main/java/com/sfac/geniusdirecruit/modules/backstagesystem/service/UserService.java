@@ -60,4 +60,9 @@ public interface UserService {
     //求职者注册
     HashMap<Object, String> registerStaff(User user);
 
+    HashMap<String, Object> emailLogin(String email, Integer code,HttpServletRequest request);
+
+    HashMap<String, Object> sendMessage(String tel, HttpServletRequest request);
+
+    HashMap<String, Object> messageLogin(String tel, Integer code, HttpServletRequest request);
 }

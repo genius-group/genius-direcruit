@@ -48,6 +48,7 @@ public class TestController {
         return "frontdesk/login";
     }
 
+    //账号密码登录
     @PostMapping("/loginIn")
     @ResponseBody
     public HashMap<Object,String> loginIn(@RequestBody User user){
@@ -66,12 +67,33 @@ public class TestController {
         return "common/managerIndex";
     }
 
+    //向邮箱发送验证码
     @GetMapping("/emailSend")
     @ResponseBody
     public HashMap<String,Object> emailSend(@RequestParam String email, HttpServletRequest request){
-
-
         return userService.sendCode(email,request);
+    }
+
+    //向手机发送验证码
+    @GetMapping("/messageSend")
+    @ResponseBody
+    public HashMap<String,Object> messageSend(@RequestParam String tel,HttpServletRequest request){
+
+        return userService.sendMessage(tel,request);
+    }
+
+    //用邮箱+验证码登录
+    @PostMapping("/emailLogin")
+    @ResponseBody
+    public HashMap<String,Object> emailLogin(@RequestParam String email,Integer code,HttpServletRequest request){
+        return userService.emailLogin(email,code,request);
+    }
+
+    //用手机+验证码登录
+    @PostMapping("/messageLogin")
+    @ResponseBody
+    public HashMap<String,Object> messageLogin(@RequestParam String tel,Integer code,HttpServletRequest request){
+        return userService.messageLogin(tel,code,request);
     }
 
 
