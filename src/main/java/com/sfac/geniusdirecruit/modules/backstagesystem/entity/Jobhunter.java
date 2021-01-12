@@ -19,6 +19,7 @@ public class Jobhunter {
     @Id//主键列
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer jobHunterId;
+
     private Integer userId;
 
     //求职者姓名
