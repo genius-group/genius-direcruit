@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "job")
 @Data
-public class Job {
+public class Job extends MyPage {
     //创建主键
     @Id//主键列
     @GeneratedValue(strategy = GenerationType.IDENTITY)

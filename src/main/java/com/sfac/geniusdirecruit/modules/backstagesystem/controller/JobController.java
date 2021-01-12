@@ -20,6 +20,7 @@ import java.util.List;
 public class JobController {
     @Autowired
     private JobService jobService;
+
     //添加 http://127.0.0.1:8080/api/job
    //{"jobCategoryId":"1","jobName":"习大大","description":"ygfeueuigvdu","pay":"5000","numbers":"21","degree":"大专","expiryDate":"1","area":"习大大","address":"ygfeueuigvdu","viewCount":"5000","releaseTime":"2021-01-05 14:33:34"}
     @PostMapping(value = "/job", consumes = "application/json")
@@ -60,6 +61,4 @@ public class JobController {
     public ResultEntity<Object> deleteJobById(@PathVariable("jobId") Integer jobId) {
         return jobService.deleteJobById(jobId);
     }
-
-
 }

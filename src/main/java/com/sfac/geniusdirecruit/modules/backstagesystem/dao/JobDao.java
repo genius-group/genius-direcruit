@@ -4,9 +4,17 @@ import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Job;
 import org.apache.ibatis.annotations.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
 
 /**
  * @Author: yzs
@@ -59,4 +67,8 @@ public interface JobDao {
     //删除job
     @Delete("delete from job where job_id = #{jobId}")
     void deleteJobById(int jobId);
+
+    //将url增加到简历表中
+    @Insert("insert into resume (url) values (#{url})")
+    int insertByUrl(String url);
 }

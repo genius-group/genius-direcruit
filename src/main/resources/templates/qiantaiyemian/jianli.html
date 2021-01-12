@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6"><![endif]-->
+<!--[if IE 7 ]><html class="ie ie7"><![endif]-->
+<!--[if IE 8 ]><html class="ie ie8"><![endif]-->
+<!--[if IE 9 ]><html class="ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html class="standard"><!--<![endif]-->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>牛人招聘</title>
+    <meta name="keywords" content="招聘,求职,找工作"/>
+    <meta name="description" content="牛人是一款互联网求职招聘找工作软件，让求职者与Boss直接开聊、加快面试、即时反馈，找工作就用牛人招聘，下载APP让直直带你轻松找工作！"/>
+    <script src="/frontdesk/vendor/jquery/jquery-3.4.1.js"></script>
+    <link href="https://static.zhipin.com/zhipin-geek/v351/web/geek/css/main.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div id="wrap" class="sign-resume-wrapper page-sign">
+
+    <div class="sign-wrap sign-wrap-v2">
+        <div class="sign-form upload-resume">
+            <div class="sign-slide-box">
+                <a class="logo" href="/" ka="header-logo">
+                    <img src="/backstage/images/flag/369.png">
+                    <div>
+                        <p>找工作</p >
+                        <p>我要跟老板谈</p >
+                    </div>
+                </a>
+                <ul>
+                    <li>
+                        <i class="icon"></i>
+                        <span>沟通</span>
+                        <span>在线职位及时沟通</span>
+                    </li>
+                    <li>
+                        <i class="icon"></i>
+                        <span>任性选</span>
+                        <span>各大行业职位任你选</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="sign-content">
+                <div class="inner-box">
+                    <h4>请上传您的简历</h4>
+                    <div class="sub-title">PDF格式简历文件<br/><span class="red">文件大小不超过&nbsp;8&nbsp;M</span></div>
+
+                    <a href="javascript:;" class="btn upload-resume-wrap" ka="nlp_resume_upload_choose" >
+                        <!--                      upload upload  accept="application/pdf"-->
+                        立即上传<input id="file" type="file" name="file">
+                    </a>
+                    <a href="javascript:;" class="btn upload-resume-wrap" ka="nlp_resume_upload_choose">
+                        提交<input type="button" onclick="uploadFile();">
+                    </a>
+                    <a href="/user/signup.html?loginType=1" class="btn btn-outline complete-online">
+                        没有附件简历&nbsp;<span class="text-blue">在线填写</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--
+<input type="file" id="file">
+<input type="button" value="提交" onclick="uploadFile();">
+<div id="result"></div>
+-->
+
+<script>
+    function uploadFile() {
+        var file=$("#file")[0].files[0];
+        var formData=new FormData();
+        formData.append("file",file);
+        $.ajax({
+            url:'/jobs/upload',
+            data:formData,
+            type:'post',
+            processData:false,
+            contentType:false,
+            success:function (msg) {
+                $('#result').html(msg);
+            }
+        });
+
+    }
+
+</script>
+
+<!--<input type="hidden" id="page_key_name" value="cpc_resume_choose" />
+<script src="https://static.zhipin.com/library/js/lib/jquery-1.12.2.min.js"></script>
+
+<script src="https://static.zhipin.com/zhipin-geek/v351/web/geek/js/main.js"></script>-->
+
+<!--<script>
+    function get_share_datas_from_html_inapp() {
+        var shid = "shdefault",
+            urlShid,
+            urlSid,
+            pk = "pkdefault",
+            pp = "ppdefault",
+            pkn = (typeof _PK != 'undefined' ? _PK : document.getElementById("page_key_name")),
+            getQueryString = function(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"),
+                    r = window.location.search.substr(1).match(reg);
+                if (r != null) {
+                    return unescape(r[2])
+                }
+                return null;
+            };
+        urlShid = getQueryString("shid");
+        urlSid = getQueryString("sid");
+        if (urlShid) {
+            shid = urlShid;
+        } else if (urlSid) {
+            shid = urlSid;
+        }
+        if (pkn) {
+            var pknVal = pkn.value;
+            if (pknVal) {
+                var pkArray = pknVal.split("|");
+                if (pkArray.length == 1) {
+                    pk = pkArray[0];
+                } else if (pkArray.length >= 2) {
+                    pk = pkArray[0];
+                    pp = pkArray[1];
+                }
+            }
+        }
+        var ret = [];
+        ret["shid"] = shid;
+        ret["pk"] = pk;
+        ret["pp"] = pp;
+        return ret;
+    }
+    function getQueryString(name, url) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"),
+            r = window.location.search.substr(1).match(reg);
+        if (url) {
+            r = url.split('?')[1].match(reg);
+        }
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+</script>
+
+<script src='https://static.zhipin.com/library/js/analytics/ka.zhipin.min.js'></script>
+
+<script>
+    !(function(c,b,d,a){c[a]||(c[a]={});c[a].config={pid:"h9614n96f5@468fdc7650031e0",appType:"web",imgUrl:"https://arms-retcode.aliyuncs.com/r.png?",disableHook:true,enableSPA:true};
+        with(b)with(body)with(insertBefore(createElement("script"),firstChild))setAttribute("crossorigin","",src=d)
+    })(window,document,"https://retcode.alicdn.com/retcode/bl.js","__bl");
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?194df3105ad7148dcf2b98a91b5e727a";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>-->
+</body>
+</html>
