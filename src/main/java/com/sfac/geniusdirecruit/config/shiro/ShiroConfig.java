@@ -51,7 +51,7 @@ public class ShiroConfig {
 
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 		shiroFilterFactoryBean.setSecurityManager(securityManager());
-		shiroFilterFactoryBean.setLoginUrl("/manager/login");
+
 		shiroFilterFactoryBean.setSuccessUrl("/common/dashboard");
 
 		// 自定义过滤器
@@ -105,8 +105,10 @@ public class ShiroConfig {
 		map.put("/tmall/searchResults", "anon");
 		map.put("/tmall/category/*", "anon");
 		map.put("/tmall/product/*", "anon");*/
+		map.put("/jobs/**", "anon");
 		map.put("/test/**", "anon");
-		map.put("/user/**", "anon");
+		map.put("/api/**", "anon");
+
 
 		// 登录访问规则
 		/*map.put("/user/**", "tmallAuthc");*/
@@ -114,7 +116,7 @@ public class ShiroConfig {
 
 		// 记住我访问规则
 		map.put("/common/dashboard", "managerUser");
-		map.put("/jobs/**", "managerUser");
+		//map.put("/jobs/**", "managerUser");
 		map.put("/newses/**", "managerUser");
 		map.put("/blogrolls/**", "managerUser");
 		/*map.put("/shopping/**", "managerUser");*/
