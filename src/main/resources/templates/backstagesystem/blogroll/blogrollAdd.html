@@ -17,19 +17,19 @@
                     </div>
 
                     <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="blogrollLogoForAdd">BlogrollLogo</label>
-                        <div class="col-md-6 col-sm-6 ">
-                            <input type="text" id="blogrollLogoForAdd" name="blogrollLogo" class="form-control ">
-                        </div>
-                    </div>
-
-                    <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align" for="blogrollUrlForAdd">BlogrollUrl</label>
                         <div class="col-md-6 col-sm-6 ">
                             <input type="text" id="blogrollUrlForAdd" name="blogrollUrl" class="form-control ">
                         </div>
                     </div>
 
+                    <div class="item form-group">
+                        <input type="hidden" id="logoForAddPage" name="blogrollLogo" value="" />
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="blogrollLogoForAdd">Upload Logo</label>
+                        <div class="col-md-6 col-sm-6 ">
+                            <input id="blogrollLogoForAdd" name="image" type="file" multiple=true>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
