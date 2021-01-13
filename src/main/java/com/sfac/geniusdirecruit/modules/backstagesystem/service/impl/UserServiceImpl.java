@@ -198,7 +198,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    //发送验证码到邮箱
+
     @Override
     public HashMap<String, Object> sendCode(String email, HttpServletRequest request) {
         HashMap<String,Object> map = new HashMap<String, Object>();
@@ -391,4 +391,19 @@ public class UserServiceImpl implements UserService {
             return map;
         }
     }
+
+    @Override
+    public ResultEntity<User> insertUserByAdmin(User user) {
+        User user1=new User();
+        user1.setUserName(user.getUserName());
+        user1.setUserPwd(MD5Util.getMD5(user.getUserPwd()));
+        user.setTel(user.getTel());
+        user1.setState(user.getState());
+        user1.setCreateTime(user.getCreateTime());
+        userDao.insertUser(user1);
+        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                "insert success",user1);
+    }
+
+
 }

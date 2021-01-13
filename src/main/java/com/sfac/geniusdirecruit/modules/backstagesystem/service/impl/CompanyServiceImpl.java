@@ -49,4 +49,11 @@ public class CompanyServiceImpl implements CompanyService {
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "update success",company);
     }
+
+    @Override
+    public ResultEntity<Company> insertCompany(Company company) {
+        companyDao.insertCompany(company);
+        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                "insert success",company);
+    }
 }

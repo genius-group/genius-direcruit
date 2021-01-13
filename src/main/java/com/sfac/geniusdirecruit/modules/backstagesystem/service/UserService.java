@@ -58,4 +58,5 @@ public interface UserService {
     HashMap<String, Object> messageLogin(String tel, Integer code, HttpServletRequest request);
 
 
+    ResultEntity<User> insertUserByAdmin(User user);
 }

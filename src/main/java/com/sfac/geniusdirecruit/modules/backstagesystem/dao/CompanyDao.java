@@ -2,10 +2,7 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Company;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -51,4 +48,7 @@ public interface CompanyDao {
 
     @Delete("delete from company where user_id = #{userId}")
     void deleteCompanyByUserId(Integer userId);
+
+    @Insert("insert into company (company_name,address,description,credit_code,nature) values (#{companyName},#{address},#{description},#{creditCode},#{nature})")
+    void insertCompany(Company company);
 }

@@ -42,13 +42,13 @@ public interface UserDao {
             + "</script>")
     List<User> getUsersBySearchBean(SearchBean searchBean);
 
-    @Insert("insert into user (user_name,user_pwd,create_time,tel,state) values (#{userName},#{userPwd},#{createTime},#{tel},#{state})")
+    @Insert("insert into user (user_name,user_pwd,tel,state,create_time) values (#{userName},#{userPwd},#{tel},#{state},#{createTime})")
     void insertUser(User user);
 
     @Select("select * from user where user_id = #{userId}")
     User getUserById(int userId);
 
-    @Update("update user set user_name = #{userName},user_pwd=#{userPwd}, create_time = #{createTime},tel = #{tel},state = #{state} where user_id = #{userId}")
+    @Update("update user set user_name = #{userName},tel = #{tel},state = #{state}, create_time = #{createTime} where user_id = #{userId}")
     void editUser(User user);
 
     @Delete("delete from user where user_id = #{userId}")
