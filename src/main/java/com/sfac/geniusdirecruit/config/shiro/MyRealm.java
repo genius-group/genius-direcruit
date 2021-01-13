@@ -1,5 +1,6 @@
 package com.sfac.geniusdirecruit.config.shiro;
 
+import com.sfac.geniusdirecruit.common.utile.MD5Util;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Role;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.RoleService;

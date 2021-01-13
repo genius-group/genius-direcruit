@@ -51,8 +51,8 @@ public class TestController {
     //账号密码登录
     @PostMapping("/loginIn")
     @ResponseBody
-    public HashMap<Object,String> loginIn(@RequestBody User user){
-        HashMap<Object, String> map = userService.loginIn(user);
+    public HashMap<Object,String> loginIn(@RequestBody User user,HttpServletRequest request){
+        HashMap<Object, String> map = userService.loginIn(user,request);
         System.err.println(map);
         return map;
     }

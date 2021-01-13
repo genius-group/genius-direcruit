@@ -30,7 +30,7 @@ public interface UserService {
 
     ResultEntity<Object> deleteUserByUserId(Integer userId);
 
-    HashMap<Object, String> loginIn(User user);
+    HashMap<Object, String> loginIn(User user,HttpServletRequest request);
 
     void logout();
 	

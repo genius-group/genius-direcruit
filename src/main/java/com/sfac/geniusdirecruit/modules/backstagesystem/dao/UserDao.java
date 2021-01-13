@@ -74,23 +74,20 @@ public interface UserDao {
 
     //通过email查询User
     @Select("SELECT\n" +
-            "jobhunter.job_hunter_id,\n" +
-            "jobhunter.user_id,\n" +
-            "jobhunter.job_hunter_name,\n" +
-            "jobhunter.sex,\n" +
-            "jobhunter.birth,\n" +
-            "jobhunter.photo,\n" +
-            "jobhunter.educate,\n" +
-            "jobhunter.email,\n" +
-            "jobhunter.address\n" +
+            "`user`.user_id,\n" +
+            "`user`.user_name,\n" +
+            "`user`.user_pwd,\n" +
+            "`user`.create_time,\n" +
+            "`user`.tel,\n" +
+            "`user`.state\n" +
             "FROM\n" +
-            "`user`\n" +
-            "INNER JOIN jobhunter ON `user`.user_id = jobhunter.user_id\n" +
+            "jobhunter\n" +
+            "INNER JOIN `user` ON jobhunter.user_id = `user`.user_id\n" +
             "where email = #{email}")
     User selectUserByEmail(String email);
 
     //通过电话查找用户
     @Select("select * from user where tel = #{tel}")
-    User selectUsersByTel(String tel);
+    User selectUserByTel(String tel);
 
 }
