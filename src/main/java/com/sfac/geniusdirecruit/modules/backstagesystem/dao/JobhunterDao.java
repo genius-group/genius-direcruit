@@ -2,6 +2,7 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Jobhunter;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -44,5 +45,8 @@ public interface JobhunterDao {
 
     @Delete("delete from jobhunter where user_id = #{userId}")
     void deleteJobHunterByUserId(Integer userId);
+
+    @Insert("insert into jobhunter (user_id,job_hunter_name,sex,birth,photo,educate,email,address) values (#{userId},#{jobHunterName},#{sex},#{birth},#{photo},#{educate},#{email},#{address})")
+    void insertJobHunter(Jobhunter jobhunter);
 
 }

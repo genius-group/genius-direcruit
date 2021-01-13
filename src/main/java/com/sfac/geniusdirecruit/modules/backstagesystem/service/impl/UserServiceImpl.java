@@ -255,54 +255,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    //求职者的注册
-    @Override
-    public HashMap<Object, String> registerStaff(User user) {
 
-        HashMap<Object, String> map = new HashMap<Object, String>();
-
-
-        User userTemp = userDao.findUsersByUsername(user.getUserName());
-
-        if (userTemp !=null) {
-            map.put("info","该用户名已被注册，请重新输入");
-        }else {
-            //设置时间
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-            String format = simpleDateFormat.format(new Date());
-
-            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-            LocalDateTime createTime = LocalDateTime.parse(format, df);
-            user.setCreateTime(createTime);
-
-            //设置状态
-            user.setState(1);
-            userDao.insertRegisterUser(user);
-
-            //操作中间表
-            user.getRoles().stream().forEach(item -> {
-
-                UserRole userRole = new UserRole(user.getUserId(), item.getRoleId());
-                userRoleDao.insertRegisterUser(userRole);
-
-            });
-
-
-        /*if (user.getRoles() != null) {
-            for(Role role : user.getRoles()) {
-                UserRole userRole = new UserRole(user.getUserId(), role.getRoleId());
-                userRoleDao.insertRegisterUser(userRole);
-            }
-        }*/
-
-            map.put("info","注册成功");
-
-        }
-
-        return map;
-
-    }
 
     //发送短信
     @Override
@@ -333,7 +286,7 @@ public class UserServiceImpl implements UserService {
     public HashMap<String, Object> smsEnter(UserVo userVo, HttpServletRequest request) {
 
 
-                HashMap<String,Object> map = new HashMap<String,Object>();
+        HashMap<String,Object> map = new HashMap<String,Object>();
 
         String sessionCode = request.getSession().getAttribute("smsCode")+"";
 
@@ -423,4 +376,90 @@ public class UserServiceImpl implements UserService {
             return map;
         }
     }
+
+    //求职者User表基本信息添加
+    @Override
+    @Transactional
+    public HashMap<Object, String> registerStaffOne(User user, HttpServletRequest request) {
+
+
+        HashMap<Object, String> map = new HashMap<Object, String>();
+
+
+        User userTemp = userDao.findUsersByUsername(user.getUserName());
+
+        if (userTemp !=null) {
+            map.put("info","该用户名已被注册，请重新输入");
+        }else {
+            //设置时间
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+            String format = simpleDateFormat.format(new Date());
+            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime createTime = LocalDateTime.parse(format, df);
+            user.setCreateTime(createTime);
+
+            //设置状态
+            user.setState(1);
+            userDao.insertRegisterUser(user);
+
+            //操作中间表
+            user.getRoles().stream().forEach(item -> {
+
+                UserRole userRole = new UserRole(user.getUserId(), item.getRoleId());
+                userRoleDao.insertRegisterUser(userRole);
+
+            });
+
+
+        /*if (user.getRoles() != null) {
+            for(Role role : user.getRoles()) {
+                UserRole userRole = new UserRole(user.getUserId(), role.getRoleId());
+                userRoleDao.insertRegisterUser(userRole);
+            }
+        }*/
+
+            request.getSession().setAttribute("userId",user.getUserId());
+
+            System.err.println("registerStaffOne>>>>>>>>>>>>>>>>>>>>>>>>>>"+user.getUserId());
+
+            map.put("info","将填求职者信息表");
+
+        }
+
+        return map;
+
+    }
+
+
+    //求职者Jobhunter表信息添加（待优化）
+    @Override
+    @Transactional
+    public HashMap<Object, String> registerStaffTwo(Jobhunter jobhunter, HttpServletRequest request) {
+
+        System.err.println("registerStaffTwo>>>>>>>>>>>impl>>>>>>>>>>>>>>>"+jobhunter);
+
+        HashMap<Object, String> map = new HashMap<Object, String>();
+
+        User userTemp = userDao.selectUserByEmail(jobhunter.getEmail());
+        System.out.println("registerStaffTwo>>>>>>>>>>>impl>>>>>>>>>>>>>>>"+userTemp);
+        if (userTemp!=null){
+            map.put("info","注册邮箱已被使用，请重新输入");
+        }else {
+
+            Integer userId = (Integer) request.getSession().getAttribute("userId");
+
+            System.err.println("registerStaffTwo>>>>>>>>>>>impl>>>>>>>>>>>>>>>"+userId);
+
+            jobhunter.setUserId(userId);
+
+            jobhunterDao.insertJobHunter(jobhunter);
+
+            map.put("info","注册成功");
+        }
+
+
+        return map;
+    }
+
+
 }

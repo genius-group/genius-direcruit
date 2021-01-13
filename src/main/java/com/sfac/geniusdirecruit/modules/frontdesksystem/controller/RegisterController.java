@@ -1,4 +1,5 @@
-package com.sfac.geniusdirecruit.modules.frontdesksystem.controller;/*
+package com.sfac.geniusdirecruit.modules.frontdesksystem.controller;
+/*
  * @projectName: genius-direcruit
  * @documentName: RegisterController
  * @author: WJM
@@ -6,6 +7,7 @@ package com.sfac.geniusdirecruit.modules.frontdesksystem.controller;/*
  */
 
 import com.sfac.geniusdirecruit.common.utile.SmsSend;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Jobhunter;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.UserVo;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
@@ -30,33 +32,6 @@ public class RegisterController {
     @Autowired
     SmsSend smsSend;
 
-/*
-*  127.0.0.1:8080/frontdesk/SubmissionPage
-* */
-
-    @RequestMapping("/SubmissionPage")
-    public String submissionPage() {
-
-        return "frontdesk/registerSubmission";
-
-    }
-
-
-
-    //求职者注册
-    @PostMapping(value = "/SubmissionOne",consumes = "application/json")
-    @ResponseBody
-    public HashMap<Object,String> SubmissionOne(@RequestBody User user){
-
-        System.err.println("SubmissionOne......................"+user);
-
-        HashMap<Object, String> map = userService.registerStaff(user);
-
-        System.err.println("SubmissionOne......................"+map);
-
-        return map;
-    }
-
 
 
     /**
@@ -72,6 +47,60 @@ public class RegisterController {
 
     }
 
+/*
+*  127.0.0.1:8080/frontdesk/SubmissionPage
+* */
+
+    @RequestMapping("/SubmissionPage")
+    public String submissionPage() {
+
+        return "frontdesk/registerSubmissionOne";
+
+    }
+
+    /*
+     *  127.0.0.1:8080/frontdesk/SubmissionPageTwo
+     * */
+
+    @RequestMapping("/SubmissionPageTwo")
+    public String SubmissionPageTwo() {
+
+        return "frontdesk/registerSubmissionTwo";
+
+    }
+
+
+    //求职者Jobhunter表信息添加
+    @PostMapping(value = "/SubmissionTwo",consumes = "application/json")
+    @ResponseBody
+    public HashMap<Object,String> SubmissionTwo(@RequestBody Jobhunter jobhunter, HttpServletRequest request){
+
+        System.err.println("SubmissionTwo.........controller............."+jobhunter);
+
+        HashMap<Object, String> map = userService.registerStaffTwo(jobhunter,request);
+
+        System.err.println("SubmissionTwo.........controller............."+map);
+
+        return map;
+    }
+
+
+    //求职者User表基本信息添加
+    @PostMapping(value = "/SubmissionOne",consumes = "application/json")
+    @ResponseBody
+    public HashMap<Object,String> SubmissionOne(@RequestBody User user,HttpServletRequest request){
+
+        System.err.println("SubmissionOne......................"+user);
+
+        HashMap<Object, String> map = userService.registerStaffOne(user,request);
+
+        System.err.println("SubmissionOne......................"+map);
+
+        return map;
+    }
+
+
+
 
     //发送短信
     @RequestMapping("/sendSms")
@@ -84,7 +113,6 @@ public class RegisterController {
         return userService.sendSms(phone,request);
 
     }
-
 
 
 

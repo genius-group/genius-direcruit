@@ -70,7 +70,7 @@ public interface UserDao {
     //新增注册后的用户
     @Insert("insert into user (user_name,user_pwd,create_time,tel,state) values (#{userName},#{userPwd},#{createTime},#{tel},#{state})")
     @Options(useGeneratedKeys = true, keyProperty = "userId",keyColumn = "user_id")
-    void insertRegisterUser(User user_db);
+    void insertRegisterUser(User user);
 
     //通过email查询User
     @Select("SELECT\n" +
