@@ -26,7 +26,7 @@ public class JobsController {
 
     @RequestMapping("/jobsPage")
     public String jobsPage(ModelMap modelMap) {
-        modelMap.put("template", "backstagesystem/jobs");
+        modelMap.put("template", "backstagesystem/job/jobs");
         return "common/managerIndex";
     }
 

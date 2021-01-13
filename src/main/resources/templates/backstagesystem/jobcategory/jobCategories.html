@@ -17,7 +17,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>企业列表 <small>companies</small></h3>
+                <h3>职位类别<small>jobCategory</small></h3>
             </div>
         </div>
 
@@ -38,12 +38,8 @@
                                         <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>企业名称</th>
-                                            <th>公司地址</th>
-                                            <th>公司描述</th>
-                                            <th>信用代码</th>
-                                            <th>公司性质</th>
-                                            <th>操作</th>
+                                            <th>职位类别名称</th>
+                                            <th>操作列</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -59,8 +55,9 @@
     </div>
 </div>
 <!-- /page content -->
-<div th:replace="backstagesystem/company/companyAdd"></div>
-<div th:replace="backstagesystem/company/companyEdit"></div>
+
+<div th:replace="backstagesystem/jobcategory/jobCategoryAdd"></div>
+<div th:replace="backstagesystem/jobcategory/jobCategoryEdit"></div>
 
 <!-- Datatables -->
 <script src="/backstage/plugin/datatables.net/js/jquery.dataTables.min.js"></script>
@@ -89,8 +86,6 @@
         $("#addModalSubmit").bind("click", function() {
             addModal();
         });
-
-        // 绑定页面元素的其他事件
         $("#editModalSubmit").bind("click", function() {
             editModal();
         });
@@ -124,8 +119,9 @@
                 searchBean.direction = direction;
                 searchBean.keyWord = data.search.value;
 
+
                 $.ajax({
-                    url : "/api/companies",
+                    url : "/api/jobcategories",
                     type : "post",
                     contentType: "application/json",
                     data : JSON.stringify(searchBean),
@@ -151,7 +147,7 @@
                         var rowsData = [];
                         for (var i = 0; i < rs.list.length; i++) {
                             //包装行数据
-                            var rowData = new RowData(rs.list[i].companyId, rs.list[i].companyName,rs.list[i].address,rs.list[i].description,rs.list[i].creditCode,rs.list[i].nature,);
+                            var rowData = new RowData(rs.list[i].jobCategoryId, rs.list[i].jobCategoryName);
                             // 将行数据放到数组里
                             rowsData.push(rowData);
                         }
@@ -166,53 +162,37 @@
                 });
             },
             "columns": [ //定义行数据字段
-                {data: 'companyId', name: "company_id", sortable: true},
-                {data: 'companyName', name: "company_name", sortable: true},
-                {data: 'address', name: "address", sortable: true},
-                {data: 'description', name: "description", sortable: true},
-                {data: 'creditCode', name: "credit_code", sortable: true},
-                {data: 'nature', name: "nature", sortable: true},
+                {data: 'jobCategoryId', name: "job_category_id", sortable: true},
+                {data: 'jobCategoryName', name: "job_category_name", sortable: true},
                 {data: 'operate', width: '80px', sortable: false}
             ]
         });
     }
 
     //行数据结构
-    function RowData(companyId, companyName,address,description,creditCode,nature) {
-        this.companyId = companyId;
-        this.companyName = companyName;
-        this.address = address;
-        this.description = description;
-        this.creditCode = creditCode;
-        this.nature = nature;
+    function RowData(jobCategoryId, jobCategoryName) {
+        this.jobCategoryId = jobCategoryId;
+        this.jobCategoryName = jobCategoryName;
         this.operate = function () {
             return "<a href='javascript:void(0);' class='btn_editcolor' " +
                 "data-toggle='modal' data-target='#editModal' " +
-                "onclick='initEditModal(\"" + companyId + "\")'>编辑</a>";
+                "onclick='initEditModal(\"" + jobCategoryId + "\")'>编辑</a>&nbsp;" +
+                "<a href='javascript:void(0);' onclick='deleteModal(\"" + jobCategoryId + "\")' " +
+                "class='btn_editcolor'>删除</a>";
         }
     }
-
+    // 初始化添加页面
     function initAddModal() {
-        $("#nameForAdd").val("");
-        $("#addressForAdd").val("");
-        $("#descriptionForAdd").val("");
-        $("#creditCodeForAdd").val("");
-        $("#natureForAdd").val("");
+        $("#jobCategoryNameForAdd").val("");
     }
-
     function addModal() {
-        var company = {};
-        company.companyName = $("#nameForAdd").val();
-        company.address = $("#addressForAdd").val();
-        company.description = $("#descriptionForAdd").val();
-        company.creditCode = $("#creditCodeForAdd").val();
-        company.nature = $("#natureForAdd").val();
-
+        var jobCategory = {};
+        jobCategory.jobCategoryName = $("#jobCategoryNameForAdd").val();
         $.ajax({
-            url : "/api/company",
+            url : "/api/jobcategory",
             type : "post",
             contentType: "application/json",
-            data : JSON.stringify(company),
+            data : JSON.stringify(jobCategory),
             success : function (rs) {
                 if (rs.status == 200) {
                     $('#addModal').modal('hide');
@@ -227,19 +207,13 @@
         });
     }
 
-    function initEditModal(companyId) {
+    function initEditModal(jobCategoryId) {
         $.ajax({
-            url : "/api/company/" + companyId,
+            url : "/api/jobCategory/" + jobCategoryId,
             type : "get",
-            //contentType: "application/json",
-            //data : JSON.stringify(category),
             success : function (rs) {
-                $("#idForEdit").val(rs.companyId);
-                $("#nameForEdit").val(rs.companyName);
-                $("#addressForEdit").val(rs.address);
-                $("#descriptionForEdit").val(rs.description);
-                $("#creditCodeForEdit").val(rs.creditCode);
-                $("#natureForEdit").val(rs.nature);
+                $("#jobCategoryIdForEdit").val(rs.jobCategoryId);
+                $("#jobCategoryNameForEdit").val(rs.jobCategoryName);
             },
             error : function (data) {
                 layer.alert(data.responseText, {icon: 0});
@@ -248,19 +222,14 @@
     }
 
     function editModal() {
-        var company = {};
-        company.companyId = $("#idForEdit").val();
-        company.companyName = $("#nameForEdit").val();
-        company.address = $("#addressForEdit").val();
-        company.description = $("#descriptionForEdit").val();
-        company.creditCode = $("#creditCodeForEdit").val();
-        company.nature = $("#natureForEdit").val();
-
+        var jobCategory = {};
+        jobCategory.jobCategoryId= $("#idForEdit").val();
+        jobCategory.jobCategoryName = $("#jobCategoryNameForEdit").val();
         $.ajax({
-            url : "/api/company",
+            url : "/api/jobcategory",
             type : "put",
             contentType: "application/json",
-            data : JSON.stringify(company),
+            data : JSON.stringify(jobCategory),
             success : function (rs) {
                 if (rs.status == 200) {
                     $('#editModal').modal('hide');
@@ -271,6 +240,29 @@
             },
             error : function (data) {
                 layer.alert(data.responseText, {icon: 0});
+            }
+        });
+    }
+
+    function deleteModal(jobCategoryId) {
+        bootbox.confirm("Are you sure?", function(result) {
+            if(result) {
+                $.ajax({
+                    url : "/api/jobcategory/" + jobCategoryId,
+                    type : "delete",
+                    //contentType: "application/json",
+                    //data : JSON.stringify(category),
+                    success : function (rs) {
+                        if (rs.status == 200) {
+                            initTable(DEFAULT_PAFE_SIZE);
+                        } else {
+                            layer.alert(rs.message, {icon: 0});
+                        }
+                    },
+                    error : function (data) {
+                        layer.alert(data.responseText, {icon: 0});
+                    }
+                });
             }
         });
     }

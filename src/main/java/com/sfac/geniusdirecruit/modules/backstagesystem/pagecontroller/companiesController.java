@@ -13,7 +13,7 @@ public class companiesController {
      */
     @RequestMapping("/companyPage")
     public String loginPage(ModelMap modelMap) {
-        modelMap.put("template", "backstagesystem/companies");
+        modelMap.put("template", "backstagesystem/company/companies");
         return "common/managerIndex";
     }
 }

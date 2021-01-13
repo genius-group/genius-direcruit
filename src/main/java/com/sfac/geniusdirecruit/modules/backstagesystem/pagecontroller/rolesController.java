@@ -13,7 +13,7 @@ public class rolesController {
      */
     @RequestMapping("/rolePage")
     public String loginPage(ModelMap modelMap) {
-        modelMap.put("template", "backstagesystem/roles");
+        modelMap.put("template", "backstagesystem/role/roles");
         return "common/managerIndex";
     }
 }

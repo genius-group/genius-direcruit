@@ -13,7 +13,7 @@ public class usersController {
      */
     @RequestMapping("/userPage")
     public String loginPage(ModelMap modelMap) {
-        modelMap.put("template", "backstagesystem/users");
+        modelMap.put("template", "backstagesystem/user/users");
         return "common/managerIndex";
     }
 }

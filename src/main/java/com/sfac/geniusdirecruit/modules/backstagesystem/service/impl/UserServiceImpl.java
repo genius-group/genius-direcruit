@@ -86,11 +86,11 @@ public class UserServiceImpl implements UserService {
         user.setState(1);
         User userTemp = userDao.selectUserByUserName(user.getUserName());
         User userTemp1 = userDao.findUsersByTel(userVo.getTel());
-        String sessionCode = request.getSession().getAttribute("smsCode")+"";
         if (userTemp1 != null) {
             return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                     "tel is registered.", user);
         }
+        String sessionCode = request.getSession().getAttribute("smsCode")+"";
         if (sessionCode.equals(userVo.getCode())) {
             if (userTemp != null) {
                 return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
@@ -253,7 +253,6 @@ public class UserServiceImpl implements UserService {
             return map;
         }
     }
-
 
     //求职者的注册
     @Override
