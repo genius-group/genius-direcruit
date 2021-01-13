@@ -18,6 +18,8 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.entity.UserRole;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.UserVo;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -134,20 +136,21 @@ public class UserServiceImpl implements UserService {
                 "delete success");
     }
 
+    //用户登录
     @Override
-    public HashMap<Object, String> loginIn(User user) {
+    public HashMap<Object, String> loginIn(User user,HttpServletRequest request) {
         HashMap<Object,String> map = new HashMap<Object, String>();
-        User user_db = userDao.selectUserByUserName(user.getUserName());
-        if (user_db==null){
-            map.put("info","用户不存在");
-        }else {
-            if (user.getUserPwd().equals(user_db.getUserPwd())){
-                map.put("info","登录成功");
-                return map;
-            }else {
-                map.put("info","密码错误");
-                return map;
-            }
+        try {
+            UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(),MD5Util.getMD5(user.getUserPwd()));
+            Subject subject = SecurityUtils.getSubject();
+            subject.login(token);
+            subject.checkRoles();
+            request.getSession().setAttribute("user",subject.getPrincipal());
+            map.put("info","登录成功");
+
+        }catch (UnknownAccountException | IncorrectCredentialsException e){
+            e.printStackTrace();
+            map.put("info","用户名或密码输入错误");
         }
         return map;
     }
@@ -195,7 +198,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
+    //发送验证码到邮箱
     @Override
     public HashMap<String, Object> sendCode(String email, HttpServletRequest request) {
         HashMap<String,Object> map = new HashMap<String, Object>();
@@ -310,7 +313,7 @@ public class UserServiceImpl implements UserService {
 
 
             //根据电话去查询用户，如果已注册，则会去登录页面
-            User userTemp = userDao.selectUsersByTel(userVo.getTel());
+            User userTemp = userDao.selectUserByTel(userVo.getTel());
             if (userTemp!=null){
                 map.put("info","用户已注册，请登录");
             }else {
@@ -325,15 +328,22 @@ public class UserServiceImpl implements UserService {
         return map;
 
     }
+
+    //邮箱+验证码登录
     @Override
     public HashMap<String, Object> emailLogin(String email, Integer code, HttpServletRequest request) {
         HashMap<String,Object> map = new HashMap<String, Object>();
+        User user = userDao.selectUserByEmail(email);
+
         Integer code0 = (Integer) request.getSession().getAttribute("code");
-        System.err.println(code0);
         String email0 = (String) request.getSession().getAttribute("email");
-        System.err.println(email0);
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(),user.getUserPwd());
         if (code.equals(code0)&&email.equals(email0)){
             map.put("info","登录成功");
+            Subject subject = SecurityUtils.getSubject();
+            subject.login(token);
+            subject.checkRoles();
+            request.getSession().setAttribute("user",subject.getPrincipal());
             return map;
         }else {
             map.put("info","登录失败，请稍后重试");
@@ -341,6 +351,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    //发送验证码到手机
     @Override
     public HashMap<String, Object> sendMessage(String tel, HttpServletRequest request) {
         HashMap<String, Object> map = new HashMap<String, Object>();
@@ -360,23 +371,24 @@ public class UserServiceImpl implements UserService {
             }
     }
 
+    //手机+验证码登录
     @Override
     public HashMap<String, Object> messageLogin(String tel, Integer code, HttpServletRequest request) {
         HashMap<String,Object> map = new HashMap<String, Object>();
+        User user = userDao.selectUserByTel(tel);
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(),user.getUserPwd());
         Integer code0 = (Integer) request.getSession().getAttribute("smsCode");
         String tel0 = (String) request.getSession().getAttribute("tel");
         if (code.equals(code0)&&tel.equals(tel0)){
             map.put("info","登录成功");
+            Subject subject = SecurityUtils.getSubject();
+            subject.login(token);
+            subject.checkRoles();
+            request.getSession().setAttribute("user",subject.getPrincipal());
             return map;
         }else {
             map.put("info","登录失败，请稍后重试");
             return map;
         }
     }
-
-
-
-
-
-
 }

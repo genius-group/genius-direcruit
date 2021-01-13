@@ -1,4 +1,4 @@
-package com.sfac.geniusdirecruit.modules.backstagesystem.controller;
+package com.sfac.geniusdirecruit.modules.backstagesystem.pagecontroller;
 
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

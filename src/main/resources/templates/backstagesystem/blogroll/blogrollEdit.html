@@ -18,16 +18,17 @@
                     </div>
 
                     <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align">BlogrollLogo</label>
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">BlogrollUrl</label>
                         <div class="col-md-6 col-sm-6 ">
-                            <input type="text" id="blogrollLogoForEdit" name="blogrollLogo" class="form-control ">
+                            <input type="text" id="blogrollUrlForEdit" name="blogrollUrl" class="form-control ">
                         </div>
                     </div>
 
                     <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align">BlogrollUrl</label>
+                        <input type="hidden" id="logoForEditPage" name="blogrollLogo" value="" />
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="blogrollLogoForEdit">Upload Logo</label>
                         <div class="col-md-6 col-sm-6 ">
-                            <input type="text" id="blogrollUrlForEdit" name="blogrollUrl" class="form-control ">
+                            <input id="blogrollLogoForEdit" name="image" type="file" multiple=true>
                         </div>
                     </div>
                 </form>

@@ -60,7 +60,7 @@ public class SmsSend {
         request.putQueryParameter("RegionId", "cn-hangzhou");
         /*填写阿里云申请的短信发送需要的相关信息*/
         request.putQueryParameter("PhoneNumbers",phone);
-        request.putQueryParameter("SignName", "雕刻的某个风景");
+        request.putQueryParameter("SignName", "PHOENIX商城");
         request.putQueryParameter("TemplateCode", templateCode);
         request.putQueryParameter("TemplateParam", "{'code':"+code+"}");
         try {

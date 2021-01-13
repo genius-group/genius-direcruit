@@ -1,9 +1,8 @@
-package com.sfac.geniusdirecruit.common.controller;
+package com.sfac.geniusdirecruit.modules.backstagesystem.pagecontroller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @Author: yzs

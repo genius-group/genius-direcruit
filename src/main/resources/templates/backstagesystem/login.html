@@ -5,14 +5,14 @@
                 <img src="/frontdesk/images/fav.svg" alt="..." class="img-circle mb-lg-3">
                 <h1>牛人招聘系统后台登录</h1>
                 <div>
-                    <input name="userName" type="text" class="form-control" placeholder="userName" required=""/>
+                    <input name="userName" type="text" class="form-control" placeholder="userName" required="required"/>
                 </div>
                 <div>
-                    <input name="userPwd" type="password" class="form-control" placeholder="userPwd" required=""/>
+                    <input name="userPwd" type="password" class="form-control" placeholder="userPwd" required="required"/>
                 </div>
                 <div>
                     <input class="form-control input-val" type="text" value="" placeholder="请输入验证码（不区分大小写）"
-                           style="float:left; width:68%; margin-bottom: 0px;">
+                           style="float:left; width:68%; margin-bottom: 0px;" required="required">
                     <canvas id="canvas" width="100" height="36"></canvas>
                 </div>
                 <div style="text-align:left; margin-top: 5px; margin-left: 3px;">
@@ -59,6 +59,7 @@
     });
 
     function login() {
+
         /* var code = $(".input-val").val();
         var num = show_num.join("");
         if (code == "") {
