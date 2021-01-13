@@ -1,15 +1,15 @@
 <!-- jquery dataTable -->
 <link href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <!-- Datatables -->
-<link href="/plugin/datatables.net-bs/css/dataTables.bootstrap.min.css"
+<link href="/backstage/plugin/datatables.net-bs/css/dataTables.bootstrap.min.css"
       rel="stylesheet">
-<link href="/plugin/datatables.net-buttons-bs/css/buttons.bootstrap.min.css"
+<link href="/backstage/plugin/datatables.net-buttons-bs/css/buttons.bootstrap.min.css"
       rel="stylesheet">
-<link href="/plugin/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css"
+<link href="/backstage/plugin/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css"
       rel="stylesheet">
-<link href="/plugin/datatables.net-responsive-bs/css/responsive.bootstrap.min.css"
+<link href="/backstage/plugin/datatables.net-responsive-bs/css/responsive.bootstrap.min.css"
       rel="stylesheet">
-<link href="/plugin/datatables.net-scroller-bs/css/scroller.bootstrap.min.css"
+<link href="/backstage/plugin/datatables.net-scroller-bs/css/scroller.bootstrap.min.css"
       rel="stylesheet">
 
 <!-- page content -->
@@ -17,7 +17,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>用户列表 <small>categories</small></h3>
+                <h3>用户列表 <small>users</small></h3>
             </div>
         </div>
 
@@ -27,7 +27,7 @@
                 <div class="x_panel">
                     <div class="x_title">
                         <button class="btn btn-primary" type="button" id="addModalBtn"
-                                data-toggle="modal" data-target="#modalAdd">新增</button>
+                                data-toggle="modal" data-target="#addModal">新增</button>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
@@ -63,18 +63,18 @@
 <div th:replace="backstagesystem/userEdit"></div>
 
 <!-- Datatables -->
-<script src="/plugin/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="/plugin/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-<script src="/plugin/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-<script src="/plugin/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-<script src="/plugin/datatables.net-buttons/js/buttons.flash.min.js"></script>
-<script src="/plugin/datatables.net-buttons/js/buttons.html5.min.js"></script>
-<script src="/plugin/datatables.net-buttons/js/buttons.print.min.js"></script>
-<script src="/plugin/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-<script src="/plugin/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-<script src="/plugin/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script src="/plugin/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-<script src="/plugin/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+<script src="/backstage/plugin/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/backstage/plugin/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="/backstage/plugin/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/backstage/plugin/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<script src="/backstage/plugin/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="/backstage/plugin/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="/backstage/plugin/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="/backstage/plugin/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="/backstage/plugin/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+<script src="/backstage/plugin/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/backstage/plugin/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="/backstage/plugin/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 
 <script >
     var DEFAULT_PAFE_SIZE = 5;
@@ -149,7 +149,7 @@
                         var rowsData = [];
                         for (var i = 0; i < rs.list.length; i++) {
                             //包装行数据
-                            var rowData = new RowData(rs.list[i].id, rs.list[i].name);
+                            var rowData = new RowData(rs.list[i].userId, rs.list[i].userName,rs.list[i].tel,rs.list[i].state,rs.list[i].createTime);
                             // 将行数据放到数组里
                             rowsData.push(rowData);
                         }
@@ -164,11 +164,11 @@
                 });
             },
             "columns": [ //定义行数据字段
-                {data: 'userId', name: "userId", sortable: true},
-                {data: 'userName', name: "userName", sortable: true},
+                {data: 'userId', name: "user_id", sortable: true},
+                {data: 'userName', name: "user_name", sortable: true},
                 {data: 'tel', name: "tel", sortable: true},
                 {data: 'state', name: "state", sortable: true},
-                {data: 'createTime', name: "createTime", sortable: true},
+                {data: 'createTime', name: "create_time", sortable: true},
                 {data: 'operate', width: '80px', sortable: false}
             ]
         });
@@ -184,8 +184,8 @@
         this.operate = function () {
             return "<a href='javascript:void(0);' class='btn_editcolor' " +
                 "data-toggle='modal' data-target='#editModal' " +
-                "onclick='initEditModal(\"" + id + "\")'>编辑</a>&nbsp;" +
-                "<a href='javascript:void(0);' onclick='deleteModal(\"" + id + "\")' " +
+                "onclick='initEditModal(\"" + userId + "\")'>编辑</a>&nbsp;" +
+                "<a href='javascript:void(0);' onclick='deleteModal(\"" + userId + "\")' " +
                 "class='btn_editcolor'>删除</a>";
         }
     }
@@ -207,13 +207,13 @@
         user.createTime = $("#createTimeForAdd").val();
 
         $.ajax({
-            url : "/api/user",
+            url : "/api/user/admin",
             type : "post",
             contentType: "application/json",
             data : JSON.stringify(user),
             success : function (rs) {
                 if (rs.status == 200) {
-                    $('#modalAdd').modal('hide');
+                    $('#addModal').modal('hide');
                     initTable(DEFAULT_PAFE_SIZE);
                 } else {
                     layer.alert(rs.message, {icon: 0});
@@ -229,8 +229,6 @@
         $.ajax({
             url : "/api/user/" + userId,
             type : "get",
-            //contentType: "application/json",
-            //data : JSON.stringify(category),
             success : function (rs) {
                 $("#idForEdit").val(rs.userId);
                 $("#nameForEdit").val(rs.userName);
