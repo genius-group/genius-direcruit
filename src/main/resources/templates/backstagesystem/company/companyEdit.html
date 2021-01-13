@@ -10,34 +10,29 @@
 
             <div class="modal-body">
                 <form action="javascript:void(0);" data-parsley-validate class="form-horizontal form-label-left">
+                    <input type="hidden" id="idForEdit" name="userId" value="">
                     <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align">用户名</label>
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" >用户名</label>
                         <div class="col-md-6 col-sm-6 ">
-                            <input type="text" id="nameForAdd" name="userName" class="form-control ">
+                            <input type="text" id="nameForEidt" name="userName" class="form-control ">
                         </div>
                     </div>
                     <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align">密码</label>
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" >电话</label>
                         <div class="col-md-6 col-sm-6 ">
-                            <input type="text" id="pwdForAdd" name="userPwd" class="form-control " value="111">
+                            <input type="text" id="telForEdit" name="tel" class="form-control ">
                         </div>
                     </div>
                     <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align">电话</label>
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" >状态</label>
                         <div class="col-md-6 col-sm-6 ">
-                            <input type="text" id="telForAdd" name="tel" class="form-control ">
+                            <input type="text" id="stateForEdit" name="state" class="form-control ">
                         </div>
                     </div>
                     <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align">状态</label>
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" >创建时间</label>
                         <div class="col-md-6 col-sm-6 ">
-                            <input type="text" id="stateForAdd" name="state" class="form-control ">
-                        </div>
-                    </div>
-                    <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align">创建时间</label>
-                        <div class="col-md-6 col-sm-6 ">
-                            <input type="text" id="createTimeForAdd" name="createTime" class="form-control ">
+                            <input type="text" id="createTimeForEdit" name="createTime" class="form-control " readonly>
                         </div>
                     </div>
                 </form>
