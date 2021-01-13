@@ -24,6 +24,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -31,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: yzs
@@ -51,6 +53,8 @@ public class UserServiceImpl implements UserService {
     private UserRoleDao userRoleDao;
     @Autowired
     private EmailSend emailSend;
+    @Autowired
+    private RedisTemplate<String ,Object> redisTemplate;
 
 
     @Autowired
@@ -134,6 +138,34 @@ public class UserServiceImpl implements UserService {
         userDao.deleteUserByUserId(userId);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "delete success");
+    }
+
+    //判断用户是否被锁定的方法
+    private boolean judgeAccount(String tel){
+        String key=tel+":lock";
+        Long lockTime=redisTemplate.getExpire(key, TimeUnit.SECONDS);
+        if (lockTime>0){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    //设置失败次数
+    private void setFailCounts(String tel){
+        String key=tel+":failCount";
+        redisTemplate.opsForValue().increment(key,new Double(1));
+    }
+
+    //获取失败次数
+    private int getFailCounts(String tel){
+        String key=tel+":failCount";
+        Object num=redisTemplate.opsForValue().get(key);
+        if (num==null){
+            return 0;
+        }else {
+            return (int)num;
+        }
     }
 
     //用户登录
