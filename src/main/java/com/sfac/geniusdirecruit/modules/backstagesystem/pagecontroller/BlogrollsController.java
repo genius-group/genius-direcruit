@@ -1,4 +1,4 @@
-package com.sfac.geniusdirecruit.common.controller;
+package com.sfac.geniusdirecruit.modules.backstagesystem.pagecontroller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

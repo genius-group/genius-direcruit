@@ -1,15 +1,15 @@
 <!-- jquery dataTable -->
 <link href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <!-- Datatables -->
-<link href="/plugin/datatables.net-bs/css/dataTables.bootstrap.min.css"
+<link href="/backstage/plugin/datatables.net-bs/css/dataTables.bootstrap.min.css"
       rel="stylesheet">
-<link href="/plugin/datatables.net-buttons-bs/css/buttons.bootstrap.min.css"
+<link href="/backstage/plugin/datatables.net-buttons-bs/css/buttons.bootstrap.min.css"
       rel="stylesheet">
-<link href="/plugin/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css"
+<link href="/backstage/plugin/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css"
       rel="stylesheet">
-<link href="/plugin/datatables.net-responsive-bs/css/responsive.bootstrap.min.css"
+<link href="/backstage/plugin/datatables.net-responsive-bs/css/responsive.bootstrap.min.css"
       rel="stylesheet">
-<link href="/plugin/datatables.net-scroller-bs/css/scroller.bootstrap.min.css"
+<link href="/backstage/plugin/datatables.net-scroller-bs/css/scroller.bootstrap.min.css"
       rel="stylesheet">
 
 <!-- page content -->
@@ -17,7 +17,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>角色列表 <small>categories</small></h3>
+                <h3>用户列表 <small>users</small></h3>
             </div>
         </div>
 
@@ -38,8 +38,11 @@
                                         <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>角色名</th>
-                                            <th>角色描述</th>
+                                            <th>用户名</th>
+                                            <th>电话</th>
+                                            <th>状态</th>
+                                            <th>创建时间</th>
+                                            <th>操作</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -56,22 +59,22 @@
 </div>
 <!-- /page content -->
 
-<div th:replace="backstagesystem/roleAdd"></div>
-<div th:replace="backstagesystem/roleEdit"></div>
+<div th:replace="backstagesystem/user/userAdd"></div>
+<div th:replace="backstagesystem/user/userEdit"></div>
 
 <!-- Datatables -->
-<script src="/plugin/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="/plugin/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-<script src="/plugin/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-<script src="/plugin/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-<script src="/plugin/datatables.net-buttons/js/buttons.flash.min.js"></script>
-<script src="/plugin/datatables.net-buttons/js/buttons.html5.min.js"></script>
-<script src="/plugin/datatables.net-buttons/js/buttons.print.min.js"></script>
-<script src="/plugin/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-<script src="/plugin/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-<script src="/plugin/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script src="/plugin/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-<script src="/plugin/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+<script src="/backstage/plugin/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/backstage/plugin/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="/backstage/plugin/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/backstage/plugin/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<script src="/backstage/plugin/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="/backstage/plugin/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="/backstage/plugin/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="/backstage/plugin/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="/backstage/plugin/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+<script src="/backstage/plugin/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/backstage/plugin/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="/backstage/plugin/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 
 <script >
     var DEFAULT_PAFE_SIZE = 5;
@@ -120,7 +123,7 @@
                 searchBean.keyWord = data.search.value;
 
                 $.ajax({
-                    url : "/api/roles",
+                    url : "/api/users",
                     type : "post",
                     contentType: "application/json",
                     data : JSON.stringify(searchBean),
@@ -146,7 +149,7 @@
                         var rowsData = [];
                         for (var i = 0; i < rs.list.length; i++) {
                             //包装行数据
-                            var rowData = new RowData(rs.list[i].id, rs.list[i].name);
+                            var rowData = new RowData(rs.list[i].userId, rs.list[i].userName, rs.list[i].tel, rs.list[i].state, rs.list[i].createTime);
                             // 将行数据放到数组里
                             rowsData.push(rowData);
                         }
@@ -161,43 +164,51 @@
                 });
             },
             "columns": [ //定义行数据字段
-                {data: 'roleId', name: "roleId", sortable: true},
-                {data: 'roleName', name: "roleName", sortable: true},
-                {data: 'roleDescribe', name: "roleDescribe", sortable: true},
+                {data: 'userId', name: "user_id", sortable: true},
+                {data: 'userName', name: "user_name", sortable: true},
+                {data: 'tel', name: "tel", sortable: true},
+                {data: 'state', name: "state", sortable: true},
+                {data: 'createTime', name: "create_time", sortable: true},
                 {data: 'operate', width: '80px', sortable: false}
             ]
         });
     }
 
     //行数据结构
-    function RowData(roleId, roleName,roleDescribe) {
-        this.roleId = roleId;
-        this.roleName = roleName;
-        this.roleDescribe = roleDescribe;
+    function RowData(userId, userName,tel,state,createTime) {
+        this.userId = userId;
+        this.userName = userName;
+        this.tel = tel;
+        this.state = state;
+        this.createTime = createTime;
         this.operate = function () {
             return "<a href='javascript:void(0);' class='btn_editcolor' " +
                 "data-toggle='modal' data-target='#editModal' " +
-                "onclick='initEditModal(\"" + id + "\")'>编辑</a>&nbsp;" +
-                "<a href='javascript:void(0);' onclick='deleteModal(\"" + id + "\")' " +
+                "onclick='initEditModal(\"" + userId + "\")'>编辑</a>&nbsp;" +
+                "<a href='javascript:void(0);' onclick='deleteModal(\"" + userId + "\")' " +
                 "class='btn_editcolor'>删除</a>";
         }
     }
 
     function initAddModal() {
         $("#nameForAdd").val("");
-        $("#describeForAdd").val("");
+        $("#pwdForAdd").val("");
+        $("#telForAdd").val("");
+        $("#stateForAdd").val("");
     }
 
     function addModal() {
-        var role = {};
-        role.roleName = $("#nameForAdd").val();
-        role.roleDescribe = $("#describeForAdd").val();
+        var user = {};
+        user.userName = $("#nameForAdd").val();
+        user.userPwd = $("#pwdForAdd").val();
+        user.tel = $("#telForAdd").val();
+        user.state = $("#stateForAdd").val();
 
         $.ajax({
-            url : "/api/role",
+            url : "/api/user",
             type : "post",
             contentType: "application/json",
-            data : JSON.stringify(role),
+            data : JSON.stringify(user),
             success : function (rs) {
                 if (rs.status == 200) {
                     $('#modalAdd').modal('hide');
@@ -212,16 +223,18 @@
         });
     }
 
-    function initEditModal(roleId) {
+    function initEditModal(userId) {
         $.ajax({
-            url : "/api/role/" + roleId,
+            url : "/api/user/" + userId,
             type : "get",
             //contentType: "application/json",
             //data : JSON.stringify(category),
             success : function (rs) {
-                $("#idForEdit").val(rs.roleId);
-                $("#nameForEdit").val(rs.roleName);
-                $("#describeForEdit").val(rs.roleDescribe);
+                $("#idForEdit").val(rs.userId);
+                $("#nameForEdit").val(rs.userName);
+                $("#telForEdit").val(rs.tel);
+                $("#stateForEdit").val(rs.state);
+                $("#createTimeForEdit").val(rs.createTime);
             },
             error : function (data) {
                 layer.alert(data.responseText, {icon: 0});
@@ -230,16 +243,18 @@
     }
 
     function editModal() {
-        var role = {};
-        role.roleId = $("#idForEdit").val();
-        role.roleName = $("#nameForEdit").val();
-        role.roleDescribe = $("#describeForEdit").val();
+        var user = {};
+        user.userId = $("#idForEdit").val();
+        user.userName = $("#nameForEdit").val();
+        user.tel = $("#telForEdit").val();
+        user.state = $("#stateForEdit").val();
+        user.createTime = $("#createTimeForEdit").val();
 
         $.ajax({
-            url : "/api/role",
+            url : "/api/user",
             type : "put",
             contentType: "application/json",
-            data : JSON.stringify(role),
+            data : JSON.stringify(user),
             success : function (rs) {
                 if (rs.status == 200) {
                     $('#editModal').modal('hide');
@@ -254,11 +269,11 @@
         });
     }
 
-    function deleteModal(roleId) {
+    function deleteModal(userId) {
         bootbox.confirm("确定删除?", function(result) {
             if(result) {
                 $.ajax({
-                    url : "/api/role/" + roleId,
+                    url : "/api/user/" + userId,
                     type : "delete",
                     //contentType: "application/json",
                     //data : JSON.stringify(category),

@@ -1,4 +1,4 @@
-package com.sfac.geniusdirecruit.common.controller;
+package com.sfac.geniusdirecruit.modules.backstagesystem.pagecontroller;
 
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +26,14 @@ public class JobsController {
 
     @RequestMapping("/jobsPage")
     public String jobsPage(ModelMap modelMap) {
-        modelMap.put("template", "backstagesystem/jobs");
+        modelMap.put("template", "backstagesystem/job/jobs");
         return "common/managerIndex";
     }
 
     @GetMapping("/index")
     public String index1(Model map, @RequestParam(required = false,defaultValue = "1") int page) {
         map.addAttribute("listUser", jobService.findAll(page));
-        return "/qiantaiyemian/index";
+        return "frontdesk/index";
     }
     @ResponseBody
     @RequestMapping("/upload")
@@ -100,13 +100,13 @@ public class JobsController {
         return "下载成功";
     }
 
-    @GetMapping("/jianli")
+    @GetMapping("/resume")
     public String jianli() {
-        return "/qiantaiyemian/jianli";
+        return "frontdesk/resume";
     }
 
     @RequestMapping("/test")
     public String test() {
-        return "/qiantaiyemian/test";
+        return "frontdesk/test";
     }
 }

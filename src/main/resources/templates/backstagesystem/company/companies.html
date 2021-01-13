@@ -1,15 +1,15 @@
 <!-- jquery dataTable -->
 <link href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <!-- Datatables -->
-<link href="/plugin/datatables.net-bs/css/dataTables.bootstrap.min.css"
+<link href="/backstage/plugin/datatables.net-bs/css/dataTables.bootstrap.min.css"
       rel="stylesheet">
-<link href="/plugin/datatables.net-buttons-bs/css/buttons.bootstrap.min.css"
+<link href="/backstage/plugin/datatables.net-buttons-bs/css/buttons.bootstrap.min.css"
       rel="stylesheet">
-<link href="/plugin/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css"
+<link href="/backstage/plugin/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css"
       rel="stylesheet">
-<link href="/plugin/datatables.net-responsive-bs/css/responsive.bootstrap.min.css"
+<link href="/backstage/plugin/datatables.net-responsive-bs/css/responsive.bootstrap.min.css"
       rel="stylesheet">
-<link href="/plugin/datatables.net-scroller-bs/css/scroller.bootstrap.min.css"
+<link href="/backstage/plugin/datatables.net-scroller-bs/css/scroller.bootstrap.min.css"
       rel="stylesheet">
 
 <!-- page content -->
@@ -17,7 +17,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>用户列表 <small>categories</small></h3>
+                <h3>企业列表 <small>companies</small></h3>
             </div>
         </div>
 
@@ -26,9 +26,9 @@
             <div class="col-md-12 col-sm-12 ">
                 <div class="x_panel">
                     <div class="x_title">
-                        <button class="btn btn-primary" type="button" id="addModalBtn"
+                        <!--<button class="btn btn-primary" type="button" id="addModalBtn"
                                 data-toggle="modal" data-target="#modalAdd">新增</button>
-                        <div class="clearfix"></div>
+                        <div class="clearfix"></div>-->
                     </div>
                     <div class="x_content">
                         <div class="row">
@@ -38,10 +38,11 @@
                                         <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>用户名</th>
-                                            <th>电话</th>
-                                            <th>状态</th>
-                                            <th>创建时间</th>
+                                            <th>企业名称</th>
+                                            <th>公司地址</th>
+                                            <th>公司描述</th>
+                                            <th>信用代码</th>
+                                            <th>公司性质</th>
                                             <th>操作</th>
                                         </tr>
                                         </thead>
@@ -59,22 +60,21 @@
 </div>
 <!-- /page content -->
 
-<div th:replace="backstagesystem/userAdd"></div>
-<div th:replace="backstagesystem/userEdit"></div>
+<div th:replace="backstagesystem/company/companyEdit"></div>
 
 <!-- Datatables -->
-<script src="/plugin/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="/plugin/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-<script src="/plugin/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-<script src="/plugin/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-<script src="/plugin/datatables.net-buttons/js/buttons.flash.min.js"></script>
-<script src="/plugin/datatables.net-buttons/js/buttons.html5.min.js"></script>
-<script src="/plugin/datatables.net-buttons/js/buttons.print.min.js"></script>
-<script src="/plugin/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-<script src="/plugin/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-<script src="/plugin/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script src="/plugin/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-<script src="/plugin/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+<script src="/backstage/plugin/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/backstage/plugin/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="/backstage/plugin/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/backstage/plugin/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<script src="/backstage/plugin/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="/backstage/plugin/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="/backstage/plugin/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="/backstage/plugin/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="/backstage/plugin/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+<script src="/backstage/plugin/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/backstage/plugin/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="/backstage/plugin/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 
 <script >
     var DEFAULT_PAFE_SIZE = 5;
@@ -123,7 +123,7 @@
                 searchBean.keyWord = data.search.value;
 
                 $.ajax({
-                    url : "/api/users",
+                    url : "/api/companies",
                     type : "post",
                     contentType: "application/json",
                     data : JSON.stringify(searchBean),
@@ -164,79 +164,53 @@
                 });
             },
             "columns": [ //定义行数据字段
-                {data: 'userId', name: "userId", sortable: true},
-                {data: 'userName', name: "userName", sortable: true},
-                {data: 'tel', name: "tel", sortable: true},
-                {data: 'state', name: "state", sortable: true},
-                {data: 'createTime', name: "createTime", sortable: true},
+                {data: 'companyId', name: "companyId", sortable: true},
+                {data: 'companyName', name: "companyName", sortable: true},
+                {data: 'address', name: "address", sortable: true},
+                {data: 'description', name: "description", sortable: true},
+                {data: 'creditCode', name: "creditCode", sortable: true},
+                {data: 'nature', name: "nature", sortable: true},
                 {data: 'operate', width: '80px', sortable: false}
             ]
         });
     }
 
     //行数据结构
-    function RowData(userId, userName,tel,state,createTime) {
-        this.userId = userId;
-        this.userName = userName;
-        this.tel = tel;
-        this.state = state;
-        this.createTime = createTime;
+    function RowData(companyId, companyName,address,description,creditCode,nature) {
+        this.companyId = companyId;
+        this.companyName = companyName;
+        this.address = address;
+        this.description = description;
+        this.creditCode = creditCode;
+        this.nature = nature;
         this.operate = function () {
             return "<a href='javascript:void(0);' class='btn_editcolor' " +
                 "data-toggle='modal' data-target='#editModal' " +
-                "onclick='initEditModal(\"" + id + "\")'>编辑</a>&nbsp;" +
-                "<a href='javascript:void(0);' onclick='deleteModal(\"" + id + "\")' " +
-                "class='btn_editcolor'>删除</a>";
+                "onclick='initEditModal(\"" + id + "\")'>编辑</a>";
         }
     }
 
     function initAddModal() {
         $("#nameForAdd").val("");
-        $("#pwdForAdd").val("");
-        $("#telForAdd").val("");
-        $("#stateForAdd").val("");
-        $("#createTimeForAdd").val("");
+        $("#addressForAdd").val("");
+        $("#descriptionForAdd").val("");
+        $("#creditCodeForAdd").val("");
+        $("#natureForAdd").val("");
     }
 
-    function addModal() {
-        var user = {};
-        user.userName = $("#nameForAdd").val();
-        user.userPwd = $("#pwdForAdd").val();
-        user.tel = $("#telForAdd").val();
-        user.state = $("#stateForAdd").val();
-        user.createTime = $("#createTimeForAdd").val();
-
+    function initEditModal(companyId) {
         $.ajax({
-            url : "/api/user",
-            type : "post",
-            contentType: "application/json",
-            data : JSON.stringify(user),
-            success : function (rs) {
-                if (rs.status == 200) {
-                    $('#modalAdd').modal('hide');
-                    initTable(DEFAULT_PAFE_SIZE);
-                } else {
-                    layer.alert(rs.message, {icon: 0});
-                }
-            },
-            error : function (data) {
-                layer.alert(data.responseText, {icon: 0});
-            }
-        });
-    }
-
-    function initEditModal(userId) {
-        $.ajax({
-            url : "/api/user/" + userId,
+            url : "/api/company/" + companyId,
             type : "get",
             //contentType: "application/json",
             //data : JSON.stringify(category),
             success : function (rs) {
                 $("#idForEdit").val(rs.userId);
                 $("#nameForEdit").val(rs.userName);
-                $("#telForEdit").val(rs.tel);
-                $("#stateForEdit").val(rs.state);
-                $("#createTimeForEdit").val(rs.createTime);
+                $("#addressForEdit").val(rs.tel);
+                $("#descriptionForEdit").val(rs.state);
+                $("#creditCodeForEdit").val(rs.creditCode);
+                $("#natureForEdit").val(rs.creditCode);
             },
             error : function (data) {
                 layer.alert(data.responseText, {icon: 0});
@@ -245,18 +219,19 @@
     }
 
     function editModal() {
-        var user = {};
-        user.userId = $("#idForEdit").val();
-        user.userName = $("#nameForEdit").val();
-        user.tel = $("#telForEdit").val();
-        user.state = $("#stateForEdit").val();
-        user.createTime = $("#createTimeForEdit").val();
+        var company = {};
+        company.companyId = $("#idForEdit").val();
+        company.companyName = $("#nameForEdit").val();
+        company.address = $("#addressForEdit").val();
+        company.description = $("#descriptionForEdit").val();
+        company.creditCode = $("#creditCodeForEdit").val();
+        company.nature = $("#natureForEdit").val();
 
         $.ajax({
-            url : "/api/user",
+            url : "/api/company",
             type : "put",
             contentType: "application/json",
-            data : JSON.stringify(user),
+            data : JSON.stringify(company),
             success : function (rs) {
                 if (rs.status == 200) {
                     $('#editModal').modal('hide');
@@ -267,29 +242,6 @@
             },
             error : function (data) {
                 layer.alert(data.responseText, {icon: 0});
-            }
-        });
-    }
-
-    function deleteModal(userId) {
-        bootbox.confirm("确定删除?", function(result) {
-            if(result) {
-                $.ajax({
-                    url : "/api/user/" + userId,
-                    type : "delete",
-                    //contentType: "application/json",
-                    //data : JSON.stringify(category),
-                    success : function (rs) {
-                        if (rs.status == 200) {
-                            initTable(DEFAULT_PAFE_SIZE);
-                        } else {
-                            layer.alert(rs.message, {icon: 0});
-                        }
-                    },
-                    error : function (data) {
-                        layer.alert(data.responseText, {icon: 0});
-                    }
-                });
             }
         });
     }

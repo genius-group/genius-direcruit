@@ -1,17 +1,17 @@
-package com.sfac.geniusdirecruit.common.controller;
+package com.sfac.geniusdirecruit.modules.backstagesystem.pagecontroller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class companiesController {
+public class rolesController {
     /**
      * http://127.0.0.1:8080/roles/rolePage
      */
-    @GetMapping("/companies/companyPage")
+    @GetMapping("/roles/rolePage")
     public String loginPage(ModelMap modelMap) {
-        modelMap.put("template", "backstagesystem/companies");
+        modelMap.put("template", "backstagesystem/role/roles");
         return "common/managerIndex";
     }
 }
