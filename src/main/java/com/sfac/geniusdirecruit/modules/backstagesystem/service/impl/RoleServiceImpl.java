@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.RoleDao;
+import com.sfac.geniusdirecruit.modules.backstagesystem.dao.UserRoleDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Role;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ import java.util.Optional;
 public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleDao roleDao;
+    @Autowired
+    private UserRoleDao userRoleDao;
     @Override
     public List<Role> selectAllRoles() {
         return roleDao.selectAllRoles();
@@ -61,6 +64,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public ResultEntity<Object> deleteRoleByRoleId(Integer roleId) {
+        userRoleDao.deleteByRoleId(roleId);
         roleDao.deleteRoleByRoleId(roleId);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "Delete success");

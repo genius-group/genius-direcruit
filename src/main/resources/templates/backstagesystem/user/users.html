@@ -11,6 +11,10 @@
       rel="stylesheet">
 <link href="/backstage/plugin/datatables.net-scroller-bs/css/scroller.bootstrap.min.css"
       rel="stylesheet">
+<!-- jquery-daterangepicker -->
+<link href="/backstage/jquery-datetimepicker/jquery.datetimepicker.css" rel="stylesheet">
+<!-- jquery-datetimepicker -->
+<script src="/backstage/jquery-datetimepicker/build/jquery.datetimepicker.full.js"></script>
 
 <!-- page content -->
 <div class="right_col" role="main">
@@ -225,6 +229,12 @@
         });
     }
 
+    $('#createTimeForAdd').datetimepicker({
+        format: "Y-m-d H:i:s",
+        timepicker:false,
+        step:1
+    });
+
     function initEditModal(userId) {
         $.ajax({
             url : "/api/user/" + userId,
@@ -268,6 +278,12 @@
             }
         });
     }
+
+    $('#createTimeForEdit').datetimepicker({
+        format: "Y-m-d H:i:s",
+        timepicker:false,
+        step:1
+    });
 
     function deleteModal(userId) {
         bootbox.confirm("确定删除?", function(result) {

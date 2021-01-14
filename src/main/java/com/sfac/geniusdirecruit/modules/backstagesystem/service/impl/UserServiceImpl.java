@@ -11,10 +11,7 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.dao.CompanyDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobhunterDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.UserDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.UserRoleDao;
-import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Company;
-import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Jobhunter;
-import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
-import com.sfac.geniusdirecruit.modules.backstagesystem.entity.UserRole;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.*;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.UserVo;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.apache.shiro.SecurityUtils;
@@ -55,6 +52,7 @@ public class UserServiceImpl implements UserService {
     private EmailSend emailSend;
     @Autowired
     private RedisTemplate<String ,Object> redisTemplate;
+
 
 
     @Autowired
@@ -110,7 +108,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(int userId) {
-        return  userDao.getUserById(userId);
+        List<Role> roles=userRoleDao.selectRolesByUserId(userId);
+        User user = userDao.getUserById(userId);
+        user.setRoles(roles);
+        return  user;
     }
 
     @Override
@@ -468,7 +469,7 @@ public class UserServiceImpl implements UserService {
         User user1=new User();
         user1.setUserName(user.getUserName());
         user1.setUserPwd(MD5Util.getMD5(user.getUserPwd()));
-        user.setTel(user.getTel());
+        user1.setTel(user.getTel());
         user1.setState(user.getState());
         user1.setCreateTime(user.getCreateTime());
         userDao.insertUser(user1);

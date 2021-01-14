@@ -12,7 +12,7 @@ public class companiesController {
      * http://127.0.0.1:8080/roles/rolePage
      */
     @RequestMapping("/companyPage")
-    public String loginPage(ModelMap modelMap) {
+    public String companyPage(ModelMap modelMap) {
         modelMap.put("template", "backstagesystem/company/companies");
         return "common/managerIndex";
     }
