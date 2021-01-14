@@ -63,4 +63,5 @@ public interface UserService {
     //求职者Jobhunter表信息添加
     HashMap<Object, String> registerStaffTwo(Jobhunter jobhunter, HttpServletRequest request);
 
+    ResultEntity<User> insertUserByAdmin(User user);
 }

@@ -17,7 +17,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>职位 <small>job</small></h3>
+                <h3>职位 <small>职位列表</small></h3>
             </div>
         </div>
 
@@ -38,7 +38,9 @@
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>job名称</th>
+                                                <th>职位名称</th>
+                                                <th>游览次数</th>
+                                                <th>职位描述</th>
                                                 <th>操作列</th>
                                             </tr>
                                         </thead>
@@ -147,7 +149,7 @@
                         var rowsData = [];
                         for (var i = 0; i < rs.list.length; i++) {
                             //包装行数据
-                            var rowData = new RowData(rs.list[i].jobId, rs.list[i].jobName);
+                            var rowData = new RowData(rs.list[i].jobId, rs.list[i].jobName, rs.list[i].viewCount, rs.list[i].description);
                             // 将行数据放到数组里
                             rowsData.push(rowData);
                         }
@@ -164,15 +166,19 @@
             "columns": [ //定义行数据字段
                 {data: 'jobId', name: "job_id", sortable: true},
                 {data: 'jobName', name: "job_name", sortable: true},
+                {data: 'viewCount', name: "view_count", sortable: true},
+                {data: 'description', name: "description", sortable: true},
                 {data: 'operate', width: '80px', sortable: false}
             ]
         });
     }
 
     //行数据结构
-    function RowData(jobId, jobName) {
+    function RowData(jobId, jobName,viewCount,description) {
         this.jobId = jobId;
         this.jobName = jobName;
+        this.viewCount = viewCount;
+        this.description = description;
         this.operate = function () {
             return "<a href='javascript:void(0);' class='btn_editcolor' " +
                 "data-toggle='modal' data-target='#editModal' " +
@@ -184,12 +190,15 @@
     // 初始化添加页面
     function initAddModal() {
         $("#nameForAdd").val("");
+        $("#viewCountForAdd").val("");
+        $("#jobCategoryName").val("");
     }
-
+/*jobCategoryId*/
     function addModal() {
         var job = {};
         job.jobName = $("#nameForAdd").val();
-
+        job.viewCount = $("#viewCountForAdd").val();
+        job.description = $("#jobCategoryName").val();
         $.ajax({
             url : "/api/job",
             type : "post",
@@ -216,6 +225,8 @@
             success : function (rs) {
                 $("#idForEdit").val(rs.jobId);
                 $("#nameForEdit").val(rs.jobName);
+                $("#viewCountForEdit").val(rs.viewCount);
+                $("#jobCategoryName").val(rs.jobCategory);
             },
             error : function (data) {
                 layer.alert(data.responseText, {icon: 0});
@@ -227,7 +238,8 @@
         var job = {};
         job.jobId = $("#idForEdit").val();
         job.jobName = $("#nameForEdit").val();
-
+        job.viewCount = $("#viewCountForEdit").val();
+        job.jobCategoryName = $("#jobCategoryNameForEdit").val();
         $.ajax({
             url : "/api/job",
             type : "put",

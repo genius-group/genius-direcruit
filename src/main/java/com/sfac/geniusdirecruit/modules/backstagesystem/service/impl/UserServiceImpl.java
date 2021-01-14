@@ -86,11 +86,11 @@ public class UserServiceImpl implements UserService {
         user.setState(1);
         User userTemp = userDao.selectUserByUserName(user.getUserName());
         User userTemp1 = userDao.findUsersByTel(userVo.getTel());
-        String sessionCode = request.getSession().getAttribute("smsCode")+"";
         if (userTemp1 != null) {
             return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                     "tel is registered.", user);
         }
+        String sessionCode = request.getSession().getAttribute("smsCode")+"";
         if (sessionCode.equals(userVo.getCode())) {
             if (userTemp != null) {
                 return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
@@ -286,7 +286,7 @@ public class UserServiceImpl implements UserService {
     public HashMap<String, Object> smsEnter(UserVo userVo, HttpServletRequest request) {
 
 
-        HashMap<String,Object> map = new HashMap<String,Object>();
+                HashMap<String,Object> map = new HashMap<String,Object>();
 
         String sessionCode = request.getSession().getAttribute("smsCode")+"";
 
@@ -459,6 +459,21 @@ public class UserServiceImpl implements UserService {
 
 
         return map;
+    }
+
+
+
+    @Override
+    public ResultEntity<User> insertUserByAdmin(User user) {
+        User user1=new User();
+        user1.setUserName(user.getUserName());
+        user1.setUserPwd(MD5Util.getMD5(user.getUserPwd()));
+        user.setTel(user.getTel());
+        user1.setState(user.getState());
+        user1.setCreateTime(user.getCreateTime());
+        userDao.insertUser(user1);
+        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                "insert success",user1);
     }
 
 

@@ -33,7 +33,7 @@ public class RoleController {
 
     /**
      *查询所有角色信息并分页
-     *  http://127.0.0.1:8080/api/readRoles--------post
+     *  http://127.0.0.1:8080/api/roles--------post
      *  {"currentPage":1, "pageSize":2, "order":"role_id", "direction":"desc", "keyWord":""}
      */
     @PostMapping(value = "/roles",consumes = "application/json")
