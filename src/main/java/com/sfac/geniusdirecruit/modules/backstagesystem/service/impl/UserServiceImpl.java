@@ -142,8 +142,8 @@ public class UserServiceImpl implements UserService {
     }
 
     //判断用户是否被锁定的方法
-    private boolean judgeAccount(String tel){
-        String key=tel+":lock";
+    private boolean judgeAccount(String userName){
+        String key=userName+":lock";
         Long lockTime=redisTemplate.getExpire(key, TimeUnit.SECONDS);
         if (lockTime>0){
             return false;
@@ -153,14 +153,14 @@ public class UserServiceImpl implements UserService {
     }
 
     //设置失败次数
-    private void setFailCounts(String tel){
-        String key=tel+":failCount";
+    private void setFailCounts(String userName){
+        String key=userName+":failCount";
         redisTemplate.opsForValue().increment(key,new Double(1));
     }
 
     //获取失败次数
-    private int getFailCounts(String tel){
-        String key=tel+":failCount";
+    private int getFailCounts(String userName){
+        String key=userName+":failCount";
         Object num=redisTemplate.opsForValue().get(key);
         if (num==null){
             return 0;
@@ -174,16 +174,35 @@ public class UserServiceImpl implements UserService {
     public HashMap<Object, String> loginIn(User user,HttpServletRequest request) {
         HashMap<Object,String> map = new HashMap<Object, String>();
         try {
-            UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(),MD5Util.getMD5(user.getUserPwd()));
-            Subject subject = SecurityUtils.getSubject();
-            subject.login(token);
-            subject.checkRoles();
-            request.getSession().setAttribute("user",subject.getPrincipal());
-            map.put("info","登录成功");
-
-        }catch (UnknownAccountException | IncorrectCredentialsException e){
+            if (judgeAccount(user.getUserName())){
+                UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(),MD5Util.getMD5(user.getUserPwd()));
+                Subject subject = SecurityUtils.getSubject();
+                subject.login(token);
+                subject.checkRoles();
+                request.getSession().setAttribute("user",subject.getPrincipal());
+                map.put("info","登录成功");
+                redisTemplate.delete(user.getUserName()+":lock");
+                redisTemplate.delete(user.getUserName()+":failCount");
+                redisTemplate.opsForValue().set("userName",user.getUserName(),10,TimeUnit.MINUTES);
+            }else {
+                map.put("info","账号被锁定，请在1分钟后再次尝试");
+            }
+        }catch (UnknownAccountException e){
             e.printStackTrace();
             map.put("info","用户名或密码输入错误");
+        }
+        catch (IncorrectCredentialsException e){
+            setFailCounts(user.getUserName());
+            int num = getFailCounts(user.getUserName());
+            if (num>=3){
+                String key = user.getUserName()+":lock";
+                redisTemplate.opsForValue().set(key,"userName",1,TimeUnit.MINUTES);
+                String key1 = user.getUserName()+":failCount";
+                redisTemplate.opsForValue().set(key1,1,1,TimeUnit.MINUTES);
+                map.put("info","账号被锁定,请在1分钟后再次尝试");
+            }else {
+                map.put("info","你输入密码错误"+num+"次，还剩余"+(3-num)+"次机会");
+            }
         }
         return map;
     }
