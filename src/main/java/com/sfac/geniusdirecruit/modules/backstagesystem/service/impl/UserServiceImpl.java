@@ -283,20 +283,20 @@ public class UserServiceImpl implements UserService {
 
         HashMap<String,Object> map = new HashMap<String,Object>();
 
-        Random rd = new Random();
-        int code = rd.nextInt(1000);
-        //发送短信
-        String info = smsSend.send(phone,code+"");
-        //判断是否成功
-        if(info.equals("OK")){
-            //存入session中
-            request.getSession().setAttribute("smsCode",code);
-            map.put("info","短信发送成功");
-        }else{
-            map.put("info","短信发送失败");
-        }
+//        Random rd = new Random();
+//        int code = rd.nextInt(1000);
+//        //发送短信
+//        String info = smsSend.send(phone,code+"");
+//        //判断是否成功
+//        if(info.equals("OK")){
+//            //存入session中
+//            request.getSession().setAttribute("smsCode",code);
+//            map.put("info","短信发送成功");
+//        }else{
+//            map.put("info","短信发送失败");
+//        }
 
-//        request.getSession().setAttribute("smsCode",1111);
+        request.getSession().setAttribute("smsCode",1111);
 
         return map;
     }
@@ -400,7 +400,7 @@ public class UserServiceImpl implements UserService {
     //求职者User表基本信息添加
     @Override
     @Transactional
-    public HashMap<Object, String> registerStaffOne(User user, HttpServletRequest request) {
+    public HashMap<Object, String> registerStaffOne(User user, String flag, HttpServletRequest request) {
 
 
         HashMap<Object, String> map = new HashMap<Object, String>();
@@ -442,7 +442,16 @@ public class UserServiceImpl implements UserService {
 
             System.err.println("registerStaffOne>>>>>>>>>>>>>>>>>>>>>>>>>>"+user.getUserId());
 
-            map.put("info","将填求职者信息表");
+            System.err.println("registerStaffOne>>>>>>>>>>>>>>>>>>>>>>>>>>"+flag);
+
+            if (flag.equals("1")){
+
+                map.put("info","将填求职者信息表");
+
+            }else{
+                map.put("info","将填企业信息表");
+            }
+
 
         }
 

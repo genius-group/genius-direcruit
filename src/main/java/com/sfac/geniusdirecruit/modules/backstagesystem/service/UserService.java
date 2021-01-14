@@ -58,7 +58,7 @@ public interface UserService {
     HashMap<String, Object> messageLogin(String tel, Integer code, HttpServletRequest request);
 
     //求职者User表基本信息添加
-    HashMap<Object, String> registerStaffOne(User user, HttpServletRequest request);
+    HashMap<Object, String> registerStaffOne(User user, String flag, HttpServletRequest request);
 
     //求职者Jobhunter表信息添加
     HashMap<Object, String> registerStaffTwo(Jobhunter jobhunter, HttpServletRequest request);

@@ -13,6 +13,7 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.UserVo;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,20 +53,46 @@ public class RegisterController {
 * */
 
     @RequestMapping("/SubmissionPage")
-    public String submissionPage() {
-
+    public String submissionPage(@RequestParam String flag, ModelMap modelMap) {
+        System.err.println(">>>>>>>>>>>>>SubmissionPage>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+flag);
+        modelMap.addAttribute("flag",flag);
         return "frontdesk/registerSubmissionOne";
 
     }
 
     /*
      *  127.0.0.1:8080/frontdesk/SubmissionPageTwo
+     * 求职者信息表
      * */
 
     @RequestMapping("/SubmissionPageTwo")
-    public String SubmissionPageTwo() {
+    public String goJobHunterPage() {
 
         return "frontdesk/registerSubmissionTwo";
+
+    }
+
+    /*
+     *  127.0.0.1:8080/frontdesk/GoCompanyPage
+     * 企业表
+     * */
+
+    @RequestMapping("/GoCompanyPage")
+    public String goCompanyPage() {
+
+        return "frontdesk/registerSubmissionCompany";
+
+    }
+
+
+    /*
+     *  127.0.0.1:8080/frontdesk/GoIndex
+     * */
+
+    @RequestMapping("/GoIndex")
+    public String goIndex() {
+
+        return "frontdesk/index";
 
     }
 
@@ -88,11 +115,14 @@ public class RegisterController {
     //求职者User表基本信息添加
     @PostMapping(value = "/SubmissionOne",consumes = "application/json")
     @ResponseBody
-    public HashMap<Object,String> SubmissionOne(@RequestBody User user,HttpServletRequest request){
+    public HashMap<Object,String> SubmissionOne(@RequestBody User user,@RequestParam String flag,HttpServletRequest request){
 
         System.err.println("SubmissionOne......................"+user);
 
-        HashMap<Object, String> map = userService.registerStaffOne(user,request);
+        System.err.println("SubmissionOne...........flag..........."+flag);
+
+
+        HashMap<Object, String> map = userService.registerStaffOne(user,flag,request);
 
         System.err.println("SubmissionOne......................"+map);
 

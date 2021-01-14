@@ -25,6 +25,7 @@
    <link href="/frontdesk/css/style.css" rel="stylesheet">
 </head>
 <body>
+<input type="hidden" id="flag" th:value="${flag}" />
 <!-- Login -->
 <div class="bg-white">
    <div class="container">
@@ -73,47 +74,23 @@
                   <div class="form-group">
                   <!--                           <input type="hidden" name="syllabusId" value="${syllabus_db.syllabusId}">-->
                      <div class="position-relative icon-form-control">
-                        <input name="role" id="role" type="hidden" value="2" class="form-control" placeholder="分配角色">
+                        <input name="role" id="role" type="hidden" value="2" class="form-control" placeholder="分配求职者角色">
+                     </div>
+                  </div>
+
+                  <!-- 分配角色:招聘者-->
+                  <div class="form-group">
+                     <!--                           <input type="hidden" name="syllabusId" value="${syllabus_db.syllabusId}">-->
+                     <div class="position-relative icon-form-control">
+                        <input name="roleTwo" id="roleTwo" type="hidden" value="3" class="form-control" placeholder="分配招聘者角色">
                      </div>
                   </div>
 
 
 
-<!--                  <div class="form-group">-->
-<!--                     <label class="mb-1">注册日期</label>-->
-<!--                     <div class="position-relative icon-form-control">-->
-
-<!--                        <input name="createTime" id="createTime" type="date" class="form-control" placeholder="phone number">-->
-<!--                     </div>-->
-<!--                  </div>-->
-
-
-
-<!--                  <div class="custom-control custom-checkbox mb-3">
-                     <input type="checkbox" class="custom-control-input" id="customCheck1">
-                     <label class="custom-control-label" for="customCheck1">记住密码</label>
-                  </div>-->
-
                   <button class="btn btn-success btn-block text-uppercase" type="button" id="registerOne"> 下一步 </button>
 
 
-<!--                  <div class="text-center mt-3 border-bottom pb-3">
-                     <p class="small text-muted">尝试其他登录方式</p>
-                     <div class="row">
-                        <div class="col-6">
-                           <button type="button" class="btn btn-outline-instagram btn-block"><i class="mdi mdi-instagram"></i> Instagram</button>
-                        </div>
-                        <div class="col-6">
-                           <button type="button" class="btn btn-outline-facebook btn-block"><i class="mdi mdi-facebook"></i> Facebook</button>
-                        </div>
-                     </div>
-                  </div>-->
-
-<!--                  <div class="py-3 d-flex align-item-center">
-                     <a href="forgot-password.html">忘记密码?</a>
-                     <span class="ml-auto"> 新用户? <a href="register.html">立即加入</a></span>
-
-                  </div>-->
 
 
                </form>
@@ -169,41 +146,55 @@
          return false;
       }
       else {
-         registerSubmitOne()
+
+         registerSubmitOne();
+         // var flag = $("#flag");
+         // if (flag == 1) {
+         //    registerSubmitOne();
+         // } else {
+         //    registerCompanySubmitOne();
+         // }
       }
 
    }
 
 
-   //检测手机格式
-   // function checkform2() {
-   //    var pattern =/^[1][3,4,5,7,8][0-9]{9}$/;
-   //    if (!pattern.test($("#tel").val())){
-   //       alert('手机号码不正确');
-   //       return false;
-   //    }
-   //    if (pattern.test($("#tel").val())){
-   //       registerSubmitOne()
-   //    }
-   // }
-
 
    function registerSubmitOne() {
+      var flag = $("#flag").val();
+      //      var user ={};定义一个对象
       var user ={};
       user.userName = $("#userName").val();
       user.userPwd = $("#userPwd").val();
       user.tel = $("#tel").val();
       user.createTime = $("#createTime").val();
 
-      var roles = [];
-      var role = {};
-      role.roleId = $("#role").val();
-      roles.push(role);
+      //roles = []定义的一个集合，#role页面取的角色
+      // var roles = [];
+      // var role = {};
+      // role.roleId = $("#role").val();
+      // roles.push(role);
 
+      if (flag==1){
+         /*求职者*/
+         //roles = []定义的一个集合，#role页面取的角色
+         var roles = [];
+         var role = {};
+         role.roleId = $("#role").val();
+         roles.push(role);
+      }else {
+         /*   招聘者
+         flag=2
+            */
+         var roles = [];
+         var role = {};
+         role.roleId = $("#roleTwo").val();
+         roles.push(role);
+      }
       user.roles = roles;
 
       $.ajax({
-         url:"/frontdesk/SubmissionOne",
+         url:"/frontdesk/SubmissionOne?flag="+flag,
          type:"post",
          contentType:"application/json",
          data:JSON.stringify(user),
@@ -221,7 +212,8 @@
                if (data.info=="将填求职者信息表"){
 
                   location.href="/frontdesk/SubmissionPageTwo";
-
+               }else {
+                  location.href="/frontdesk/GoCompanyPage";
                }
             }
 
