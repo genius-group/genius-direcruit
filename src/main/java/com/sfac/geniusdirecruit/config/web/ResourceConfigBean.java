@@ -4,15 +4,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
-/**
- * @Author: yzs
- * @Date: 2021/1/11 20:02
- * 概要：
- * XXXXX
- */
 @Component
 @PropertySource("classpath:application.properties")
 public class ResourceConfigBean {
+
     @Value("${spring.resource.path}")
     private String resourcePath;
     @Value("${spring.resource.path.pattern}")

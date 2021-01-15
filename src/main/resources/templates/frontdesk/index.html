@@ -53,7 +53,7 @@
             <div class="user-nav">
                 <!--未登录-->
                 <div class="btns">
-                    <a href="/jobs/resume" rel="nofollow" class="link-sign-resume" title="上传简历，解析内容，完善注册">上传简历</a>
+                    <a href="/frontjobs/resume" rel="nofollow" class="link-sign-resume" title="上传简历，解析内容，完善注册">上传简历</a>
                     <a href="#" rel="nofollow" ka="header-geek" class="link-sign-resume" title="上传简历，解析内容，完善注册">我要找工作<span class="new" style="display: inline;">hot</span></a>
                     <a href="https://signup.zhipin.com?intent=1" rel="nofollow" class="link-scan" ka="header-boss" title="我要招聘">我要招聘兼职</a>
                     <a href="https://signup.zhipin.com" ka="header-register" class="btn btn-outline">注册</a>
@@ -335,11 +335,11 @@
                 <!--分页功能-->
                 <div class="page">
                     <div>
-                        <a class="prev" th:href="@{/jobs/index(page=${listUser.prePage})}">&lt;&lt;</a>
-                        <a class="num" href="/jobs/index">首页</a>
+                        <a class="prev" th:href="@{/frontjobs/index(page=${listUser.prePage})}">&lt;&lt;</a>
+                        <a class="num" href="/frontjobs/index">首页</a>
                         <span class="current" th:text="${listUser.curPage}"></span>
-                        <a class="num" th:href="@{/jobs/index(page=${listUser.totalPages})}">尾页</a>
-                        <a class="next" th:href="@{/jobs/index(page=${listUser.nextPage})}">&gt;&gt;</a>
+                        <a class="num" th:href="@{/frontjobs/index(page=${listUser.totalPages})}">尾页</a>
+                        <a class="next" th:href="@{/frontjobs/index(page=${listUser.nextPage})}">&gt;&gt;</a>
                     </div>
                 </div>
             </div>
@@ -404,70 +404,5 @@
 <script src="https://static.zhipin.com/library/js/lib/jquery-1.12.2.min.js"></script>
 <script src="https://static.zhipin.com/zhipin-geek/v350/web/geek/js/main.js"></script>
 <input type="hidden" id="page_key_name" value="cpc_job_list" />
-<script>
-    function get_share_datas_from_html_inapp(){
-        var shid = "shdefault",
-            urlShid,
-            urlSid,
-            pk = "pkdefault",
-            pp = "ppdefault",
-            pkn = (typeof _PK != 'undefined' ? _PK : document.getElementById("page_key_name")),
-            getQueryString = function(name) {
-                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"),
-                    r = window.location.search.substr(1).match(reg);
-                if (r != null) {
-                    return unescape(r[2])
-                }
-                return null;
-            };
-        urlShid = getQueryString("shid");
-        urlSid = getQueryString("sid");
-        if (urlShid) {
-            shid = urlShid;
-        } else if (urlSid) {
-            shid = urlSid;
-        }
-        if (pkn) {
-            var pknVal = pkn.value;
-            if (pknVal) {
-                var pkArray = pknVal.split("|");
-                if (pkArray.length == 1) {
-                    pk = pkArray[0];
-                } else if (pkArray.length >= 2) {
-                    pk = pkArray[0];
-                    pp = pkArray[1];
-                }
-            }
-        }
-        var ret = [];
-        ret["shid"] = shid;
-        ret["pk"] = pk;
-        ret["pp"] = pp;
-        return ret;
-    }
-    function getQueryString(name)
-    {
-        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-        var r = window.location.search.substr(1).match(reg);
-        if(r!=null)return  unescape(r[2]); return null;
-    }
-</script>
-<script>
-    var _T = _T || [];
-    (function() {
-        var script = document.createElement("script");
-        script.src = "https://static.zhipin.com/library/js/analytics/ka.zhipin.min.js";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(script, s);
-    })();
-
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?194df3105ad7148dcf2b98a91b5e727a";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
-</script>
 </body>
 </html>

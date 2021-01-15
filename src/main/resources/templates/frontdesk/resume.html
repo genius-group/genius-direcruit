@@ -43,15 +43,14 @@
                 <div class="inner-box">
                     <h4>请上传您的简历</h4>
                     <div class="sub-title">PDF格式简历文件<br/><span class="red">文件大小不超过&nbsp;8&nbsp;M</span></div>
-
-                    <a href="javascript:;" class="btn upload-resume-wrap" ka="nlp_resume_upload_choose" >
-                        <!--                      upload upload  accept="application/pdf"-->
-                        立即上传<input id="file" type="file" name="file">
+                    <a href="javascript:;" class="btn upload-resume-wrap" ka="nlp_resume_upload_choose">
+                        <!--multiple是html的新特性可实现多文件传输-->
+                        简历上传<input type="file" id="file" name="file" accept="application/pdf">
                     </a>
                     <a href="javascript:;" class="btn upload-resume-wrap" ka="nlp_resume_upload_choose">
-                        提交<input type="button" onclick="uploadFile();">
+                        提交<input type="button" id="button" onclick="ajaxFileUpload();">
                     </a>
-                    <a href="/user/signup.html?loginType=1" class="btn btn-outline complete-online">
+                    <a href="#" class="btn btn-outline complete-online">
                         没有附件简历&nbsp;<span class="text-blue">在线填写</span></a>
                 </div>
             </div>
@@ -59,101 +58,42 @@
     </div>
 
 </div>
-<!--
-<input type="file" id="file">
-<input type="button" value="提交" onclick="uploadFile();">
-<div id="result"></div>
--->
 
 <script>
-    function uploadFile() {
+    <!--上传文件-->
+    function ajaxFileUpload()
+    {
         var file=$("#file")[0].files[0];
-        var formData=new FormData();
+        var formData=new FormData();//FormData 接口提供了一种表示表单数据的键值对的构造方式
         formData.append("file",file);
         $.ajax({
-            url:'/jobs/upload',
-            data:formData,
-            type:'post',
-            processData:false,
-            contentType:false,
-            success:function (msg) {
-                $('#result').html(msg);
+                url:'/frontjobs/upload',//用于文件上传的服务器端请求地址
+                type:'post',
+                data:formData,
+                secureuri:false,//一般设置为false
+                fileElementId:'file',//文件上传空间的id属性  <input type="file" id="file" name="file" />
+                dataType: 'json',//返回值类型 一般设置为json，返回文本用text
+                processData:false,//很重要，告诉jq不要对data数据进行处理
+                contentType:false,//很重要，指定为false才能形成正确的content-type
+                success: function (data)  //服务器成功响应处理函数  message
+                {
+                    console.log(data);
+                    if (data.status==200){
+                        alert(data.object+"       上传成功")
+                    }else{
+                        alert("上传失败")
+                    }
+                },
+                error: function (data, status, e)//服务器响应失败处理函数
+                {
+                    alert(e);
+                }
             }
-        });
-
+        )
     }
-
 </script>
-
-<!--<input type="hidden" id="page_key_name" value="cpc_resume_choose" />
+<input type="hidden" id="page_key_name" value="cpc_resume_choose" />
 <script src="https://static.zhipin.com/library/js/lib/jquery-1.12.2.min.js"></script>
-
-<script src="https://static.zhipin.com/zhipin-geek/v351/web/geek/js/main.js"></script>-->
-
-<!--<script>
-    function get_share_datas_from_html_inapp() {
-        var shid = "shdefault",
-            urlShid,
-            urlSid,
-            pk = "pkdefault",
-            pp = "ppdefault",
-            pkn = (typeof _PK != 'undefined' ? _PK : document.getElementById("page_key_name")),
-            getQueryString = function(name) {
-                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"),
-                    r = window.location.search.substr(1).match(reg);
-                if (r != null) {
-                    return unescape(r[2])
-                }
-                return null;
-            };
-        urlShid = getQueryString("shid");
-        urlSid = getQueryString("sid");
-        if (urlShid) {
-            shid = urlShid;
-        } else if (urlSid) {
-            shid = urlSid;
-        }
-        if (pkn) {
-            var pknVal = pkn.value;
-            if (pknVal) {
-                var pkArray = pknVal.split("|");
-                if (pkArray.length == 1) {
-                    pk = pkArray[0];
-                } else if (pkArray.length >= 2) {
-                    pk = pkArray[0];
-                    pp = pkArray[1];
-                }
-            }
-        }
-        var ret = [];
-        ret["shid"] = shid;
-        ret["pk"] = pk;
-        ret["pp"] = pp;
-        return ret;
-    }
-    function getQueryString(name, url) {
-        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"),
-            r = window.location.search.substr(1).match(reg);
-        if (url) {
-            r = url.split('?')[1].match(reg);
-        }
-        if(r!=null)return  unescape(r[2]); return null;
-    }
-</script>
-
-<script src='https://static.zhipin.com/library/js/analytics/ka.zhipin.min.js'></script>
-
-<script>
-    !(function(c,b,d,a){c[a]||(c[a]={});c[a].config={pid:"h9614n96f5@468fdc7650031e0",appType:"web",imgUrl:"https://arms-retcode.aliyuncs.com/r.png?",disableHook:true,enableSPA:true};
-        with(b)with(body)with(insertBefore(createElement("script"),firstChild))setAttribute("crossorigin","",src=d)
-    })(window,document,"https://retcode.alicdn.com/retcode/bl.js","__bl");
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?194df3105ad7148dcf2b98a91b5e727a";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
-</script>-->
+<script src="https://static.zhipin.com/zhipin-geek/v351/web/geek/js/main.js"></script>
 </body>
 </html>

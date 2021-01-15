@@ -3,6 +3,7 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Job;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Resume;
 import org.apache.ibatis.annotations.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -67,8 +68,4 @@ public interface JobDao {
     //删除job
     @Delete("delete from job where job_id = #{jobId}")
     void deleteJobById(int jobId);
-
-    //将url增加到简历表中
-    @Insert("insert into resume (url) values (#{url})")
-    int insertByUrl(String url);
 }
