@@ -44,7 +44,7 @@
                      <label class="mb-1">企业名称</label>
                      <div class="position-relative icon-form-control">
 
-                        <input type="text"  id="jobHunterName" name="jobHunterName" class="form-control">
+                        <input type="text"  id="companyName" name="companyName" class="form-control">
                      </div>
                   </div>
 
@@ -52,7 +52,7 @@
                   <div class="form-group">
                      <label class="mb-1">公司地址</label>
                      <div class="position-relative icon-form-control">
-                         <input name="address" id="" type="text" class="form-control">
+                         <input name="address" id="address" type="text" class="form-control">
 
                      </div>
                   </div>
@@ -62,7 +62,7 @@
                      <label class="mb-1">公司描述</label>
                      <div class="position-relative icon-form-control">
 
-                         <input name="address" id="" type="text" class="form-control">
+                         <input name="description" id="description" type="text" class="form-control">
                      </div>
                   </div>
 
@@ -70,7 +70,7 @@
                      <label class="mb-1">信用代码</label>
                      <div class="position-relative icon-form-control">
 
-                        <input name="photo" id="photo" type="" class="form-control">
+                        <input name="creditCode" id="creditCode" type="" class="form-control">
                      </div>
                   </div>
 
@@ -79,14 +79,14 @@
                      <label class="mb-1">公司性质</label>
                      <div class="position-relative icon-form-control">
 
-                         <select class="educate" name="educate" id="educate">
-                             <option value="初中及以下">初中及以下</option>
-                             <option value="中专/中技">中专/中技</option>
-                             <option value="高中">高中</option>
-                             <option value="大专">大专</option>
-                             <option value="本科">本科</option>
-                             <option value="硕士">硕士</option>
-                             <option value="博士">博士</option>
+                         <select class="nature" name="nature" id="nature">
+                             <option value="有限责任公司">有限责任公司</option>
+                             <option value="股份有限公司">股份有限公司</option>
+                             <option value="国有独资公司">国有独资公司</option>
+                             <option value="个人独资企业">个人独资企业</option>
+                             <option value="合伙企业">合伙企业</option>
+                             <option value="外资投资企业">外资投资企业</option>
+                             <option value="私营企业">私营企业</option>
                          </select>
 <!--                        <input name="educate" id="educate" type="text" class="form-control">-->
                      </div>
@@ -96,7 +96,7 @@
 
 
 
-                  <button class="btn btn-success btn-block text-uppercase" type="button" id="registerTwo"> 注册 </button>
+                  <button class="btn btn-success btn-block text-uppercase" type="button" id="registerCompany"> 注册 </button>
 
 
 
@@ -127,20 +127,9 @@
 <script src="/frontdesk/js/custom.js"></script>
 <script>
 
-   //获取选中性别值
-   // function getRid() {
-      // var rId="";
-      // $('input[type=checkbox]:checked').each(function() {
-      //    rId+=$(this).val()+",";
-      // });
-      // console.log(rId)
-      // $("#roleId").val(rId);
-   // }
-
-
 
    $(function(){
-      $("#registerTwo").bind("click",function () {
+      $("#registerCompany").bind("click",function () {
          checkform();
       });
 
@@ -150,76 +139,52 @@
 
    /*判断姓名、性别是否为空*/
    function checkform() {
-       var pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-      if (document.getElementById('jobHunterName').value.length==0){
-         alert('姓名不能为空');
-         document.getElementById('jobHunterName').focus();
+      if (document.getElementById('companyName').value.length==0){
+         alert('企业名称不能为空');
+         document.getElementById('companyName').focus();
          return false;
       }
-       if (!pattern.test($("#email").val())) {
-           alert('邮箱格式不正确');
-           return false;
-       }else {
-           registerSubmitTwo()
-       }
-
-
-      // if (document.getElementById('userGender').value.length==0){
-      //    alert('性别不能为空');
-      //    document.getElementById('userGender').focus();
-      //    return false;
-      // }
-      // else{
-      //     registerSubmitTwo()
-      // }
-
-
-
+       if (document.getElementById('address').value.length==0){
+         alert('公司描述不能为空');
+         document.getElementById('address').focus();
+         return false;
+      }
+      else{
+           registerSubmitCompany()
+      }
    }
 
 
-   //检测邮箱格式
-   // function checkform1() {
-   //     var pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-   //     if (!pattern.test($("#email").val())) {
-   //         alert('邮箱格式不正确');
-   //         return false;
-   //     }
-   //     if (pattern.test($("#email").val())){
-   //         registerSubmitTwo()
-   //     }
-   // }
+
 
 // $(".educate").val($("#educate").val());
 
-   function registerSubmitTwo() {
-      var jobHunter ={};
-       jobHunter.jobHunterName = $("#jobHunterName").val();
-       jobHunter.sex = $("[name=userGender]:checked").val();
-       jobHunter.birth = $("#birth").val();
-       jobHunter.photo = $("#photo").val();
-       jobHunter.educate = $("#educate").val();
-       jobHunter.email = $("#email").val();
-       jobHunter.address = $("#address").val();
+   function registerSubmitCompany() {
+      var Company ={};
+       Company.companyName = $("#companyName").val();
+       Company.address = $("#address").val();
+       Company.description = $("#description").val();
+       Company.creditCode = $("#creditCode").val();
+       Company.nature = $("#nature").val();
 
 
       $.ajax({
-         url:"/frontdesk/SubmissionTwo",
+         url:"/frontdesk/SubmissionCompany",
          type:"post",
          contentType:"application/json",
-         data:JSON.stringify(jobHunter),
+         data:JSON.stringify(Company),
          dataType:"json",
          success:function (data) {
             console.log("==========>>>"+data)
 
             alert(data.info);
-            if (data.info=="注册邮箱已被使用，请重新输入"){
+            if (data.info=="该公司名称已被注册，请核实后添加"){
 
-               location.href="/frontdesk/SubmissionPageTwo";
+               location.href="/frontdesk/GoCompanyPage";
 
             }else {
 
-               if (data.info=="注册成功"){
+               if (data.info=="企业注册成功"){
 
                   location.href="/frontdesk/GoIndex";
 

@@ -3,6 +3,7 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.service;
 import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Company;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Jobhunter;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.UserVo;
@@ -64,4 +65,6 @@ public interface UserService {
     HashMap<Object, String> registerStaffTwo(Jobhunter jobhunter, HttpServletRequest request);
 
     ResultEntity<User> insertUserByAdmin(User user);
+    //企业Company表信息添加
+    HashMap<Object, String> registerCompany(Company company, HttpServletRequest request);
 }

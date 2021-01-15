@@ -7,6 +7,7 @@ package com.sfac.geniusdirecruit.modules.frontdesksystem.controller;
  */
 
 import com.sfac.geniusdirecruit.common.utile.SmsSend;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Company;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Jobhunter;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.UserVo;
@@ -95,6 +96,25 @@ public class RegisterController {
         return "frontdesk/index";
 
     }
+
+
+
+    //企业Company表信息添加
+    @PostMapping(value = "/SubmissionCompany",consumes = "application/json")
+    @ResponseBody
+    public HashMap<Object,String> SubmissionCompany(@RequestBody Company company, HttpServletRequest request){
+
+        System.err.println("SubmissionCompany.........controller............."+company);
+
+        HashMap<Object, String> map = userService.registerCompany(company,request);
+
+        System.err.println("SubmissionCompany.........controller............."+map);
+
+        return map;
+    }
+
+
+
 
 
     //求职者Jobhunter表信息添加

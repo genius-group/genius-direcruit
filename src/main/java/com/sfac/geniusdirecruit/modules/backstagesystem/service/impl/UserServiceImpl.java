@@ -420,6 +420,8 @@ public class UserServiceImpl implements UserService {
 
             //设置状态
             user.setState(1);
+            //加密
+            user.setUserPwd(MD5Util.getMD5(user.getUserPwd()));
             userDao.insertRegisterUser(user);
 
             //操作中间表
@@ -470,7 +472,7 @@ public class UserServiceImpl implements UserService {
         HashMap<Object, String> map = new HashMap<Object, String>();
 
         User userTemp = userDao.selectUserByEmail(jobhunter.getEmail());
-        System.out.println("registerStaffTwo>>>>>>>>>>>impl>>>>>>>>>>>>>>>"+userTemp);
+        System.err.println("registerStaffTwo>>>>>>>>>>>impl>>>>>>>>>>>>>>>"+userTemp);
         if (userTemp!=null){
             map.put("info","注册邮箱已被使用，请重新输入");
         }else {
@@ -503,6 +505,32 @@ public class UserServiceImpl implements UserService {
         userDao.insertUser(user1);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "insert success",user1);
+    }
+
+    //企业Company表信息添加
+    @Override
+    @Transactional
+    public HashMap<Object, String> registerCompany(Company company, HttpServletRequest request) {
+        HashMap<Object, String> map = new HashMap<Object, String>();
+
+       Company companyTemp =  companyDao.selectCompanyByCompanyName(company.getCompanyName());
+
+       if (companyTemp!=null){
+           map.put("info","该公司名称已被注册，请核实后添加");
+       }else {
+
+           Integer userId = (Integer) request.getSession().getAttribute("userId");
+           System.err.println("registerCompany>>>>>>>>>>>impl>>>>>>>>>>>>>>>"+userId);
+           company.setUserId(userId);
+
+           companyDao.insertCompanyAll(company);
+           map.put("info","企业注册成功");
+
+       }
+
+
+        return map;
+
     }
 
 

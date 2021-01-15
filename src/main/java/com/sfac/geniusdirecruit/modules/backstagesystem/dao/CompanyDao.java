@@ -51,4 +51,11 @@ public interface CompanyDao {
 
     @Insert("insert into company (company_name,address,description,credit_code,nature) values (#{companyName},#{address},#{description},#{creditCode},#{nature})")
     void insertCompany(Company company);
+
+    @Select("select * from company where company_name = #{companyName}")
+    Company selectCompanyByCompanyName(String companyName);
+
+    @Insert("insert into company (user_id,company_name,address,description,credit_code,nature) values (#{userId},#{companyName},#{address},#{description},#{creditCode},#{nature})")
+    void insertCompanyAll(Company company);
+
 }
