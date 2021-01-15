@@ -193,12 +193,15 @@
         $("#viewCountForAdd").val("");
         $("#jobCategoryName").val("");
     }
-/*jobCategoryId*/
     function addModal() {
         var job = {};
         job.jobName = $("#nameForAdd").val();
         job.viewCount = $("#viewCountForAdd").val();
-        job.description = $("#jobCategoryName").val();
+        job.jobCategoryId = $("#jobCategoryName").val();
+
+        var jobCategory = {};
+        jobCategory.jobCategoryId = $("#jobCategoryName").val();
+        job.jobCategoryId = jobCategory.jobCategoryId;
         $.ajax({
             url : "/api/job",
             type : "post",
