@@ -11,6 +11,10 @@
       rel="stylesheet">
 <link href="/backstage/plugin/datatables.net-scroller-bs/css/scroller.bootstrap.min.css"
       rel="stylesheet">
+<!-- jquery-daterangepicker -->
+<link href="/backstage/jquery-datetimepicker/jquery.datetimepicker.css" rel="stylesheet">
+<!-- jquery-datetimepicker -->
+<script src="/backstage/jquery-datetimepicker/build/jquery.datetimepicker.full.js"></script>
 
 <!-- page content -->
 <div class="right_col" role="main">
@@ -27,7 +31,7 @@
                 <div class="x_panel">
                     <div class="x_title">
                         <button class="btn btn-primary" type="button" id="addModalBtn"
-                                data-toggle="modal" data-target="#modalAdd">新增</button>
+                                data-toggle="modal" data-target="#addModal">新增</button>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
@@ -149,7 +153,7 @@
                         var rowsData = [];
                         for (var i = 0; i < rs.list.length; i++) {
                             //包装行数据
-                            var rowData = new RowData(rs.list[i].userId, rs.list[i].userName, rs.list[i].tel, rs.list[i].state, rs.list[i].createTime);
+                            var rowData = new RowData(rs.list[i].userId, rs.list[i].userName,rs.list[i].tel,rs.list[i].state,rs.list[i].createTime);
                             // 将行数据放到数组里
                             rowsData.push(rowData);
                         }
@@ -195,6 +199,7 @@
         $("#pwdForAdd").val("");
         $("#telForAdd").val("");
         $("#stateForAdd").val("");
+        $("#createTimeForAdd").val("");
     }
 
     function addModal() {
@@ -203,15 +208,16 @@
         user.userPwd = $("#pwdForAdd").val();
         user.tel = $("#telForAdd").val();
         user.state = $("#stateForAdd").val();
+        user.createTime = $("#createTimeForAdd").val();
 
         $.ajax({
-            url : "/api/user",
+            url : "/api/user/admin",
             type : "post",
             contentType: "application/json",
             data : JSON.stringify(user),
             success : function (rs) {
                 if (rs.status == 200) {
-                    $('#modalAdd').modal('hide');
+                    $('#addModal').modal('hide');
                     initTable(DEFAULT_PAFE_SIZE);
                 } else {
                     layer.alert(rs.message, {icon: 0});
@@ -223,12 +229,16 @@
         });
     }
 
+    $('#createTimeForAdd').datetimepicker({
+        format: "Y-m-d H:i:s",
+        timepicker:false,
+        step:1
+    });
+
     function initEditModal(userId) {
         $.ajax({
             url : "/api/user/" + userId,
             type : "get",
-            //contentType: "application/json",
-            //data : JSON.stringify(category),
             success : function (rs) {
                 $("#idForEdit").val(rs.userId);
                 $("#nameForEdit").val(rs.userName);
@@ -268,6 +278,12 @@
             }
         });
     }
+
+    $('#createTimeForEdit').datetimepicker({
+        format: "Y-m-d H:i:s",
+        timepicker:false,
+        step:1
+    });
 
     function deleteModal(userId) {
         bootbox.confirm("确定删除?", function(result) {

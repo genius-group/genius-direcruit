@@ -3,6 +3,8 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.service;
 import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Company;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Jobhunter;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.UserVo;
 
@@ -30,7 +32,7 @@ public interface UserService {
 
     ResultEntity<Object> deleteUserByUserId(Integer userId);
 
-    HashMap<Object, String> loginIn(User user);
+    HashMap<Object, String> loginIn(User user,HttpServletRequest request);
 
     void logout();
 	
@@ -41,8 +43,7 @@ public interface UserService {
 
     HashMap<String, Object> sendCode(String email, HttpServletRequest request);
 
-    //求职者注册
-    HashMap<Object, String> registerStaff(User user);
+
 
 
     //发送短信
@@ -57,5 +58,13 @@ public interface UserService {
 
     HashMap<String, Object> messageLogin(String tel, Integer code, HttpServletRequest request);
 
+    //求职者User表基本信息添加
+    HashMap<Object, String> registerStaffOne(User user, String flag, HttpServletRequest request);
 
+    //求职者Jobhunter表信息添加
+    HashMap<Object, String> registerStaffTwo(Jobhunter jobhunter, HttpServletRequest request);
+
+    ResultEntity<User> insertUserByAdmin(User user);
+    //企业Company表信息添加
+    HashMap<Object, String> registerCompany(Company company, HttpServletRequest request);
 }

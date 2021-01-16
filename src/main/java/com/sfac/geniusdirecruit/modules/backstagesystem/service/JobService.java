@@ -3,6 +3,7 @@ import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Job;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Resume;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +28,4 @@ public interface JobService {
 
     ResultEntity<Object> deleteJobById(Integer jobId);
 
-    HashMap<String, Object> findAll(int currentPage);
-
-    int insertByUrl(String url);
 }

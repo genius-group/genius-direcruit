@@ -7,6 +7,7 @@ import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobsDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Job;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Resume;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -83,37 +84,6 @@ public class JobServiceImpl implements JobService {
        jobDao.deleteJobById(jobId);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "Delete success");
-    }
-
-    @Override
-    public HashMap<String, Object> findAll(int currentPage) {
-        HashMap<String, Object> map = new HashMap();
-        Job job = new Job();
-        job.setPage(currentPage);
-        Pageable pageable = PageRequest.of(job.getPage() - 1, job.getRow(), Sort.by(new String[]{"numbers"}).descending());
-        Page<Job> userInfoPage = jobsDao.findAll(pageable);
-        map.put("curPage", userInfoPage.getNumber() + 1);
-        if (userInfoPage.getNumber() < 1) {
-            map.put("prePage", userInfoPage.getNumber() + 1);
-        } else {
-            map.put("prePage", userInfoPage.getNumber());
-        }
-
-        if (userInfoPage.getNumber() + 2 >= userInfoPage.getTotalPages()) {
-            map.put("nextPage", userInfoPage.getTotalPages());
-        } else {
-            map.put("nextPage", userInfoPage.getNumber() + 2);
-        }
-
-        map.put("totalPages", userInfoPage.getTotalPages());
-        map.put("totalElements", userInfoPage.getTotalElements());
-        map.put("list", userInfoPage.getContent());
-        return map;
-    }
-
-    @Override
-    public int insertByUrl(String url) {
-        return jobDao.insertByUrl(url);
     }
 }
 

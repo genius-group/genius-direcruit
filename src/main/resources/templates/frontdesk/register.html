@@ -26,6 +26,7 @@
    </head>
    <body>
 
+      <input type="hidden" id="flag" name="flag" value="1" />
       <!-- Register -->
       <div class="bg-white">
 
@@ -52,15 +53,6 @@
                      <form action="javascript:void(0);" id="smsForm" method="post">
                         <p style="text-align: center" class="small text-muted">打工人，打工魂，打工都是人上人!</p>
 
-                             <!--分配角色-->
-<!--                        <div class="form-group">-->
-<!--&lt;!&ndash;                           <input type="hidden" name="syllabusId" value="${syllabus_db.syllabusId}">&ndash;&gt;-->
-<!--                           <div class="position-relative icon-form-control">-->
-<!--                              <input name="role" id="role" type="hidden" value="1" class="form-control" placeholder="分配角色">-->
-<!--                           </div>-->
-<!--                        </div>-->
-
-
                         <div class="form-group">
 
                            <div class="position-relative icon-form-control">
@@ -69,20 +61,19 @@
                            </div>
                         </div>
 
-
                          <div class="form-group" style="float: left">
 
                                <input id="code" name="code" type="password" style="width: 150px;display: inline-block" class="form-control" placeholder="验证码" >
 
                                <div id="send" style="float: right;padding-left: 30px">
 
-                                  <button type="button" class="btn btn-primary mb-2" onclick="sendSms()" >发送验证码</button>
+                                  <button type="button" class="btn btn-primary mb-2" id="messageSend">发送验证码</button>
 
                                </div>
 
                          </div>
 
-                        <button id="smsSubmit" class="btn btn-success btn-block text-uppercase" type="button"> 同意并加入 </button>
+                        <button id="smsSubmit" class="btn btn-success btn-block text-uppercase" type="button"> 注册 </button>
 
                      </form>
 
@@ -92,14 +83,6 @@
                      <!--我是招聘者-->
                      <form action="javascript:void(0);" id="smsCompanyForm" method="post" style="display: none">
                         <p style="text-align: center" class="small text-muted">招聘效果好，人才匹配度高</p>
-
-                        <!--分配角色-->
-                        <!--                        <div class="form-group">-->
-                        <!--&lt;!&ndash;                           <input type="hidden" name="syllabusId" value="${syllabus_db.syllabusId}">&ndash;&gt;-->
-                        <!--                           <div class="position-relative icon-form-control">-->
-                        <!--                              <input name="role" id="role" type="hidden" value="1" class="form-control" placeholder="分配角色">-->
-                        <!--                           </div>-->
-                        <!--                        </div>-->
 
 
                         <div class="form-group">
@@ -116,14 +99,14 @@
                            <input id="codeTwo" name="code" type="password" style="width: 150px;display: inline-block" class="form-control" placeholder="验证码" >
 
                            <div id="sendTwo" style="float: right;padding-left: 30px">
-
-                              <button type="button" class="btn btn-primary mb-2" onclick="sendSmsTwo()" >发送验证码</button>
+                              <!--onclick="sendSmsTwo()"-->
+                              <button type="button" class="btn btn-primary mb-2" id="messageSendCompany">发送验证码</button>
 
                            </div>
 
                         </div>
 
-                        <button id="smsCompanySubmit" class="btn btn-success btn-block text-uppercase" type="button"> 同意并加入 </button>
+                        <button id="smsCompanySubmit" class="btn btn-success btn-block text-uppercase" type="button"> 注册 </button>
 
                      </form>
 
@@ -192,17 +175,35 @@
 
    $(function(){
 
-      // 绑定页面元素的其他事件
+      //发送短信,求职者
+      $("#messageSend").bind("click",function(){
+         checkform2();
+         time(this);
+      });
 
-      //短信进入
+      //短信进入,求职者
       $("#smsSubmit").bind("click", function() {
          smsEnter();
       });
 
+      //发送短信,招聘者
+      $("#messageSendCompany").bind("click",function(){
+         checkform1();
+         time(this);
+      });
+
+      //短信进入,招聘者
+      $("#smsCompanySubmit").bind("click", function() {
+         smsEnter();
+      });
+
+      //招聘者
       $("#companyShow").bind("click",function(){
          switchOne();
       });
 
+
+      //求职者
       $("#jobHunterShow").bind("click",function(){
          switchTwo();
       });
@@ -210,24 +211,84 @@
 
    })
 
-   //切换身份1
+   //检测手机格式,招聘者
+   function checkform1() {
+
+      var pattern =/^[1][3,4,5,7,8][0-9]{9}$/;
+      if (!pattern.test($("#telTwo").val())){
+         alert('手机号码不正确');
+         return false;
+      }
+      if (pattern.test($("#telTwo").val())){
+         sendSms();
+      }
+
+   }
+
+   //检测手机格式
+   function checkform2() {
+
+      var pattern =/^[1][3,4,5,7,8][0-9]{9}$/;
+      if (!pattern.test($("#tel").val())){
+         alert('手机号码不正确');
+         return false;
+      }
+      if (pattern.test($("#tel").val())){
+         sendSms();
+      }
+
+   }
+
+
+   //验证码禁用
+   var wait=10;
+   function time(o) {
+      if (wait == 0) {
+         o.removeAttribute("disabled");
+         //o.value="免费获取验证码";
+         $(o).html("免费获取验证码");
+         wait = 10;
+      } else {
+         o.setAttribute("disabled", true);
+         //o.value="重新发送(" + wait + ")";
+         $(o).html("重新发送(" + wait + ")");
+         wait--;
+         setTimeout(function() {
+            time(o)
+         }, 1000)
+      }
+   }
+
+
+
+   //切换身份1     招聘者
    function switchOne() {
       $("#smsCompanyForm").show()
       $("#smsForm").hide()
+      $("#flag").val("2");
    }
 
 
-   //切换身份2
+   //切换身份2    求职者
    function switchTwo() {
       $("#smsCompanyForm").hide()
-      $("#smsForm").show()
+      $("#smsForm").show();
+      $("#flag").val("1");
    }
 
-   //短信进入,改写
+   //短信进入
    function smsEnter() {
       var userVo ={};
-      userVo.tel = $("#tel").val();
-      userVo.code = $("#code").val();
+      var flag = $("#flag").val();
+      if (flag == 1) {
+         //求职者
+         userVo.tel = $("#tel").val();
+         userVo.code = $("#code").val();
+      } else {
+         //招聘者
+         userVo.tel = $("#telTwo").val();
+         userVo.code = $("#codeTwo").val();
+      }
 
       $.ajax({
          url:"/frontdesk/smsEnter",
@@ -248,7 +309,8 @@
             }else {
                if (data.info=="登入成功"){
 
-                  location.href="/frontdesk/SubmissionPage"
+                  console.log("=====登入成功=====>>>"+flag)
+                  location.href="/frontdesk/SubmissionPage?flag="+flag;
                }
 
             }
@@ -258,43 +320,23 @@
    }
 
 
-   //短信进入
-   // function smsEnter() {
-   //    $.ajax({
-   //       url:"/frontdesk/smsLogin/" + $("#code").val()+"/"+ $("#tel").val(),
-   //       type:"get",
-   //       //contentType: "application/json",
-   //       //data : JSON.stringify(sms),
-   //       success:function(data){
-   //
-   //          console.log("==========>>>"+data)
-   //
-   //          alert(data.info);
-   //          if(data.info=="用户已注册，请登录"){
-   //             //访问主页面
-   //             location.href="/test/login"
-   //
-   //
-   //          }else {
-   //             if (data.info=="登入成功"){
-   //
-   //                location.href="/frontdesk/SubmissionPage"
-   //             }
-   //
-   //          }
-   //       }
-   //    })
-   //    return false;
-   // }
-
-
-var s = 3;
+// var s = 3;
 
 //求职者发送短信
 function sendSms(){
 
+   var flag = $("#flag").val();
 
-   var tel = $("#tel").val()
+   if (flag == 1) {
+      //求职者
+      var tel = $("#tel").val();
+   } else {
+      //招聘者
+      var tel = $("#telTwo").val();
+   }
+
+
+
    $.ajax({
       url:"/frontdesk/sendSms",
       type:"get",
@@ -306,19 +348,18 @@ function sendSms(){
       }
    })
 
-
-   var time = setInterval(function () {
-      //禁用发送验证码按钮  class="btn btn-outline-secondary"
-      $("#send").html("<button type='button'  class='btn btn-outline-secondary disabled' >"+s+"秒后发送验证码</button>")
-      s--;
-      if(s==0){ //倒计时结束
-         //清除计时器
-         clearInterval(time);
-         //启用发送验证码 class="btn btn-success"
-         $("#send").html("<button type='button' class='btn btn-success' onclick=\"sendSms()\">发送验证码</button>")
-      }
-
-   },1000)
+   // var time = setInterval(function () {
+   //    //禁用发送验证码按钮  class="btn btn-outline-secondary"
+   //    $("#send").html("<button type='button'  class='btn btn-outline-secondary disabled' >"+s+"秒后发送验证码</button>")
+   //    s--;
+   //    if(s==0){ //倒计时结束
+   //       //清除计时器
+   //       clearInterval(time);
+   //       //启用发送验证码 class="btn btn-success"
+   //       $("#send").html("<button type='button' class='btn btn-success' onclick=\"sendSms()\">发送验证码</button>")
+   //    }
+   //
+   // },1000)
 
 }
 

@@ -11,17 +11,17 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.dao.CompanyDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobhunterDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.UserDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.UserRoleDao;
-import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Company;
-import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Jobhunter;
-import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
-import com.sfac.geniusdirecruit.modules.backstagesystem.entity.UserRole;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.*;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.UserVo;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -29,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: yzs
@@ -49,6 +50,9 @@ public class UserServiceImpl implements UserService {
     private UserRoleDao userRoleDao;
     @Autowired
     private EmailSend emailSend;
+    @Autowired
+    private RedisTemplate<String ,Object> redisTemplate;
+
 
 
     @Autowired
@@ -80,11 +84,11 @@ public class UserServiceImpl implements UserService {
         user.setState(1);
         User userTemp = userDao.selectUserByUserName(user.getUserName());
         User userTemp1 = userDao.findUsersByTel(userVo.getTel());
-        String sessionCode = request.getSession().getAttribute("smsCode")+"";
         if (userTemp1 != null) {
             return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                     "tel is registered.", user);
         }
+        String sessionCode = request.getSession().getAttribute("smsCode")+"";
         if (sessionCode.equals(userVo.getCode())) {
             if (userTemp != null) {
                 return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
@@ -104,7 +108,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(int userId) {
-        return  userDao.getUserById(userId);
+        List<Role> roles=userRoleDao.selectRolesByUserId(userId);
+        User user = userDao.getUserById(userId);
+        user.setRoles(roles);
+        return  user;
     }
 
     @Override
@@ -134,19 +141,67 @@ public class UserServiceImpl implements UserService {
                 "delete success");
     }
 
-    @Override
-    public HashMap<Object, String> loginIn(User user) {
-        HashMap<Object,String> map = new HashMap<Object, String>();
-        User user_db = userDao.selectUserByUserName(user.getUserName());
-        if (user_db==null){
-            map.put("info","用户不存在");
+    //判断用户是否被锁定的方法
+    private boolean judgeAccount(String userName){
+        String key=userName+":lock";
+        Long lockTime=redisTemplate.getExpire(key, TimeUnit.SECONDS);
+        if (lockTime>0){
+            return false;
         }else {
-            if (user.getUserPwd().equals(user_db.getUserPwd())){
+            return true;
+        }
+    }
+
+    //设置失败次数
+    private void setFailCounts(String userName){
+        String key=userName+":failCount";
+        redisTemplate.opsForValue().increment(key,new Double(1));
+    }
+
+    //获取失败次数
+    private int getFailCounts(String userName){
+        String key=userName+":failCount";
+        Object num=redisTemplate.opsForValue().get(key);
+        if (num==null){
+            return 0;
+        }else {
+            return (int)num;
+        }
+    }
+
+    //用户登录
+    @Override
+    public HashMap<Object, String> loginIn(User user,HttpServletRequest request) {
+        HashMap<Object,String> map = new HashMap<Object, String>();
+        try {
+            if (judgeAccount(user.getUserName())){
+                UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(),MD5Util.getMD5(user.getUserPwd()));
+                Subject subject = SecurityUtils.getSubject();
+                subject.login(token);
+                subject.checkRoles();
+                request.getSession().setAttribute("user",subject.getPrincipal());
                 map.put("info","登录成功");
-                return map;
+                redisTemplate.delete(user.getUserName()+":lock");
+                redisTemplate.delete(user.getUserName()+":failCount");
+                redisTemplate.opsForValue().set("userName",user.getUserName(),10,TimeUnit.MINUTES);
             }else {
-                map.put("info","密码错误");
-                return map;
+                map.put("info","账号被锁定，请在1分钟后再次尝试");
+            }
+        }catch (UnknownAccountException e){
+            e.printStackTrace();
+            map.put("info","用户名或密码输入错误");
+        }
+        catch (IncorrectCredentialsException e){
+            setFailCounts(user.getUserName());
+            int num = getFailCounts(user.getUserName());
+            if (num>=3){
+                String key = user.getUserName()+":lock";
+                redisTemplate.opsForValue().set(key,"userName",1,TimeUnit.MINUTES);
+                String key1 = user.getUserName()+":failCount";
+                redisTemplate.opsForValue().set(key1,1,1,TimeUnit.MINUTES);
+                map.put("info","账号被锁定,请在1分钟后再次尝试");
+            }else {
+                map.put("info","你输入密码错误"+num+"次，还剩余"+(3-num)+"次机会");
             }
         }
         return map;
@@ -195,7 +250,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
+    //发送验证码到邮箱
     @Override
     public HashMap<String, Object> sendCode(String email, HttpServletRequest request) {
         HashMap<String,Object> map = new HashMap<String, Object>();
@@ -220,54 +275,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    //求职者的注册
-    @Override
-    public HashMap<Object, String> registerStaff(User user) {
 
-        HashMap<Object, String> map = new HashMap<Object, String>();
-
-
-        User userTemp = userDao.findUsersByUsername(user.getUserName());
-
-        if (userTemp !=null) {
-            map.put("info","该用户名已被注册，请重新输入");
-        }else {
-            //设置时间
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-            String format = simpleDateFormat.format(new Date());
-
-            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-            LocalDateTime createTime = LocalDateTime.parse(format, df);
-            user.setCreateTime(createTime);
-
-            //设置状态
-            user.setState(1);
-            userDao.insertRegisterUser(user);
-
-            //操作中间表
-            user.getRoles().stream().forEach(item -> {
-
-                UserRole userRole = new UserRole(user.getUserId(), item.getRoleId());
-                userRoleDao.insertRegisterUser(userRole);
-
-            });
-
-
-        /*if (user.getRoles() != null) {
-            for(Role role : user.getRoles()) {
-                UserRole userRole = new UserRole(user.getUserId(), role.getRoleId());
-                userRoleDao.insertRegisterUser(userRole);
-            }
-        }*/
-
-            map.put("info","注册成功");
-
-        }
-
-        return map;
-
-    }
 
     //发送短信
     @Override
@@ -275,20 +283,20 @@ public class UserServiceImpl implements UserService {
 
         HashMap<String,Object> map = new HashMap<String,Object>();
 
-        Random rd = new Random();
-        int code = rd.nextInt(1000);
-        //发送短信
-        String info = smsSend.send(phone,code+"");
-        //判断是否成功
-        if(info.equals("OK")){
-            //存入session中
-            request.getSession().setAttribute("smsCode",code);
-            map.put("info","短信发送成功");
-        }else{
-            map.put("info","短信发送失败");
-        }
+//        Random rd = new Random();
+//        int code = rd.nextInt(1000);
+//        //发送短信
+//        String info = smsSend.send(phone,code+"");
+//        //判断是否成功
+//        if(info.equals("OK")){
+//            //存入session中
+//            request.getSession().setAttribute("smsCode",code);
+//            map.put("info","短信发送成功");
+//        }else{
+//            map.put("info","短信发送失败");
+//        }
 
-//        request.getSession().setAttribute("smsCode",1111);
+        request.getSession().setAttribute("smsCode",1111);
 
         return map;
     }
@@ -310,7 +318,7 @@ public class UserServiceImpl implements UserService {
 
 
             //根据电话去查询用户，如果已注册，则会去登录页面
-            User userTemp = userDao.selectUsersByTel(userVo.getTel());
+            User userTemp = userDao.selectUserByTel(userVo.getTel());
             if (userTemp!=null){
                 map.put("info","用户已注册，请登录");
             }else {
@@ -325,15 +333,22 @@ public class UserServiceImpl implements UserService {
         return map;
 
     }
+
+    //邮箱+验证码登录
     @Override
     public HashMap<String, Object> emailLogin(String email, Integer code, HttpServletRequest request) {
         HashMap<String,Object> map = new HashMap<String, Object>();
+        User user = userDao.selectUserByEmail(email);
+
         Integer code0 = (Integer) request.getSession().getAttribute("code");
-        System.err.println(code0);
         String email0 = (String) request.getSession().getAttribute("email");
-        System.err.println(email0);
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(),user.getUserPwd());
         if (code.equals(code0)&&email.equals(email0)){
             map.put("info","登录成功");
+            Subject subject = SecurityUtils.getSubject();
+            subject.login(token);
+            subject.checkRoles();
+            request.getSession().setAttribute("user",subject.getPrincipal());
             return map;
         }else {
             map.put("info","登录失败，请稍后重试");
@@ -341,6 +356,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    //发送验证码到手机
     @Override
     public HashMap<String, Object> sendMessage(String tel, HttpServletRequest request) {
         HashMap<String, Object> map = new HashMap<String, Object>();
@@ -360,13 +376,20 @@ public class UserServiceImpl implements UserService {
             }
     }
 
+    //手机+验证码登录
     @Override
     public HashMap<String, Object> messageLogin(String tel, Integer code, HttpServletRequest request) {
         HashMap<String,Object> map = new HashMap<String, Object>();
+        User user = userDao.selectUserByTel(tel);
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(),user.getUserPwd());
         Integer code0 = (Integer) request.getSession().getAttribute("smsCode");
         String tel0 = (String) request.getSession().getAttribute("tel");
         if (code.equals(code0)&&tel.equals(tel0)){
             map.put("info","登录成功");
+            Subject subject = SecurityUtils.getSubject();
+            subject.login(token);
+            subject.checkRoles();
+            request.getSession().setAttribute("user",subject.getPrincipal());
             return map;
         }else {
             map.put("info","登录失败，请稍后重试");
@@ -374,9 +397,141 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    //求职者User表基本信息添加
+    @Override
+    @Transactional
+    public HashMap<Object, String> registerStaffOne(User user, String flag, HttpServletRequest request) {
+
+
+        HashMap<Object, String> map = new HashMap<Object, String>();
+
+
+        User userTemp = userDao.findUsersByUsername(user.getUserName());
+
+        if (userTemp !=null) {
+            map.put("info","该用户名已被注册，请重新输入");
+        }else {
+            //设置时间
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+            String format = simpleDateFormat.format(new Date());
+            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime createTime = LocalDateTime.parse(format, df);
+            user.setCreateTime(createTime);
+
+            //设置状态
+            user.setState(1);
+            //加密
+            user.setUserPwd(MD5Util.getMD5(user.getUserPwd()));
+            userDao.insertRegisterUser(user);
+
+            //操作中间表
+            user.getRoles().stream().forEach(item -> {
+
+                UserRole userRole = new UserRole(user.getUserId(), item.getRoleId());
+                userRoleDao.insertRegisterUser(userRole);
+
+            });
+
+
+        /*if (user.getRoles() != null) {
+            for(Role role : user.getRoles()) {
+                UserRole userRole = new UserRole(user.getUserId(), role.getRoleId());
+                userRoleDao.insertRegisterUser(userRole);
+            }
+        }*/
+
+            request.getSession().setAttribute("userId",user.getUserId());
+
+            System.err.println("registerStaffOne>>>>>>>>>>>>>>>>>>>>>>>>>>"+user.getUserId());
+
+            System.err.println("registerStaffOne>>>>>>>>>>>>>>>>>>>>>>>>>>"+flag);
+
+            if (flag.equals("1")){
+
+                map.put("info","将填求职者信息表");
+
+            }else{
+                map.put("info","将填企业信息表");
+            }
+
+
+        }
+
+        return map;
+
+    }
+
+
+    //求职者Jobhunter表信息添加（待优化）
+    @Override
+    @Transactional
+    public HashMap<Object, String> registerStaffTwo(Jobhunter jobhunter, HttpServletRequest request) {
+
+        System.err.println("registerStaffTwo>>>>>>>>>>>impl>>>>>>>>>>>>>>>"+jobhunter);
+
+        HashMap<Object, String> map = new HashMap<Object, String>();
+
+        User userTemp = userDao.selectUserByEmail(jobhunter.getEmail());
+        System.err.println("registerStaffTwo>>>>>>>>>>>impl>>>>>>>>>>>>>>>"+userTemp);
+        if (userTemp!=null){
+            map.put("info","注册邮箱已被使用，请重新输入");
+        }else {
+
+            Integer userId = (Integer) request.getSession().getAttribute("userId");
+
+            System.err.println("registerStaffTwo>>>>>>>>>>>impl>>>>>>>>>>>>>>>"+userId);
+
+            jobhunter.setUserId(userId);
+
+            jobhunterDao.insertJobHunter(jobhunter);
+
+            map.put("info","注册成功");
+        }
+
+
+        return map;
+    }
 
 
 
+    @Override
+    public ResultEntity<User> insertUserByAdmin(User user) {
+        User user1=new User();
+        user1.setUserName(user.getUserName());
+        user1.setUserPwd(MD5Util.getMD5(user.getUserPwd()));
+        user1.setTel(user.getTel());
+        user1.setState(user.getState());
+        user1.setCreateTime(user.getCreateTime());
+        userDao.insertUser(user1);
+        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                "insert success",user1);
+    }
+
+    //企业Company表信息添加
+    @Override
+    @Transactional
+    public HashMap<Object, String> registerCompany(Company company, HttpServletRequest request) {
+        HashMap<Object, String> map = new HashMap<Object, String>();
+
+       Company companyTemp =  companyDao.selectCompanyByCompanyName(company.getCompanyName());
+
+       if (companyTemp!=null){
+           map.put("info","该公司名称已被注册，请核实后添加");
+       }else {
+
+           Integer userId = (Integer) request.getSession().getAttribute("userId");
+           System.err.println("registerCompany>>>>>>>>>>>impl>>>>>>>>>>>>>>>"+userId);
+           company.setUserId(userId);
+
+           companyDao.insertCompanyAll(company);
+           map.put("info","企业注册成功");
+
+       }
+
+
+        return map;
+
+    }
 
 
 }

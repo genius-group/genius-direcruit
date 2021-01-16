@@ -42,6 +42,16 @@ public class CompanyController {
     }
 
     /**
+     * 添加企业
+     * http://127.0.0.1:8080/api/company------------post
+     * {"companyName":"华为","address":"深圳","description":"手机","creditCode":"111222","nature":"上市"}
+     */
+    @PostMapping(value = "/company",consumes = "application/json")
+    public ResultEntity<Company> insertCompany(@RequestBody Company company){
+        return companyService.insertCompany(company);
+    }
+
+    /**
      * 编辑企业信息(预修改信息的显示)
      * http://127.0.0.1:8080/api/company/1-----------get
      */

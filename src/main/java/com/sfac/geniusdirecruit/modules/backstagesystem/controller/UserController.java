@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -45,7 +46,17 @@ public class UserController {
     }
 
     /**
-     * 添加用户
+     * 管理员添加添加用户
+     * http://127.0.0.1:8080/api/user---------post
+     *{"userName":"lisi","userPwd":"444","createTime":"2021-01-05 12:30:00","tel":"18398103075","state":1}
+     */
+    @PostMapping(value = "/user/admin",consumes = "application/json")
+    public ResultEntity<User> insertUserByAdmin(@RequestBody User user) {
+        return userService.insertUserByAdmin(user);
+    }
+
+    /**
+     * 注册用户
      * http://127.0.0.1:8080/api/user---------post
      *{"userName":"lisi","userPwd":"444","createTime":"2021-01-05 12:30:00","tel":"18398103075","state":1}
      */
