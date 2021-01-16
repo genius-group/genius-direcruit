@@ -22,4 +22,6 @@ public interface MessageService {
     List<Message> getMessage();
 
     PageInfo<Message> getMessageBySearchBean(SearchBean searchBean);
+
+    PageInfo<MessageVo> getMessageVoBySearchBean(SearchBean searchBean);
 }

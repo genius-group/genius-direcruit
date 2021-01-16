@@ -93,4 +93,12 @@ public interface UserDao {
     @Select("select * from user where tel = #{tel}")
     User selectUsersByTel(String tel);
 
+    //通过userId批量查询userName
+    @Select({"<script>" +
+            "select user_name from user where user_id in " +
+            "<foreach item = 'item' index = 'index' collection = 'userIdList' open='(' separator=',' close=')'>" +
+            "#{item}" +
+            "</foreach>"+
+            "</script>"})
+    List<String> selectUserNameByIds(@Param("userIdList") List<Integer> userIdList);
 }

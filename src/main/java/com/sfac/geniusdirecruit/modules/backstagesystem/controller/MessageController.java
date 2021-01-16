@@ -9,6 +9,7 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,23 +33,32 @@ public class MessageController {
     }
 
     //删除message http://127.0.0.1:8080/api/message/1
-    @DeleteMapping("/message/{newId}")
-    public ResultEntity<Object> deleteLeaveWordById(@PathVariable("newId") Integer messageId) {
+    @DeleteMapping("/message/{messageId}")
+    public ResultEntity<Object> deleteLeaveWordById(@PathVariable("messageId") Integer messageId) {
         return messageService.deleteMessageById(messageId);
     }
 
     //查询message
     //http://127.0.0.1:8080/api/messages  get请求
     @GetMapping("/messages")
-    public List<Message> getLeaveWord() {
+    public List<Message> messages() {
         return messageService.getMessage();
     }
     //分页查询message
     //http://127.0.0.1:8080/api/messages   post请求
     // {"currentPage":3, "pageSize":2, "order":"create_time", "direction":"desc", "keyWord":""}
     @PostMapping(value = "/messages", consumes = "application/json")
-    public PageInfo<Message> getLeaveWordBySearchBean(
+    public PageInfo<Message> getMessagesBySearchBean(
             @RequestBody SearchBean searchBean) {
         return messageService.getMessageBySearchBean(searchBean);
+    }
+
+    //分页查询messageVo
+    //http://127.0.0.1:8080/api/messages   post请求
+    // {"currentPage":3, "pageSize":2, "order":"create_time", "direction":"desc", "keyWord":""}
+    @PostMapping(value = "/messageVoes", consumes = "application/json")
+    public PageInfo<MessageVo> getMessagVoesBySearchBean(
+            @RequestBody SearchBean searchBean) {
+        return messageService.getMessageVoBySearchBean(searchBean);
     }
 }

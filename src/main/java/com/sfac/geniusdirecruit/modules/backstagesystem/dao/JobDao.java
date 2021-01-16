@@ -71,4 +71,13 @@ public interface JobDao {
     //将url增加到简历表中
     @Insert("insert into resume (url) values (#{url})")
     int insertByUrl(String url);
+
+    //通过jobId批量查询jobName
+    @Select({"<script>" +
+            "select job_name from job where job_id in " +
+            "<foreach item = 'item' index = 'index' collection = 'jobIdList' open='(' separator=',' close=')'>" +
+            "#{item}" +
+            "</foreach>"+
+            "</script>"})
+    List<String> selectJobNameByIds(@Param("jobIdList") List<Integer> jobIdList);
 }

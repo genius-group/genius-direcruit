@@ -12,12 +12,12 @@ public class MessageVo {
     //用户名
     private String userName;
 
-    private Integer userId;
+    //private Integer userId;
 
     //职位名称
     private String jobName;
 
-    private Integer jobId;
+    //private Integer jobId;
 
     //留言内容
     private String content;

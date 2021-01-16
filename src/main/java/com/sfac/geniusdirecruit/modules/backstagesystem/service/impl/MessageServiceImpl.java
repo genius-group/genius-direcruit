@@ -14,6 +14,7 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +37,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public ResultEntity<MessageVo> addMessage(MessageVo messageVo) {
 
-        News temp = messageDao.selectMessageByTitle(messageVo.getTitle());
+        /*News temp = messageDao.selectMessageByTitle(messageVo.getTitle());
 
         if (temp == null) {
             Message message = new Message();
@@ -51,7 +52,8 @@ public class MessageServiceImpl implements MessageService {
                     "Insert success", messageVo);
         }
         return new ResultEntity<>(ResultEntity.ResultStatus.FAILED.status,
-                "Title name is repeat.");
+                "Title name is repeat.");*/
+        return null;
     }
 
     @Override
@@ -74,4 +76,40 @@ public class MessageServiceImpl implements MessageService {
                 .ofNullable(messageDao.getMessageBySearchBean(searchBean))
                 .orElse(Collections.emptyList()));
     }
+
+    @Override
+    public PageInfo<MessageVo> getMessageVoBySearchBean(SearchBean searchBean) {
+        searchBean.initSearchBean();
+        PageHelper.startPage(searchBean.getCurrentPage(), searchBean.getPageSize());
+
+        List<Message> message = messageDao.getMessageBySearchBean(searchBean);
+        List<Integer> userIdList = new ArrayList<>();
+        List<Integer> jobIdList = new ArrayList<>();
+        for (Message m:message){
+            userIdList.add(m.getUserId());
+            jobIdList.add(m.getJobId());
+        }
+        List<String> jobNameList = jobDao.selectJobNameByIds(jobIdList);
+        List<String> userNameList = userDao.selectUserNameByIds(userIdList);
+
+
+        List<MessageVo> MVList = new ArrayList<>();
+        for (int i = 0;i<message.size();i++){
+            MessageVo messageVo = new MessageVo();
+            messageVo.setMessageId(message.get(i).getMessageId());
+            messageVo.setUserName(userNameList.get(i));
+            messageVo.setJobName(jobNameList.get(i));
+            messageVo.setTitle(message.get(i).getTitle());
+            messageVo.setContent(message.get(i).getContent());
+            messageVo.setMessageTime(message.get(i).getMessageTime());
+            MVList.add(messageVo);
+        }
+        System.out.println(new PageInfo<>(Optional
+                .ofNullable(MVList)
+                .orElse(Collections.emptyList())));
+        return new PageInfo<>(Optional
+                .ofNullable(MVList)
+                .orElse(Collections.emptyList()));
+    }
+
 }
