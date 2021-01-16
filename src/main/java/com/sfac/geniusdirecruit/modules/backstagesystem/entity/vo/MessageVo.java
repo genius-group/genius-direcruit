@@ -17,6 +17,7 @@ public class MessageVo {
     //职位名称
     private String jobName;
 
+
     //private Integer jobId;
 
     //留言内容

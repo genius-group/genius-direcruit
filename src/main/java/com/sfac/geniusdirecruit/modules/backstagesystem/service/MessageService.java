@@ -23,5 +23,6 @@ public interface MessageService {
 
     PageInfo<Message> getMessageBySearchBean(SearchBean searchBean);
 
+
     PageInfo<MessageVo> getMessageVoBySearchBean(SearchBean searchBean);
 }

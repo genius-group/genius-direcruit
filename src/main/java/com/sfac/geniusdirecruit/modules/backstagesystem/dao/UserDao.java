@@ -90,6 +90,7 @@ public interface UserDao {
     @Select("select * from user where tel = #{tel}")
     User selectUserByTel(String tel);
 
+
     //通过userId批量查询userName
     @Select({"<script>" +
             "select user_name from user where user_id in " +

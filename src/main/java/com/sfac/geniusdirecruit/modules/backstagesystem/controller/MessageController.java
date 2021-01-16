@@ -53,6 +53,7 @@ public class MessageController {
         return messageService.getMessageBySearchBean(searchBean);
     }
 
+
     //分页查询messageVo
     //http://127.0.0.1:8080/api/messages   post请求
     // {"currentPage":3, "pageSize":2, "order":"create_time", "direction":"desc", "keyWord":""}
