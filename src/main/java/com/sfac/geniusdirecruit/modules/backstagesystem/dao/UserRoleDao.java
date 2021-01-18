@@ -35,4 +35,5 @@ public interface UserRoleDao {
 
     @Select("SELECT r.role_describe FROM user_role ur INNER JOIN role r ON ur.role_id = r.role_id where user_id=#{userId}")
     List<Role> selectRolesByUserId(int userId);
+
 }

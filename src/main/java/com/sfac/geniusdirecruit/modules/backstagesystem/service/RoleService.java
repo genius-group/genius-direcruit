@@ -28,4 +28,6 @@ public interface RoleService {
     ResultEntity<Object> deleteRoleByRoleId(Integer roleId);
 
     Role selectRoleByUserId(Integer userId);
+
+    List<Role> getRoleByUserId(Integer userId);
 }

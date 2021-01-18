@@ -44,6 +44,7 @@
                                             <th>ID</th>
                                             <th>用户名</th>
                                             <th>电话</th>
+                                            <th>角色</th>
                                             <th>状态</th>
                                             <th>创建时间</th>
                                             <th>操作</th>
@@ -153,7 +154,7 @@
                         var rowsData = [];
                         for (var i = 0; i < rs.list.length; i++) {
                             //包装行数据
-                            var rowData = new RowData(rs.list[i].userId, rs.list[i].userName,rs.list[i].tel,rs.list[i].state,rs.list[i].createTime);
+                            var rowData = new RowData(rs.list[i].userId, rs.list[i].userName,rs.list[i].tel,zhuanhuan(rs.list[i].roles),rs.list[i].state,rs.list[i].createTime);
                             // 将行数据放到数组里
                             rowsData.push(rowData);
                         }
@@ -171,6 +172,7 @@
                 {data: 'userId', name: "user_id", sortable: true},
                 {data: 'userName', name: "user_name", sortable: true},
                 {data: 'tel', name: "tel", sortable: true},
+                {data: 'roles', name: "", sortable: false},
                 {data: 'state', name: "state", sortable: true},
                 {data: 'createTime', name: "create_time", sortable: true},
                 {data: 'operate', width: '80px', sortable: false}
@@ -179,10 +181,11 @@
     }
 
     //行数据结构
-    function RowData(userId, userName,tel,state,createTime) {
+    function RowData(userId, userName,tel,roles,state,createTime) {
         this.userId = userId;
         this.userName = userName;
         this.tel = tel;
+        this.roles = roles;
         this.state = state;
         this.createTime = createTime;
         this.operate = function () {
@@ -194,6 +197,13 @@
         }
     }
 
+    function zhuanhuan(l) {
+        var roles="";
+        for (var i = 0; i <l.length; i++) {
+            roles=roles+l[i].roleDescribe;
+        }
+        return roles;
+    }
     function initAddModal() {
         $("#nameForAdd").val("");
         $("#pwdForAdd").val("");
@@ -243,6 +253,7 @@
                 $("#idForEdit").val(rs.userId);
                 $("#nameForEdit").val(rs.userName);
                 $("#telForEdit").val(rs.tel);
+                $("#rolesForEdit").val(zhuanhuan(rs.roles));
                 $("#stateForEdit").val(rs.state);
                 $("#createTimeForEdit").val(rs.createTime);
             },
@@ -284,7 +295,6 @@
         timepicker:false,
         step:1
     });
-
     function deleteModal(userId) {
         bootbox.confirm("确定删除?", function(result) {
             if(result) {
