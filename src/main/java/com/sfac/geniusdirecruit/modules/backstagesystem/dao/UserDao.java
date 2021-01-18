@@ -43,7 +43,7 @@ public interface UserDao {
     List<User> getUsersBySearchBean(SearchBean searchBean);
 
     @Insert("insert into user (user_name,user_pwd,tel,state,create_time) values (#{userName},#{userPwd},#{tel},#{state},#{createTime})")
-    void insertUser(User user);
+    int insertUser(User user);
 
     @Select("select * from user where user_id = #{userId}")
     User getUserById(int userId);

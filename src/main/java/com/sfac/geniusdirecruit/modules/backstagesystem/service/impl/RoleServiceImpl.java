@@ -7,6 +7,7 @@ import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.RoleDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.UserRoleDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Role;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.UserRole;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,7 +72,14 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role selectRoleByUserId(Integer userId) {
-        return roleDao.selectRoleByUserId(userId);
+    public UserRole selectUserRoleByUserId(Integer userId) {
+
+        return userRoleDao.selectUserRoleByUserId(userId);
+    }
+
+    @Override
+    public Role selectRoleByRoleId(Integer roleId) {
+
+        return roleDao.getRoleByRoleId(roleId);
     }
 }

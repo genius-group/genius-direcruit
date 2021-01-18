@@ -3,6 +3,7 @@ package com.sfac.geniusdirecruit.config.shiro;
 import com.sfac.geniusdirecruit.common.utile.MD5Util;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Role;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.UserRole;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.RoleService;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.apache.shiro.authc.*;
@@ -33,13 +34,14 @@ public class MyRealm extends AuthorizingRealm {
 			throw new UnknownAccountException("This user name do not exist.");
 		}
 		// TODO
-		Role role = roleService.selectRoleByUserId(user.getUserId());
-		if (role.getRoleName().equals("admin")) {
-			if (role == null) {
-				simpleAuthorizationInfo.addRole("admin");
-			}
+		UserRole userRole = roleService.selectUserRoleByUserId(user.getUserId());
+		Role role = roleService.selectRoleByRoleId(userRole.getRoleId());
+		if (role.getRoleName().equals("company")) {
 			simpleAuthorizationInfo.addStringPermission(role.getRoleName());
 		}
+
+		simpleAuthorizationInfo.addRole(role.getRoleName());
+		simpleAuthorizationInfo.addStringPermission(role.getRoleName());
 		return simpleAuthorizationInfo;
 	}
 

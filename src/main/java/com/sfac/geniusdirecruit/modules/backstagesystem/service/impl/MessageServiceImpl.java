@@ -89,9 +89,8 @@ public class MessageServiceImpl implements MessageService {
             userIdList.add(m.getUserId());
             jobIdList.add(m.getJobId());
         }
-        List<String> jobNameList = jobDao.selectJobNameByIds(jobIdList);
         List<String> userNameList = userDao.selectUserNameByIds(userIdList);
-
+        List<String> jobNameList = jobDao.selectJobNameByIds(jobIdList);
 
         List<MessageVo> MVList = new ArrayList<>();
         for (int i = 0;i<message.size();i++){

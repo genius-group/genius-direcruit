@@ -96,8 +96,16 @@ public class UserServiceImpl implements UserService {
             }
             user.setUserPwd(MD5Util.getMD5(user.getUserPwd()));
             user.setCreateTime(LocalDateTime.now());
-            userDao.insertUser(user);
-            // 管理员编辑用户信息时，只修改用户角色
+            int i = userDao.insertUser(user);
+            User user1=userDao.selectUserByUserName(user.getUserName());
+            if(i>0){
+                UserRole userRole = new UserRole();
+                userRole.setUserId(user1.getUserId());
+                userRole.setRoleId(3);
+                userRoleDao.insertRegisterUser(userRole);
+            }
+
+
             return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                     "register success", user);
 
@@ -219,12 +227,10 @@ public class UserServiceImpl implements UserService {
 
             subject.login(usernamePasswordToken);
             subject.checkRoles();
-
             Session session = subject.getSession();
             User userTemp = (User) subject.getPrincipal();
             session.setAttribute("userId", userTemp.getUserId());
             session.setAttribute("userName", userTemp.getUserName());
-
         } catch (Exception e) {
             e.printStackTrace();
             return new ResultEntity<User>(ResultEntity.ResultStatus.SUCCESS.status, "User name or password error.");
