@@ -34,7 +34,7 @@
         <div class="row">
             <div class="col-md-12 col-sm-12 ">
                 <div class="x_panel">
-                    <div class="x_title">
+                    <div class="x_title" shiro:hasRole="admin">
                         <button class="btn btn-primary" type="button" id="addModalBtn"
                                 data-toggle="modal" data-target="#modalAdd">新增</button>
                         <div class="clearfix"></div>
@@ -50,7 +50,7 @@
                                             <th>链接名称</th>
                                             <th>链接图标</th>
                                             <th>链接地址</th>
-                                            <th>操作列</th>
+                                            <th shiro:hasRole="admin">操作列</th>
                                         </tr>
                                         </thead>
                                         <tbody>
