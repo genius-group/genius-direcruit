@@ -1,6 +1,7 @@
 package com.sfac.geniusdirecruit.modules.frontdesksystem.controller;
 
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.frontdesksystem.service.JobFrontService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,8 +24,10 @@ public class JobFrontController {
 
     //跳转到主站
     @GetMapping("/index")
-    public String index1(Model map, @RequestParam(required = false,defaultValue = "1") int page) {
+    public String index1(Model map,HttpServletRequest request, @RequestParam(required = false,defaultValue = "1") int page) {
         map.addAttribute("listUser", jobfrontService.findAll(page));
+        User user1 = (User)request.getSession().getAttribute("user");
+        map.addAttribute("user",user1);
         return "/frontdesk/index";
     }
 

@@ -4,6 +4,7 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,15 +52,10 @@ public class TestController {
     //账号密码登录
     @PostMapping("/loginIn")
     @ResponseBody
-    public HashMap<Object,String> loginIn(@RequestBody User user,HttpServletRequest request){
+    public HashMap<Object,String> loginIn(@RequestBody User user, HttpServletRequest request){
         HashMap<Object, String> map = userService.loginIn(user,request);
-        System.err.println(map);
-        return map;
-    }
 
-    @RequestMapping("/index")
-    public String index(){
-        return "frontdesk/index";
+        return map;
     }
 
     @RequestMapping("/managerIndex")

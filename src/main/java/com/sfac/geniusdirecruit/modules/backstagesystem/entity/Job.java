@@ -57,6 +57,9 @@ public class Job extends MyPage {
     private LocalDateTime releaseTime;
 
     @Transient
-    private List<Company> companies;
+    private String companyName;
+
+    @Transient
+    private String jobCategoryName;
 
 }
