@@ -104,8 +104,6 @@ public class UserServiceImpl implements UserService {
                 userRole.setRoleId(3);
                 userRoleDao.insertRegisterUser(userRole);
             }
-
-
             return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                     "register success", user);
 
@@ -468,7 +466,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    //求职者Jobhunter表信息添加（待优化）
+    //求职者Jobhunter表信息添加
     @Override
     @Transactional
     public HashMap<Object, String> registerStaffTwo(Jobhunter jobhunter, HttpServletRequest request) {
@@ -533,10 +531,7 @@ public class UserServiceImpl implements UserService {
            map.put("info","企业注册成功");
 
        }
-
-
         return map;
-
     }
 
 

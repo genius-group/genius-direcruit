@@ -1,14 +1,9 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 
-import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Job;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.CompanyVo;
 import org.apache.ibatis.annotations.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -80,4 +75,40 @@ public interface JobDao {
             "</foreach>"+
             "</script>"})
     List<String> selectJobNameByIds(@Param("jobIdList") List<Integer> jobIdList);
+
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tcompany.user_id user_id, company.company_name company_name,job_category.job_category_name job_category_name,job.pay pay, job.numbers numbers,job.job_name job_name,company_job.`status` `status`\n" +
+            "FROM\n" +
+            "\tcompany\n" +
+            "\tINNER JOIN\n" +
+            "\tcompany_job\n" +
+            "\tON \n" +
+            "\t\tcompany.company_id = company_job.company_id\n" +
+            "\tINNER JOIN\n" +
+            "\tjob\n" +
+            "\tON \n" +
+            "\t\tcompany_job.job_id = job.job_id\n" +
+            "\tINNER JOIN\n" +
+            "\tjob_category\n" +
+            "\tON \n" +
+            "\t\tcompany_job.company_job_id = job_category.job_category_id\n"
+            + "<where> "
+            + "<if test='userId!= null'>"
+            + " and user_id = #{userId} "
+            + "</if>"
+            + "<if test='keyWord != \"\" and keyWord != null'>"
+            + " and (job_name like '%${keyWord}%') "
+            + "</if>"
+            + "</where>"
+            + "<choose>"
+            + "<when test='order != \"\" and order != null'>"
+            + " order by ${order} ${direction}"
+            + "</when>"
+            + "<otherwise>"
+            + " order by job_name desc"
+            + "</otherwise>"
+            + "</choose>"
+            + "</script>")
+    List<CompanyVo> getCompanyBySearchBean(CompanyVo companyVo);
 }

@@ -2,6 +2,7 @@ package com.sfac.geniusdirecruit.config.web;
 
 import com.sfac.geniusdirecruit.interceptor.RequestViewMappingInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
@@ -25,20 +26,25 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Autowired
     private ResourceConfigBean resourceConfigBean;
 
+    @Value("${file.address}")
+    private String fileAddres;
+    @Value("${file.path}")
+    private String filePath;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(requestViewMappingInterceptor).addPathPatterns("/**");
     }
 
-    @Override
+    @Override//把绝对路径映射成相对路径
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String systemName = System.getProperty("os.name");
         if (systemName.toLowerCase().startsWith("win")) {
-            registry.addResourceHandler(resourceConfigBean.getResourcePathPattern())
-                    .addResourceLocations(ResourceUtils.FILE_URL_PREFIX + resourceConfigBean.getLocalPathForWindow());
+            registry.addResourceHandler(filePath)
+                    .addResourceLocations(ResourceUtils.FILE_URL_PREFIX + fileAddres);
         } else  {
-            registry.addResourceHandler(resourceConfigBean.getResourcePathPattern())
-                    .addResourceLocations(ResourceUtils.FILE_URL_PREFIX + resourceConfigBean.getLocalPathForLinux());
+            registry.addResourceHandler(filePath)
+                    .addResourceLocations(ResourceUtils.FILE_URL_PREFIX + fileAddres);
         }
     }
 }
