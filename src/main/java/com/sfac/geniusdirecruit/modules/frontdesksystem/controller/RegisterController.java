@@ -41,6 +41,47 @@ public class RegisterController {
     JobhunterService jobhunterService;
 
 
+    /*
+     *  127.0.0.1:8080/frontdesk/ChangePassword
+     * */
+    @RequestMapping("/ChangePassword")
+    public String changePassword() {
+
+        return "frontdesk/changePassword";
+
+    }
+
+    //修改密码
+    @PostMapping(value = "/ChangePasswordDo",consumes = "application/json")
+    @ResponseBody
+    public HashMap<Object,String> changePassword(@RequestParam String newPassword,HttpServletRequest request){
+
+        System.err.println("changePassword...........newPassword..........."+newPassword);
+
+
+        HashMap<Object, String> map = userService.ChangePassword(newPassword,request);
+
+        System.err.println("changePassword............map.........."+map);
+
+        return map;
+    }
+
+
+
+
+    /*
+     *  127.0.0.1:8080/frontdesk/GoIndex
+     * */
+
+    @RequestMapping("/GoIndex")
+    public String goIndex() {
+
+        return "frontdesk/index";
+
+    }
+
+
+
 
     /**
      * 127.0.0.1:8080/frontdesk/register ---- get
@@ -91,17 +132,6 @@ public class RegisterController {
 
     }
 
-
-    /*
-     *  127.0.0.1:8080/frontdesk/GoIndex
-     * */
-
-    @RequestMapping("/GoIndex")
-    public String goIndex() {
-
-        return "frontdesk/index";
-
-    }
 
 
 

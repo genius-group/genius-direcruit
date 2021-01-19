@@ -256,6 +256,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
+
     //发送验证码到邮箱
     @Override
     public HashMap<String, Object> sendCode(String email, HttpServletRequest request) {
@@ -533,6 +534,38 @@ public class UserServiceImpl implements UserService {
            map.put("info","企业注册成功");
 
        }
+
+
+        return map;
+
+    }
+
+    @Override
+    public HashMap<Object, String> ChangePassword(String newPassword, HttpServletRequest request) {
+
+        HashMap<Object, String> map = new HashMap<Object, String>();
+
+        System.err.println("..进入了....ChangePassword.....impl........");
+
+//        user.setUserPwd(MD5Util.getMD5(user.getUserPwd()));
+//        request.getSession().setAttribute("userId",user.getUserId());
+
+             User user1 = (User) request.getSession().getAttribute("user");
+             Integer userId = user1.getUserId();
+             System.err.println("..进入了....ChangePassword.....impl........"+userId);
+
+             if (userId!=null){
+                 User user = new User();
+                 user.setUserId(userId);
+                 user.setUserPwd(MD5Util.getMD5(newPassword));
+
+                 System.err.println("...ChangePassword..MD5Util.getMD5......"+MD5Util.getMD5(newPassword));
+                 userDao.modifyPassword(user);
+                 map.put("info","修改密码成功");
+
+             }else {
+                 map.put("info","修改密码失败");
+             }
 
 
         return map;

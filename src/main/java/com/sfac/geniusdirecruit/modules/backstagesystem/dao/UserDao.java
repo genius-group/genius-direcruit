@@ -5,6 +5,7 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -99,4 +100,10 @@ public interface UserDao {
             "</foreach>"+
             "</script>"})
     List<String> selectUserNameByIds(@Param("userIdList") List<Integer> userIdList);
+
+
+
+    @Update("update user set user_pwd = #{userPwd} where user_id = #{userId}")
+    void modifyPassword(User user);
+
 }
