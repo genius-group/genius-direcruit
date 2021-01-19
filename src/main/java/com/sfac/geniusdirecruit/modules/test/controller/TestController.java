@@ -2,6 +2,9 @@ package com.sfac.geniusdirecruit.modules.test.controller;
 
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -94,5 +97,20 @@ public class TestController {
         return userService.messageLogin(tel,code,request);
     }
 
-
+    //退出登录
+    @RequestMapping("/loginout")
+    @ResponseBody
+    public HashMap<String,Object> logOut(ModelMap modelMap) {
+        HashMap<String,Object> map = new HashMap<>();
+        try{
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        Session session = subject.getSession();
+        session.removeAttribute("user");
+        map.put("info","退出登录成功");
+        }catch (Exception e){
+            map.put("info","退出失败");
+        }
+        return map;
+    }
 }

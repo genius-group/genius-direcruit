@@ -5,8 +5,13 @@ import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.CompanyDao;
+import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Company;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.CompanyVo;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.CompanyService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +29,10 @@ import java.util.Optional;
 public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private CompanyDao companyDao;
+
+    @Autowired
+    private JobDao jobDao;
+
     @Override
     public List<Company> selectCompanies() {
         return companyDao.selectCompanies();
@@ -55,5 +64,21 @@ public class CompanyServiceImpl implements CompanyService {
         companyDao.insertCompany(company);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "insert success",company);
+    }
+
+    @Override
+    public PageInfo<CompanyVo> getJobsBySearchBean(CompanyVo companyVo) {
+        Subject subject = SecurityUtils.getSubject();
+        Session session = subject.getSession();
+        int userId = (int)session.getAttribute("userId");
+        companyVo.setUserId(userId);
+        return new PageInfo<>(Optional
+                .ofNullable(jobDao.getCompanyBySearchBean(companyVo))
+                .orElse(Collections.emptyList()));
+    }
+
+    @Override
+    public ResultEntity<CompanyVo> insertCompanyJob(CompanyVo companyVo) {
+        return null;
     }
 }

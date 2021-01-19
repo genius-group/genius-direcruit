@@ -104,8 +104,6 @@ public class UserServiceImpl implements UserService {
                 userRole.setRoleId(3);
                 userRoleDao.insertRegisterUser(userRole);
             }
-
-
             return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                     "register success", user);
 
@@ -534,10 +532,7 @@ public class UserServiceImpl implements UserService {
            map.put("info","企业注册成功");
 
        }
-
-
         return map;
-
     }
 
     @Override

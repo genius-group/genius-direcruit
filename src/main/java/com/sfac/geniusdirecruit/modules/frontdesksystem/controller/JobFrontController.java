@@ -71,13 +71,13 @@ public class JobFrontController {
         if (search!=null){map.addAttribute("listUser", jobfrontService.findBySearch(page,search,request));
             User user1 = (User)request.getSession().getAttribute("user");
             map.addAttribute("user",user1);
-            map.addAttribute("条件",request.getSession().getAttribute("条件"));
+            map.addAttribute("search",request.getSession().getAttribute("search"));
         }else {
-            String search1 = (String) request.getSession().getAttribute("条件");
+            String search1 = (String) request.getSession().getAttribute("search");
             map.addAttribute("listUser", jobfrontService.findBySearch(page,search1,request));
             User user1 = (User)request.getSession().getAttribute("user");
             map.addAttribute("user",user1);
-            map.addAttribute("条件",request.getSession().getAttribute("条件"));
+            map.addAttribute("search",request.getSession().getAttribute("search"));
 
         }
 

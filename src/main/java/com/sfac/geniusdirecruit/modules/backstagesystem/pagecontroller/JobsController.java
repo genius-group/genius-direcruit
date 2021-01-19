@@ -17,12 +17,17 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/jobs")
 public class JobsController {
-    @Autowired
-    private JobService jobService;
 
     @RequestMapping("/jobsPage")
     public String jobsPage(ModelMap modelMap) {
         modelMap.put("template", "backstagesystem/job/jobs");
         return "common/managerIndex";
     }
+
+    @RequestMapping("/jobsPages")
+    public String jobsPages(ModelMap modelMap) {
+        modelMap.put("template", "backstagesystem/job/job");
+        return "common/managerIndex";
+    }
+
 }

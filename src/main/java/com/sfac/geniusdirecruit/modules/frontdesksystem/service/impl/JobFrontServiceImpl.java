@@ -16,14 +16,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 import java.net.URLEncoder;
 
 /**
@@ -40,6 +40,8 @@ public class JobFrontServiceImpl implements JobFrontService {
     private JobsFrontDao jobsFrontDao;
     @Autowired
     private JobsMybatisDao jobsMybatisDao;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     //定义文件上传保存的路径
     @Value("${file.address}")
@@ -51,6 +53,13 @@ public class JobFrontServiceImpl implements JobFrontService {
     @Override
     public HashMap<String, Object> findAll(int currentPage) {
         HashMap<String, Object> map = new HashMap();
+        HashMap<String, Object> map2 = new HashMap();
+        Set<String> keys = redisTemplate.keys("*");
+        for (String key : keys) {
+            Integer value = (Integer) redisTemplate.opsForValue().get(key);
+            map2.put(key,value);
+        }
+//        List<Map.Entry<String,Integer>> list = new ArrayList<>(map2.entrySet());
         Job job = new Job();
         job.getRow();
         job.setPage(currentPage);
@@ -151,6 +160,7 @@ public class JobFrontServiceImpl implements JobFrontService {
     @Override
     public HashMap<String, Object> findBySearch(int page, String search, HttpServletRequest request) {
         HashMap<String, Object> map = new HashMap();
+        redisTemplate.opsForValue().increment(search,1);
         Job job = new Job();
         job.getRow();
         job.setPage(page);
@@ -171,7 +181,7 @@ public class JobFrontServiceImpl implements JobFrontService {
         map.put("totalPages",pageInfo.getPages());
         map.put("totalElements",pageInfo.getTotal());
         map.put("list",pageInfo.getList());
-        request.getSession().setAttribute("条件",str);
+        request.getSession().setAttribute("search",str);
         return map;
     }
 }
