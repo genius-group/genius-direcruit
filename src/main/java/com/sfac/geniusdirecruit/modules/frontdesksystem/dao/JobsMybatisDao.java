@@ -93,6 +93,6 @@ public interface JobsMybatisDao {
             "INNER JOIN company_job ON job.job_id = company_job.job_id\n" +
             "INNER JOIN company ON company_job.company_id = company.company_id\n" +
             "where job.job_name LIKE #{search} OR job.degree LIKE #{search} or job.area like #{search} or job.pay like #{search}\n" +
-            "or job.numbers like #{search}")
+            "or job.numbers like #{search} or company_name like #{search}")
     List<Job> findBySearch(String search);
 }
