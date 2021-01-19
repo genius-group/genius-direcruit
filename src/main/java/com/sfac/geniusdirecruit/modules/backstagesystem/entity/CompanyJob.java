@@ -22,5 +22,7 @@ public class CompanyJob {
     private Integer companyId;
 
     private Integer jobId;
+    //职位发布状态
+    private String status;
 }
 
