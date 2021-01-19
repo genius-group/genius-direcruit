@@ -202,7 +202,7 @@
                         <a  href="/c101270100/b_%E9%83%AB%E9%83%BD%E5%8C%BA/?query=Java" ka="sel-business-3">郫都区</a>
                         <a  href="/c101270100/b_%E9%9D%92%E7%BE%8A%E5%8C%BA/?query=Java" ka="sel-business-4">青羊区</a>
                         <a  href="/c101270100/b_%E9%87%91%E7%89%9B%E5%8C%BA/?query=Java" ka="sel-business-5">金牛区</a>
-                        <a  href="/c101270100/b_%E6%88%90%E5%8D%8E%E5%8C%BA/?query=Java" ka="sel-business-6">成华区</a>
+                        <a  href="/frontjobs/search/?search=成华区" ka="sel-business-6">成华区</a>
                         <a  href="/c101270100/b_%E9%BE%99%E6%B3%89%E9%A9%BF%E5%8C%BA/?query=Java" ka="sel-business-7">龙泉驿区</a>
                         <a  href="/c101270100/b_%E6%B8%A9%E6%B1%9F%E5%8C%BA/?query=Java" ka="sel-business-8">温江区</a>
                         <a  href="/c101270100/b_%E6%96%B0%E9%83%BD%E5%8C%BA/?query=Java" ka="sel-business-9">新都区</a>
@@ -313,9 +313,9 @@
                         <div class="job-primary">
                             <div class="info-primary">
                                 <div class="primary-wrapper">
-                                    <div class="primary-box" href="/job_detail/43d2cafabb881ee83nd90ty1E1M~.html" data-jid="43d2cafabb881ee83nd90ty1E1M~" data-itemid="1" data-lid="9nos9elhdsS.search.1" data-jobid="93791831" data-index="0" ka="search_list_1" target="_blank">
+                                    <div class="primary-box" th:href="@{'/frontjobs/job?jobId='+${x.jobId}}" data-jid="43d2cafabb881ee83nd90ty1E1M~" data-itemid="1" data-lid="9nos9elhdsS.search.1" data-jobid="93791831" data-index="0" ka="search_list_1" target="_blank">
                                         <div class="job-title">
-                                            <span class="job-name"><a href="/job_detail/43d2cafabb881ee83nd90ty1E1M~.html" th:text="${x.jobName}" target="_blank" ka="search_list_jname_1" data-jid="43d2cafabb881ee83nd90ty1E1M~" data-itemid="1" data-lid="9nos9elhdsS.search.1" data-jobid="93791831" data-index="0"></a></span>
+                                            <span class="job-name"><a th:href="@{'/frontjobs/job?jobId='+${x.jobId}}" th:text="${x.jobName}" target="_blank" ka="search_list_jname_1" data-jid="43d2cafabb881ee83nd90ty1E1M~" data-itemid="1" data-lid="9nos9elhdsS.search.1" data-jobid="93791831" data-index="0"></a></span>
                                             <span class="job-area-wrapper">
                                                 <span class="job-area" th:text="${x.area}"></span>
                                                 <span class="job-area" th:text="${x.address}"></span>
@@ -325,13 +325,13 @@
                                         <div class="job-limit clearfix">
                                             <span class="red" th:text="${x.pay}">20-40K·15薪</span>
                                             <p th:text="${x.degree}">3-5年<em class="vline"></em></p>
-                                            <div class="info-publis">
-                                                <h3 class="name"><img class="icon-chat" src="https://z.zhipin.com/web/geek/resource/icon-chat-v2.png"/>卓先生<em class="vline"></em>招聘者</h3>
-                                            </div>
-                                            <button class="btn btn-startchat" href="javascript:;" data-url="/wapi/zpgeek/friend/add.json?jobId=43d2cafabb881ee83nd90ty1E1M~&lid=9nos9elhdsS.search.1" redirect-url="/web/geek/chat?id=54365c79c9d9d0ab1HFz3Nu6EVs~">
-                                                <img class="icon-chat icon-chat-hover" src="https://z.zhipin.com/web/geek/resource/icon-chat-hover-v2.png" alt="">
-                                                <span>立即沟通</span>
-                                            </button>
+<!--                                            <div class="info-publis">-->
+<!--                                                <h3 class="name"><img class="icon-chat" src="https://z.zhipin.com/web/geek/resource/icon-chat-v2.png"/>卓先生<em class="vline"></em>招聘者</h3>-->
+<!--                                            </div>-->
+<!--                                            <button class="btn btn-startchat" href="javascript:;" data-url="/wapi/zpgeek/friend/add.json?jobId=43d2cafabb881ee83nd90ty1E1M~&lid=9nos9elhdsS.search.1" redirect-url="/web/geek/chat?id=54365c79c9d9d0ab1HFz3Nu6EVs~">-->
+<!--                                                <img class="icon-chat icon-chat-hover" src="https://z.zhipin.com/web/geek/resource/icon-chat-hover-v2.png" alt="">-->
+<!--                                                <span>立即沟通</span>-->
+<!--                                            </button>-->
                                         </div>
                                         <div class="info-detail"></div>
                                     </div>
@@ -339,33 +339,46 @@
                                 <div class="info-company">
                                     <div class="company-text">
                                         <h3 class="name"><a href="" title="" ka="search_list_company_1_custompage" target="_blank" th:text="${x.companyName}">美团</a></h3>
-                                        <p><a href="/i100020/" class="false-link" target="_blank" ka="search_list_company_industry_1_custompage" title="互联网行业招聘信息" th:text="${x.jobCategoryName}">互联网</a><em class="vline"></em>已上市<em class="vline"></em>10000人以上</p>
+                                        <p><a href="" class="false-link" target="_blank" ka="search_list_company_industry_1_custompage" title="互联网行业招聘信息" th:text="${x.jobCategoryName}">互联网</a><em class="vline"></em><span th:text="${x.expiryDate}">已上市</span><em class="vline"></em><span th:text="${x.numbers}">10000人以上</span></p>
                                     </div>
                                     <a href=""><img class="" src="" alt=""></a>
                                 </div>
                             </div>
-<!--                            <div class="info-append clearfix">-->
-<!--                                <div class="tags">-->
-<!--                                    <span class="tag-item">Java</span>-->
-<!--                                    <span class="tag-item">分布式技术</span>-->
-<!--                                    <span class="tag-item">多线程</span>-->
-<!--                                    <span class="tag-item">微服务架构</span>-->
-<!--                                    <span class="tag-item">MySQL</span>-->
-<!--                                </div>-->
-<!--                                <div class="info-desc">通讯补贴，六险一金，13薪，带薪年假，定期体检，补充医疗保险，五险一金，节日福利，年终奖，交通补助，零食下午茶，团建</div>-->
-<!--                            </div>-->
+                            <div class="info-append clearfix">
+                                <div class="tags">
+                                    <span class="tag-item">Java</span>
+                                    <span class="tag-item">分布式技术</span>
+                                    <span class="tag-item">多线程</span>
+                                    <span class="tag-item">微服务架构</span>
+                                    <span class="tag-item">MySQL</span>
+                                </div>
+                                <div class="info-desc">通讯补贴，六险一金，13薪，带薪年假，定期体检，补充医疗保险，五险一金，节日福利，年终奖，交通补助，零食下午茶，团建</div>
+                            </div>
                         </div>
                     </li>
                 </ul>
 
                 <!--分页功能-->
-                <div class="page">
-                    <div>
-                        <a class="prev" th:href="@{/frontjobs/index(page=${listUser.prePage})}">&lt;&lt;</a>
-                        <a class="num" href="/frontjobs/index">首页</a>
-                        <span class="current" th:text="${listUser.curPage}"></span>
-                        <a class="num" th:href="@{/frontjobs/index(page=${listUser.totalPages})}">尾页</a>
-                        <a class="next" th:href="@{/frontjobs/index(page=${listUser.nextPage})}">&gt;&gt;</a>
+                <div th:if="${'条件'==null}">
+                    <div class="page">
+                        <div>
+                            <a class="prev" th:href="@{/frontjobs/index(page=${listUser.prePage})}">&lt;&lt;</a>
+                            <a class="num" href="/frontjobs/index">首页</a>
+                            <span class="current" th:text="${listUser.curPage}"></span>
+                            <a class="num" th:href="@{/frontjobs/index(page=${listUser.totalPages})}">尾页</a>
+                            <a class="next" th:href="@{/frontjobs/index(page=${listUser.nextPage})}">&gt;&gt;</a>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${'条件'!=null}">
+                    <div class="page">
+                        <div>
+                            <a class="prev" th:href="@{/frontjobs/search(page=${listUser.prePage})}">&lt;&lt;</a>
+                            <a class="num" href="/frontjobs/index">首页</a>
+                            <span class="current" th:text="${listUser.curPage}"></span>
+                            <a class="num" th:href="@{/frontjobs/search(page=${listUser.totalPages})}">尾页</a>
+                            <a class="next" th:href="@{/frontjobs/search(page=${listUser.nextPage})}">&gt;&gt;</a>
+                        </div>
                     </div>
                 </div>
             </div>

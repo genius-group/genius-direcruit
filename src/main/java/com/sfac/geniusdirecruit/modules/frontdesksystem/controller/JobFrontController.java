@@ -57,4 +57,30 @@ public class JobFrontController {
     public String resume() {
         return "/frontdesk/resume";
     }
+
+    //岗位详情页面
+    @RequestMapping("/job")
+    public String job(Integer jobId){
+
+        return null;
+    }
+
+    //条件搜索
+    @GetMapping("/search")
+    public String search(@RequestParam(required = false,defaultValue = "1") int page, String search,Model map,HttpServletRequest request){
+        if (search!=null){map.addAttribute("listUser", jobfrontService.findBySearch(page,search,request));
+            User user1 = (User)request.getSession().getAttribute("user");
+            map.addAttribute("user",user1);
+            map.addAttribute("条件",request.getSession().getAttribute("条件"));
+        }else {
+            String search1 = (String) request.getSession().getAttribute("条件");
+            map.addAttribute("listUser", jobfrontService.findBySearch(page,search1,request));
+            User user1 = (User)request.getSession().getAttribute("user");
+            map.addAttribute("user",user1);
+            map.addAttribute("条件",request.getSession().getAttribute("条件"));
+
+        }
+
+        return "/frontdesk/index";
+    }
 }

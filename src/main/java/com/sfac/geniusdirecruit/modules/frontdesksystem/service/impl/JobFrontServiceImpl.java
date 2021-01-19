@@ -18,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.HashMap;
@@ -144,6 +146,33 @@ public class JobFrontServiceImpl implements JobFrontService {
         }
         out.close();
         return new ResultEntity<>(ResultEntity.ResultStatus.FAILED.status,"File download success.",fileName);
+    }
+
+    @Override
+    public HashMap<String, Object> findBySearch(int page, String search, HttpServletRequest request) {
+        HashMap<String, Object> map = new HashMap();
+        Job job = new Job();
+        job.getRow();
+        job.setPage(page);
+        PageHelper.startPage(page, 5);
+        String str = "%"+search+"%";
+        PageInfo<Job> pageInfo = new PageInfo<>(jobsMybatisDao.findBySearch(str));
+        map.put("curPage", pageInfo.getPageNum());
+        if (pageInfo.getPageNum() <= 1){
+            map.put("prePage",pageInfo.getPageNum());
+        }else {
+            map.put("prePage",pageInfo.getPageNum()-1);
+        }
+        if (pageInfo.getPageNum()+1 >= pageInfo.getPages()){
+            map.put("nextPage",pageInfo.getPages());
+        }else {
+            map.put("nextPage",pageInfo.getPageNum()+1);
+        }
+        map.put("totalPages",pageInfo.getPages());
+        map.put("totalElements",pageInfo.getTotal());
+        map.put("list",pageInfo.getList());
+        request.getSession().setAttribute("条件",str);
+        return map;
     }
 }
 
