@@ -28,4 +28,8 @@ public interface CompanyService {
     PageInfo<CompanyVo> getJobsBySearchBean(CompanyVo companyVo);
 
     ResultEntity<CompanyVo> insertCompanyJob(CompanyVo companyVo);
+
+    Company getCompanyByUser();
+
+    ResultEntity<Company> editorAddCompany(Company company);
 }

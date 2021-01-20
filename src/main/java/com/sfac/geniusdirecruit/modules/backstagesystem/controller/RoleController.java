@@ -52,7 +52,7 @@ public class RoleController {
     }
 
     /**
-     * 通过roleId查询用户,预编辑
+     * 通过roleId查询角色 ,预编辑
      * http://127.0.0.1:8080/api/role/1---------get
      */
     @GetMapping("/role/{roleId}")
@@ -77,6 +77,15 @@ public class RoleController {
     @DeleteMapping("/role/{roleId}")
     public ResultEntity<Object> deleteRoleByRoleId(@PathVariable Integer roleId){
         return roleService.deleteRoleByRoleId(roleId);
+    }
+
+    /**
+     * 通过userId查询角色
+     * http://127.0.0.1:8080/api/role/userId/1---------get
+     */
+    @GetMapping("/role/userId/{userId}")
+    public  List<Role> getRoleByUserId(@PathVariable int userId) {
+        return roleService.getRoleByUserId(userId);
     }
 
 }

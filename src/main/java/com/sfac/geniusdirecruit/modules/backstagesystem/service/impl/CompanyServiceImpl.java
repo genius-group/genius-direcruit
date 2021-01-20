@@ -67,6 +67,31 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    public Company getCompanyByUser() {
+        Subject subject = SecurityUtils.getSubject();
+        Session session = subject.getSession();
+        int userId = (int)session.getAttribute("userId");
+        System.err.println("-------------------"+userId);
+        Company company = companyDao.selectCompanyByUserId(userId);
+        return company;
+    }
+
+    @Override
+    public ResultEntity<Company> editorAddCompany(Company company) {
+        if (company.getCompanyId()==null){
+            Subject subject = SecurityUtils.getSubject();
+            Session session = subject.getSession();
+            int userId = (int)session.getAttribute("userId");
+            company.setUserId(userId);
+            companyDao.insertCompany(company);
+        }else{
+            companyDao.editCompany(company);
+        }
+        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                "success",company);
+    }
+
+    @Override
     public PageInfo<CompanyVo> getJobsBySearchBean(CompanyVo companyVo) {
         Subject subject = SecurityUtils.getSubject();
         Session session = subject.getSession();

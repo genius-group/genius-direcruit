@@ -7,10 +7,7 @@ import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.common.utile.EmailSend;
 import com.sfac.geniusdirecruit.common.utile.MD5Util;
 import com.sfac.geniusdirecruit.common.utile.SmsSend;
-import com.sfac.geniusdirecruit.modules.backstagesystem.dao.CompanyDao;
-import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobhunterDao;
-import com.sfac.geniusdirecruit.modules.backstagesystem.dao.UserDao;
-import com.sfac.geniusdirecruit.modules.backstagesystem.dao.UserRoleDao;
+import com.sfac.geniusdirecruit.modules.backstagesystem.dao.*;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.*;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.UserVo;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
@@ -52,7 +49,8 @@ public class UserServiceImpl implements UserService {
     private EmailSend emailSend;
     @Autowired
     private RedisTemplate<String ,Object> redisTemplate;
-
+    @Autowired
+    private RoleDao roleDao;
 
 
     @Autowired
@@ -60,15 +58,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> selectAllUser() {
-        return userDao.selectAllUser();
+        List<User> users = userDao.selectAllUser();
+        List<User> userList=new ArrayList<>();
+        for (User user : users) {
+            List<Role> roles = userRoleDao.selectRolesByUserId(user.getUserId());
+            user.setRoles(roles);
+            userList.add(user);
+        }
+        return userList;
     }
 
     @Override
     public PageInfo<User> getUsersBySearchBean(SearchBean searchBean) {
         searchBean.initSearchBean();
         PageHelper.startPage(searchBean.getCurrentPage(), searchBean.getPageSize());
+        List<User> usersBySearchBean = userDao.getUsersBySearchBean(searchBean);
+        List<User> userList=new ArrayList<>();
+        for (User user : usersBySearchBean) {
+            List<Role> roles = userRoleDao.selectRolesByUserId(user.getUserId());
+            user.setRoles(roles);
+            userList.add(user);
+        }
         return new PageInfo<>(Optional
-                .ofNullable(userDao.getUsersBySearchBean(searchBean))
+                .ofNullable(userList)
                 .orElse(Collections.emptyList()));
     }
 

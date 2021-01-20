@@ -31,4 +31,7 @@ public interface RoleService {
     UserRole selectUserRoleByUserId(Integer userId);
 
     Role selectRoleByRoleId(Integer roleId);
+    Role selectRoleByUserId(Integer userId);
+
+    List<Role> getRoleByUserId(Integer userId);
 }
