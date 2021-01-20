@@ -78,7 +78,7 @@ public interface JobDao {
 
     @Select("<script>" +
             "SELECT\n" +
-            "\tcompany.user_id user_id, company.company_name company_name,job_category.job_category_name job_category_name,job.pay pay, job.numbers numbers,job.job_name job_name,company_job.`status` `status`\n" +
+            "\tcompany.user_id user_id, company.company_name company_name,job_category.job_category_name job_category_name,job.pay pay, job.numbers numbers,job.job_name job_name,company_job.`status` `status`,company_job.company_job_id company_job_id\n" +
             "FROM\n" +
             "\tcompany\n" +
             "\tINNER JOIN\n" +
@@ -98,7 +98,7 @@ public interface JobDao {
             + " and user_id = #{userId} "
             + "</if>"
             + "<if test='keyWord != \"\" and keyWord != null'>"
-            + " and (job_name like '%${keyWord}%') "
+            + " and (status like '%${keyWord}%') "
             + "</if>"
             + "</where>"
             + "<choose>"
@@ -111,4 +111,7 @@ public interface JobDao {
             + "</choose>"
             + "</script>")
     List<CompanyVo> getCompanyBySearchBean(CompanyVo companyVo);
+
+    @Delete("delete from company_job where company_job_id = #{companyJobId}")
+    void deleteCompanyJobById(int companyJobId);
 }

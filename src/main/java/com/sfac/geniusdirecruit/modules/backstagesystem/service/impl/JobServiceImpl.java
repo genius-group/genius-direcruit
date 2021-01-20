@@ -85,6 +85,13 @@ public class JobServiceImpl implements JobService {
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "Delete success");
     }
+
+    @Override
+    public ResultEntity<Object> deleteCompanyJobById(int companyJobId) {
+        jobDao.deleteCompanyJobById(companyJobId);
+        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                "Delete success");
+    }
 }
 
 

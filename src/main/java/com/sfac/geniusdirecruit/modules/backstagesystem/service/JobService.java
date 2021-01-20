@@ -28,4 +28,6 @@ public interface JobService {
 
     ResultEntity<Object> deleteJobById(Integer jobId);
 
+    ResultEntity<Object> deleteCompanyJobById(int userId);
+
 }

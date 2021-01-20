@@ -152,7 +152,7 @@
                         var rowsData = [];
                         for (var i = 0; i < rs.list.length; i++) {
                             //包装行数据
-                            var rowData = new RowData(rs.list[i].userId, rs.list[i].jobName, rs.list[i].companyName, rs.list[i].jobCategoryName, rs.list[i].numbers,rs.list[i].pay, rs.list[i].status);
+                            var rowData = new RowData(rs.list[i].companyJobId, rs.list[i].jobName, rs.list[i].companyName, rs.list[i].jobCategoryName, rs.list[i].numbers,rs.list[i].pay, rs.list[i].status);
                             // 将行数据放到数组里
                             rowsData.push(rowData);
                         }
@@ -167,7 +167,7 @@
                 });
             },
             "columns": [ //定义行数据字段
-                {data: 'userId', name: "user_id", sortable: true},
+                {data: 'companyJobId', name: "company_job_id", sortable: true},
                 {data: 'jobName', name: "job_name", sortable: true},
                 {data: 'companyName', name: "company_name", sortable: true},
                 {data: 'jobCategoryName', name: "job_category_name", sortable: true},
@@ -180,8 +180,8 @@
     }
 
     //行数据结构
-    function RowData(userId, jobName,companyName,jobCategoryName,numbers,pay,status) {
-        this.userId = userId;
+    function RowData(companyJobId, jobName,companyName,jobCategoryName,numbers,pay,status) {
+        this.companyJobId = companyJobId;
         this.jobName = jobName;
         this.companyName = companyName;
         this.jobCategoryName = jobCategoryName;
@@ -191,8 +191,8 @@
         this.operate = function () {
             return "<a href='javascript:void(0);' class='btn_editcolor' " +
                 "data-toggle='modal' data-target='#editModal' " +
-                "onclick='initEditModal(\"" + userId + "\")'>编辑</a>&nbsp;" +
-                "<a href='javascript:void(0);' onclick='deleteModal(\"" + userId + "\")' " +
+                "onclick='initEditModal(\"" + companyJobId + "\")'>编辑</a>&nbsp;" +
+                "<a href='javascript:void(0);' onclick='deleteModal(\"" + companyJobId + "\")' " +
                 "class='btn_editcolor'>删除</a>";
         }
     }
@@ -269,11 +269,11 @@
         });
     }
 
-    function deleteModal(userId) {
+    function deleteModal(companyJobId) {
         bootbox.confirm("Are you sure?", function(result) {
             if(result) {
                 $.ajax({
-                    url : "/api/job/" + userId,
+                    url : "/api/companyjob/" + companyJobId,
                     type : "delete",
                     //contentType: "application/json",
                     //data : JSON.stringify(category),

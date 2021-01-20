@@ -11,6 +11,8 @@ public class CompanyVo extends SearchBean {
 
     private Integer jobId;
 
+    private Integer companyJobId;
+
     private Integer jobCategoryId;
 
     //职位名称
@@ -41,5 +43,4 @@ public class CompanyVo extends SearchBean {
 
     //公司性质
     private String nature;
-
 }

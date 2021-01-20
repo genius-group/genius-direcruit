@@ -7,6 +7,8 @@ import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.CompanyDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Company;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Role;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.CompanyVo;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.CompanyService;
 import org.apache.shiro.SecurityUtils;
@@ -15,6 +17,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -97,8 +100,13 @@ public class CompanyServiceImpl implements CompanyService {
         Session session = subject.getSession();
         int userId = (int)session.getAttribute("userId");
         companyVo.setUserId(userId);
+        companyVo.initSearchBean();
+        PageHelper.startPage(companyVo.getCurrentPage(), companyVo.getPageSize());
+        List<CompanyVo> companyVoBySearchBean = jobDao.getCompanyBySearchBean(companyVo);
+
+
         return new PageInfo<>(Optional
-                .ofNullable(jobDao.getCompanyBySearchBean(companyVo))
+                .ofNullable(companyVoBySearchBean)
                 .orElse(Collections.emptyList()));
     }
 

@@ -61,4 +61,9 @@ public class JobController {
     public ResultEntity<Object> deleteJobById(@PathVariable("jobId") Integer jobId) {
         return jobService.deleteJobById(jobId);
     }
+
+    @DeleteMapping("/companyjob/{companyJobId}")
+    public ResultEntity<Object> deleteCompanyJobById(@PathVariable("companyJobId") int companyJobId) {
+        return jobService.deleteCompanyJobById(companyJobId);
+    }
 }
