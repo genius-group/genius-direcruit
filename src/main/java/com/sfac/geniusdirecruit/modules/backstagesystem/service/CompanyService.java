@@ -23,4 +23,8 @@ public interface CompanyService {
     ResultEntity<Company> editCompany(Company company);
 
     ResultEntity<Company> insertCompany(Company company);
+
+    Company getCompanyByUser();
+
+    ResultEntity<Company> editorAddCompany(Company company);
 }

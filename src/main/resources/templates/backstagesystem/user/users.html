@@ -87,6 +87,10 @@
         // 初始化表格数据
         initTable(DEFAULT_PAFE_SIZE);
 
+        initfpRoles('fpRole','roleList');
+
+        initfpRoles('addRole','roleLists');
+
         // 绑定页面元素的其他事件
         $("#addModalBtn").bind("click", function() {
             initAddModal();
@@ -97,6 +101,7 @@
         $("#editModalSubmit").bind("click", function() {
             editModal();
         });
+
     })
 
     // 初始化表格数据
@@ -200,7 +205,7 @@
     function zhuanhuan(l) {
         var roles="";
         for (var i = 0; i <l.length; i++) {
-            roles=roles+l[i].roleDescribe;
+            roles=roles+'['+l[i].roleDescribe+']';
         }
         return roles;
     }
@@ -219,6 +224,16 @@
         user.tel = $("#telForAdd").val();
         user.state = $("#stateForAdd").val();
         user.createTime = $("#createTimeForAdd").val();
+        var roles = [];
+
+        $.each($("[name=roleLists]"), function(index, item) {
+            if (item.checked) {
+                var role = {};
+                role.roleId = $(item).val();
+                roles.push(role);
+            }
+        });
+        user.roles = roles;
 
         $.ajax({
             url : "/api/user/admin",
@@ -246,6 +261,7 @@
     });
 
     function initEditModal(userId) {
+        $("input[name='roleList']").prop("checked", false);
         $.ajax({
             url : "/api/user/" + userId,
             type : "get",
@@ -253,9 +269,31 @@
                 $("#idForEdit").val(rs.userId);
                 $("#nameForEdit").val(rs.userName);
                 $("#telForEdit").val(rs.tel);
-                $("#rolesForEdit").val(zhuanhuan(rs.roles));
                 $("#stateForEdit").val(rs.state);
                 $("#createTimeForEdit").val(rs.createTime);
+                $.each(rs.roles, function(i, item){
+                    $("input[name='roleList'][value=" + item.roleId + "]").prop("checked",true);
+                });
+            },
+            error : function (data) {
+                layer.alert(data.responseText, {icon: 0});
+            }
+        });
+    }
+
+    function initfpRoles(rolesDiv, roleName) {
+        $("#" + rolesDiv + "").empty();
+        $.ajax({
+            url : "/api/roles",
+            type : "get",
+            contentType: "application/json",
+            success : function (rs) {
+                var checkboxs = "";
+                $.each(rs, function(i, value) {
+                            checkboxs += "<input name='"+ roleName + "' value='" +
+                                value.roleId +"' type='checkbox'>" + value.roleDescribe + "&nbsp;&nbsp;";
+                });
+                $("#" + rolesDiv + "").append(checkboxs);
             },
             error : function (data) {
                 layer.alert(data.responseText, {icon: 0});
@@ -270,6 +308,15 @@
         user.tel = $("#telForEdit").val();
         user.state = $("#stateForEdit").val();
         user.createTime = $("#createTimeForEdit").val();
+        var roles = [];
+        $.each($("[name=roleList]"), function(index, item) {
+            if (item.checked) {
+                var role = {};
+                role.roleId = $(item).val();
+                roles.push(role);
+            }
+        });
+        user.roles = roles;
 
         $.ajax({
             url : "/api/user",

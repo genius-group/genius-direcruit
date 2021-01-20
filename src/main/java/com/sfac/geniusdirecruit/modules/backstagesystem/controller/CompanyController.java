@@ -70,4 +70,22 @@ public class CompanyController {
         return companyService.editCompany(company);
     }
 
+    /**
+     * 通过用户查询企业信息
+     * http://127.0.0.1:8080/api/company/companyInfo------get
+     */
+    @GetMapping("/company/companyinfo")
+    public Company getCompanyByUser(){
+        return companyService.getCompanyByUser();
+    }
+
+    /**
+     * 编辑或添加企业信息
+     * http://127.0.0.1:8080/api/company/-----------put
+     *
+     */
+    @PutMapping(value = "/company/companyinfo",consumes = "application/json")
+    public ResultEntity<Company> editorAddCompany(@RequestBody Company company){
+        return companyService.editorAddCompany(company);
+    }
 }

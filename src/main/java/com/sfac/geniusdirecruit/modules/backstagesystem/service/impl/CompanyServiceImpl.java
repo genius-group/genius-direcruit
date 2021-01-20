@@ -7,6 +7,9 @@ import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.CompanyDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Company;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.CompanyService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,5 +58,30 @@ public class CompanyServiceImpl implements CompanyService {
         companyDao.insertCompany(company);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "insert success",company);
+    }
+
+    @Override
+    public Company getCompanyByUser() {
+        Subject subject = SecurityUtils.getSubject();
+        Session session = subject.getSession();
+        int userId = (int)session.getAttribute("userId");
+        System.err.println("-------------------"+userId);
+        Company company = companyDao.selectCompanyByUserId(userId);
+        return company;
+    }
+
+    @Override
+    public ResultEntity<Company> editorAddCompany(Company company) {
+        if (company.getCompanyId()==null){
+            Subject subject = SecurityUtils.getSubject();
+            Session session = subject.getSession();
+            int userId = (int)session.getAttribute("userId");
+            company.setUserId(userId);
+            companyDao.insertCompany(company);
+        }else{
+            companyDao.editCompany(company);
+        }
+        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                "success",company);
     }
 }
