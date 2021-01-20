@@ -5,18 +5,18 @@ import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.dao.JobhunterDao;
+import com.sfac.geniusdirecruit.modules.backstagesystem.dao.UserDao;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Jobhunter;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.JobhunterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @Author: yzs
@@ -28,6 +28,9 @@ import java.util.UUID;
 public class JobhunterServiceImpl implements JobhunterService {
     @Autowired
     private JobhunterDao jobhunterDao;
+
+    @Autowired
+    UserDao userDao;
 
 
     //定义文件上传保存的路径
@@ -83,6 +86,57 @@ public class JobhunterServiceImpl implements JobhunterService {
 
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,"File upload success.", url);
 
+
+    }
+
+
+    @Override
+    public Jobhunter findAllJobhunter(HttpServletRequest request) {
+
+        User user1 = (User) request.getSession().getAttribute("user");
+        Integer userId = user1.getUserId();
+
+        System.err.println("..进入了....findAllJobhunter.....impl........"+userId);
+        return jobhunterDao.selectJobHunterByUserId(userId);
+
+    }
+
+    @Override
+    public HashMap<Object, String> updateJobhunter(Jobhunter jobhunter) {
+
+        System.err.println("updateJobhunter>>>>>>>>>>>impl>>>>>>>>>>>>>>>"+jobhunter);
+
+        HashMap<Object, String> map = new HashMap<Object, String>();
+
+//        User userTemp = userDao.selectUserByEmail(jobhunter.getEmail());
+        Jobhunter jobHunterTemp = jobhunterDao.selectJobHunterByUserId(jobhunter.getUserId());
+        System.err.println("updateJobhunter>>>>>>>>>>>impl>>>>>>>>>>>>>>>"+jobHunterTemp);
+        if (jobHunterTemp!=null){
+
+            System.err.println("进入>>>>>>>>>>>else>>>>>>>>>>>>>>"+jobHunterTemp);
+
+            jobhunter.setJobHunterId(jobhunter.getJobHunterId());
+            jobhunter.setUserId(jobhunter.getUserId());
+            jobhunter.setJobHunterName(jobhunter.getJobHunterName());
+            jobhunter.setSex(jobhunter.getSex());
+            jobhunter.setBirth(jobhunter.getBirth());
+            jobhunter.setEducate(jobhunter.getEducate());
+            jobhunter.setEmail(jobhunter.getEmail());
+            jobhunter.setAddress(jobhunter.getAddress());
+
+            jobhunterDao.updateJobhunterByJobhunter(jobhunter);
+
+
+
+            map.put("info","修改信息成功");
+
+        }else {
+
+            map.put("info","修改信息失败");
+        }
+
+
+        return map;
 
     }
 

@@ -6,6 +6,8 @@ import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Jobhunter;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -21,5 +23,9 @@ public interface JobhunterService {
     PageInfo<Jobhunter> getJobhunterBySearchBean(SearchBean searchBean);
     //头像上传
     ResultEntity uploadUserFile(MultipartFile file);
+
+    Jobhunter findAllJobhunter(HttpServletRequest request);
+
+    HashMap<Object, String> updateJobhunter(Jobhunter jobhunter);
 
 }

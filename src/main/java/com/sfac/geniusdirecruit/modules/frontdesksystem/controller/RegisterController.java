@@ -14,8 +14,11 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.UserVo;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.JobhunterService;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +42,46 @@ public class RegisterController {
 
     @Autowired
     JobhunterService jobhunterService;
+
+    /*
+     *  127.0.0.1:8080/frontdesk/GoJobHunterUpdate
+     * */
+
+    //访问修改页面
+    @RequestMapping("GoJobHunterUpdate")
+    public String goJobhunterUpdate(Model model, HttpServletRequest request) {
+
+        model.addAttribute("jobhunterList", jobhunterService.findAllJobhunter(request));
+
+        Subject subject = SecurityUtils.getSubject();
+        request.getSession().setAttribute("user",subject.getPrincipal());
+
+        System.err.println("=======GoJobHunterUpdate==========>"+jobhunterService.findAllJobhunter(request));
+
+        return "frontdesk/jobhunterUpdate";
+
+    }
+
+
+
+
+    //修改(提交)
+    @PostMapping(value = "/submitUpdate",consumes = "application/json")
+    @ResponseBody
+    public HashMap<Object,String> submitUpdate(@RequestBody Jobhunter jobhunter,HttpServletRequest request,Model model){
+
+        System.err.println("submitUpdate.........controller............."+jobhunter);
+
+        HashMap<Object, String> map = jobhunterService.updateJobhunter(jobhunter);
+
+        User user1 = (User)request.getSession().getAttribute("user");
+        System.err.println("submitUpdate.........user1............."+user1);
+        model.addAttribute("user",user1);
+
+        System.err.println("submitUpdate.........controller............."+map);
+
+        return map;
+    }
 
 
     /*
@@ -74,7 +117,11 @@ public class RegisterController {
      * */
 
     @RequestMapping("/GoIndex")
-    public String goIndex() {
+    public String goIndex(HttpServletRequest request,Model model) {
+
+        User user1 = (User)request.getSession().getAttribute("user");
+        System.err.println("goIndex.........user1............."+user1);
+        model.addAttribute("user",user1);
 
         return "frontdesk/index";
 

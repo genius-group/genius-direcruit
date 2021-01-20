@@ -494,7 +494,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    //求职者Jobhunter表信息添加（待优化）
+    //求职者Jobhunter表信息添加
     @Override
     @Transactional
     public HashMap<Object, String> registerStaffTwo(Jobhunter jobhunter, HttpServletRequest request) {

@@ -1,10 +1,7 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Jobhunter;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -48,5 +45,8 @@ public interface JobhunterDao {
 
     @Insert("insert into jobhunter (user_id,job_hunter_name,sex,birth,photo,educate,email,address) values (#{userId},#{jobHunterName},#{sex},#{birth},#{photo},#{educate},#{email},#{address})")
     void insertJobHunter(Jobhunter jobhunter);
+
+    @Update("update jobhunter set job_hunter_name = #{jobHunterName},sex = #{sex},birth = #{birth}, educate = #{educate},address = #{address} where user_id = #{userId}")
+    void updateJobhunterByJobhunter(Jobhunter jobhunter);
 
 }
