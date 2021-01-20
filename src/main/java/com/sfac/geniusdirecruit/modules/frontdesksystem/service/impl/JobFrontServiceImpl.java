@@ -155,8 +155,9 @@ public class JobFrontServiceImpl implements JobFrontService {
     @Override
     public HashMap<String, Object> findBySearch(int page, String search, HttpServletRequest request) {
         HashMap<String, Object> map = new HashMap();
-        if (search==null){
+        if (search!="" && search.charAt(0)!='%'){
         redisTemplate.opsForValue().increment(search,1);
+
         Job job = new Job();
         job.getRow();
         job.setPage(page);
