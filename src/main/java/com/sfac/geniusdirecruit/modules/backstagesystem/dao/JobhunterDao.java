@@ -49,8 +49,4 @@ public interface JobhunterDao {
     @Insert("insert into jobhunter (user_id,job_hunter_name,sex,birth,photo,educate,email,address) values (#{userId},#{jobHunterName},#{sex},#{birth},#{photo},#{educate},#{email},#{address})")
     void insertJobHunter(Jobhunter jobhunter);
 
-    //将url增加到求职者表中
-//    @Insert("insert into jobhunter (photo) values (#{photo})")
-//    int insertByUrl(String url);
-
 }

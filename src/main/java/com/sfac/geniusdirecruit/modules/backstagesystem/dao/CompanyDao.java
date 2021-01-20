@@ -2,7 +2,6 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Company;
-import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.CompanyVo;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -24,7 +23,7 @@ public interface CompanyDao {
             "select * from company "
             + "<where> "
             + "<if test='keyWord != \"\" and keyWord != null'>"
-            + " and (company_name like '%${keyWord}%') "
+            + " and (user_name like '%${keyWord}%') "
             + "</if>"
             + "</where>"
             + "<choose>"
@@ -50,7 +49,7 @@ public interface CompanyDao {
     @Delete("delete from company where user_id = #{userId}")
     void deleteCompanyByUserId(Integer userId);
 
-    @Insert("insert into company (company_name,address,description,credit_code,nature) values (#{companyName},#{address},#{description},#{creditCode},#{nature})")
+    @Insert("insert into company (user_id,company_name,address,description,credit_code,nature) values (#{userId},#{companyName},#{address},#{description},#{creditCode},#{nature})")
     void insertCompany(Company company);
 
     @Select("select * from company where company_name = #{companyName}")

@@ -1,5 +1,6 @@
 package com.sfac.geniusdirecruit.modules.backstagesystem.dao;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper
 public interface ResumeDao {
+    @Delete("delete from resume where Job_hunter_id = #{JobhunterId}")
+    void deleteResumesByJobhunterId(Integer jobHunterId);
 }

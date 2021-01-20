@@ -25,14 +25,15 @@
                     </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align" >角色</label>
-                        <div class="col-md-6 col-sm-6 ">
-                            <input type="text" id="rolesForEdit" name="roles" class="form-control ">
+                        <div class="col-md-6 col-sm-6 " id="fpRole" name="roles">
+
                         </div>
                     </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align" >状态</label>
                         <div class="col-md-6 col-sm-6 ">
-                            <input type="text" id="stateForEdit" name="state" class="form-control ">
+                            <input type="number" oninput="this.value=this.value.replace(/[^0-1]/g, '')" id="stateForEdit" name="state" class="form-control "/>
+                            <!--<input type="text" id="stateForEdit" name="state" class="form-control ">-->
                         </div>
                     </div>
                     <div class="item form-group">

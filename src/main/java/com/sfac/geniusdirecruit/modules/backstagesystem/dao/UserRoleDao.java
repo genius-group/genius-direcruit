@@ -33,10 +33,12 @@ public interface UserRoleDao {
     @Delete("delete from user_role where role_id = #{roleId}")
     void deleteByRoleId(Integer roleId);
 
-    @Select("SELECT r.role_describe FROM user_role ur INNER JOIN role r ON ur.role_id = r.role_id where user_id=#{userId}")
+    @Select("SELECT r.role_id,r.role_name,r.role_describe FROM user_role ur INNER JOIN role r ON ur.role_id = r.role_id where user_id=#{userId}")
     List<Role> selectRolesByUserId(int userId);
 
     @Select("select * from user_role where user_id=#{userId}")
     UserRole selectUserRoleByUserId(Integer userId);
 
+    @Insert("insert into user_role(user_id,role_id) values (#{userId},#{roleId}) ")
+    void insertUserRole(Integer userId, Integer roleId);
 }

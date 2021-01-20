@@ -51,6 +51,12 @@ public class UserServiceImpl implements UserService {
     private RedisTemplate<String ,Object> redisTemplate;
     @Autowired
     private RoleDao roleDao;
+    @Autowired
+    CompanyJobDao companyJobDao;
+    @Autowired
+    ResumeDao resumeDao;
+    @Autowired
+    MessageDao messageDao;
 
 
     @Autowired
@@ -72,16 +78,14 @@ public class UserServiceImpl implements UserService {
     public PageInfo<User> getUsersBySearchBean(SearchBean searchBean) {
         searchBean.initSearchBean();
         PageHelper.startPage(searchBean.getCurrentPage(), searchBean.getPageSize());
-        List<User> usersBySearchBean = userDao.getUsersBySearchBean(searchBean);
-        List<User> userList=new ArrayList<>();
-        for (User user : usersBySearchBean) {
-            List<Role> roles = userRoleDao.selectRolesByUserId(user.getUserId());
-            user.setRoles(roles);
-            userList.add(user);
-        }
-        return new PageInfo<>(Optional
-                .ofNullable(userList)
+        PageInfo<User> pageInfo = new PageInfo<User>(Optional
+                .ofNullable(userDao.getUsersBySearchBean(searchBean))
                 .orElse(Collections.emptyList()));
+        pageInfo.getList().stream().forEach(item -> {
+            List<Role> roles = userRoleDao.selectRolesByUserId(item.getUserId());
+            item.setRoles(roles);
+        });
+        return pageInfo;
     }
 
 
@@ -116,6 +120,8 @@ public class UserServiceImpl implements UserService {
                 userRole.setRoleId(3);
                 userRoleDao.insertRegisterUser(userRole);
             }
+
+
             return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                     "register success", user);
 
@@ -134,6 +140,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResultEntity<User> editUser(User user) {
+        System.err.println("------------"+user.getUserId());
+        User userById = userDao.getUserById(user.getUserId());
+        userRoleDao.deleteByUserId(userById.getUserId());
+        List<Role> roleList=user.getRoles();
+        for (Role role : roleList) {
+            userRoleDao.insertUserRole(user.getUserId(),role.getRoleId());
+        }
         userDao.editUser(user);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "update success",user);
@@ -143,13 +156,16 @@ public class UserServiceImpl implements UserService {
     public ResultEntity<Object> deleteUserByUserId(Integer userId) {
         Jobhunter jobHunter=jobhunterDao.selectJobHunterByUserId(userId);
         if (jobHunter!=null){
+            resumeDao.deleteResumesByJobhunterId(jobHunter.getJobHunterId());
             jobhunterDao.deleteJobHunterByUserId(userId);
         }else{
             Company company=companyDao.selectCompanyByUserId(userId);
             if (company!=null){
+                companyJobDao.deleteCompanyJobsByCompanyId(company.getCompanyId());
                 companyDao.deleteCompanyByUserId(userId);
             }
         }
+        messageDao.deleteMessagesByUserId(userId);
         List<UserRole> userRoles=userRoleDao.selectByUserId(userId);
         if (userRoles.size()!=0){
             userRoleDao.deleteByUserId(userId);
@@ -201,7 +217,7 @@ public class UserServiceImpl implements UserService {
                 map.put("info","登录成功");
                 redisTemplate.delete(user.getUserName()+":lock");
                 redisTemplate.delete(user.getUserName()+":failCount");
-//                redisTemplate.opsForValue().set("userName",user.getUserName(),10,TimeUnit.MINUTES);
+                redisTemplate.opsForValue().set("userName",user.getUserName(),10,TimeUnit.MINUTES);
             }else {
                 map.put("info","账号被锁定，请在1分钟后再次尝试");
             }
@@ -214,7 +230,7 @@ public class UserServiceImpl implements UserService {
             int num = getFailCounts(user.getUserName());
             if (num>=3){
                 String key = user.getUserName()+":lock";
-                redisTemplate.opsForValue().set(key,1,1,TimeUnit.MINUTES);
+                redisTemplate.opsForValue().set(key,"userName",1,TimeUnit.MINUTES);
                 String key1 = user.getUserName()+":failCount";
                 redisTemplate.opsForValue().set(key1,1,1,TimeUnit.MINUTES);
                 map.put("info","账号被锁定,请在1分钟后再次尝试");
@@ -264,7 +280,6 @@ public class UserServiceImpl implements UserService {
         Session session = subject.getSession();
         session.removeAttribute("userId");
     }
-
 
 
     //发送验证码到邮箱
@@ -323,7 +338,7 @@ public class UserServiceImpl implements UserService {
     public HashMap<String, Object> smsEnter(UserVo userVo, HttpServletRequest request) {
 
 
-                HashMap<String,Object> map = new HashMap<String,Object>();
+        HashMap<String,Object> map = new HashMap<String,Object>();
 
         String sessionCode = request.getSession().getAttribute("smsCode")+"";
 
@@ -378,19 +393,19 @@ public class UserServiceImpl implements UserService {
     public HashMap<String, Object> sendMessage(String tel, HttpServletRequest request) {
         HashMap<String, Object> map = new HashMap<String, Object>();
 
-            int code = (int)((Math.random()*9+1)*1000);
-            String info = smsSend.send(tel,code+"");
-            System.err.println(info);
-            if (info.equals("OK")){
-                //存入session中
-                request.getSession().setAttribute("smsCode",code);
-                request.getSession().setAttribute("tel",tel);
-                map.put("info","短信发送成功");
-                return map;
-            }else{
-                map.put("info","短信发送失败");
-                return map;
-            }
+        int code = (int)((Math.random()*9+1)*1000);
+        String info = smsSend.send(tel,code+"");
+        System.err.println(info);
+        if (info.equals("OK")){
+            //存入session中
+            request.getSession().setAttribute("smsCode",code);
+            request.getSession().setAttribute("tel",tel);
+            map.put("info","短信发送成功");
+            return map;
+        }else{
+            map.put("info","短信发送失败");
+            return map;
+        }
     }
 
     //手机+验证码登录
@@ -479,7 +494,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    //求职者Jobhunter表信息添加
+    //求职者Jobhunter表信息添加（待优化）
     @Override
     @Transactional
     public HashMap<Object, String> registerStaffTwo(Jobhunter jobhunter, HttpServletRequest request) {
@@ -520,6 +535,11 @@ public class UserServiceImpl implements UserService {
         user1.setState(user.getState());
         user1.setCreateTime(user.getCreateTime());
         userDao.insertUser(user1);
+        User user2 = userDao.findUsersByTel(user1.getTel());
+        List<Role> roleList=user.getRoles();
+        for (Role role : roleList) {
+            userRoleDao.insertUserRole(user2.getUserId(),role.getRoleId());
+        }
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "insert success",user1);
     }
@@ -530,22 +550,26 @@ public class UserServiceImpl implements UserService {
     public HashMap<Object, String> registerCompany(Company company, HttpServletRequest request) {
         HashMap<Object, String> map = new HashMap<Object, String>();
 
-       Company companyTemp =  companyDao.selectCompanyByCompanyName(company.getCompanyName());
+        Company companyTemp =  companyDao.selectCompanyByCompanyName(company.getCompanyName());
 
-       if (companyTemp!=null){
-           map.put("info","该公司名称已被注册，请核实后添加");
-       }else {
+        if (companyTemp!=null){
+            map.put("info","该公司名称已被注册，请核实后添加");
+        }else {
 
-           Integer userId = (Integer) request.getSession().getAttribute("userId");
-           System.err.println("registerCompany>>>>>>>>>>>impl>>>>>>>>>>>>>>>"+userId);
-           company.setUserId(userId);
+            Integer userId = (Integer) request.getSession().getAttribute("userId");
+            System.err.println("registerCompany>>>>>>>>>>>impl>>>>>>>>>>>>>>>"+userId);
+            company.setUserId(userId);
 
-           companyDao.insertCompanyAll(company);
-           map.put("info","企业注册成功");
+            companyDao.insertCompanyAll(company);
+            map.put("info","企业注册成功");
 
-       }
+        }
+
+
         return map;
+
     }
+
 
     @Override
     public HashMap<Object, String> ChangePassword(String newPassword, HttpServletRequest request) {
@@ -555,26 +579,25 @@ public class UserServiceImpl implements UserService {
         System.err.println("..进入了....ChangePassword.....impl........");
 
 
-             User user1 = (User) request.getSession().getAttribute("user");
-             Integer userId = user1.getUserId();
-             System.err.println("..进入了....ChangePassword.....impl........"+userId);
+        User user1 = (User) request.getSession().getAttribute("user");
+        Integer userId = user1.getUserId();
+        System.err.println("..进入了....ChangePassword.....impl........"+userId);
 
-             if (userId!=null){
-                 User user = new User();
-                 user.setUserId(userId);
-                 user.setUserPwd(MD5Util.getMD5(newPassword));
+        if (userId!=null){
+            User user = new User();
+            user.setUserId(userId);
+            user.setUserPwd(MD5Util.getMD5(newPassword));
 
-                 System.err.println("...ChangePassword..MD5Util.getMD5......"+MD5Util.getMD5(newPassword));
-                 userDao.modifyPassword(user);
-                 map.put("info","修改密码成功");
+            System.err.println("...ChangePassword..MD5Util.getMD5......"+MD5Util.getMD5(newPassword));
+            userDao.modifyPassword(user);
+            map.put("info","修改密码成功");
 
-             }else {
-                 map.put("info","修改密码失败");
-             }
+        }else {
+            map.put("info","修改密码失败");
+        }
 
 
         return map;
-
     }
 
 

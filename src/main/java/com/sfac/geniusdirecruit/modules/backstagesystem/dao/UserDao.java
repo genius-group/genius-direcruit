@@ -5,7 +5,6 @@ import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,7 +19,7 @@ public interface UserDao {
 
     //用户名密码登录
     @Select("select * from user where user_name = #{userName} and user_pwd =#{userPwd}")
-    User selectUserByUserNameAndPwd(String userName,String userPwd);
+    User selectUserByUserNameAndPwd(String userName, String userPwd);
 
     @Select("select * from user")
     List<User> selectAllUser();
@@ -101,9 +100,6 @@ public interface UserDao {
             "</script>"})
     List<String> selectUserNameByIds(@Param("userIdList") List<Integer> userIdList);
 
-
-
     @Update("update user set user_pwd = #{userPwd} where user_id = #{userId}")
     void modifyPassword(User user);
-
 }

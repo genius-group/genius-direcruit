@@ -22,7 +22,7 @@ import java.util.List;
 public interface UserService {
     List<User> selectAllUser();
 
-    ResultEntity<User> insertUser(UserVo userVo,HttpServletRequest request);
+    ResultEntity<User> insertUser(UserVo userVo, HttpServletRequest request);
 
     User getUserById(int userId);
 
@@ -32,10 +32,10 @@ public interface UserService {
 
     ResultEntity<Object> deleteUserByUserId(Integer userId);
 
-    HashMap<Object, String> loginIn(User user,HttpServletRequest request);
+    HashMap<Object, String> loginIn(User user, HttpServletRequest request);
 
     void logout();
-	
+
     ResultEntity<User> login(User user);
 
     User selectUserByUserName(String userName);
@@ -69,4 +69,5 @@ public interface UserService {
     HashMap<Object, String> registerCompany(Company company, HttpServletRequest request);
 
     HashMap<Object, String> ChangePassword(String newPassword, HttpServletRequest request);
+
 }
