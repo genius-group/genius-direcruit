@@ -217,7 +217,7 @@ public class UserServiceImpl implements UserService {
                 map.put("info","登录成功");
                 redisTemplate.delete(user.getUserName()+":lock");
                 redisTemplate.delete(user.getUserName()+":failCount");
-                redisTemplate.opsForValue().set("userName",user.getUserName(),10,TimeUnit.MINUTES);
+//                redisTemplate.opsForValue().set("userName",user.getUserName(),10,TimeUnit.MINUTES);
             }else {
                 map.put("info","账号被锁定，请在1分钟后再次尝试");
             }
@@ -230,7 +230,7 @@ public class UserServiceImpl implements UserService {
             int num = getFailCounts(user.getUserName());
             if (num>=3){
                 String key = user.getUserName()+":lock";
-                redisTemplate.opsForValue().set(key,"userName",1,TimeUnit.MINUTES);
+                redisTemplate.opsForValue().set(key,1,1,TimeUnit.MINUTES);
                 String key1 = user.getUserName()+":failCount";
                 redisTemplate.opsForValue().set(key1,1,1,TimeUnit.MINUTES);
                 map.put("info","账号被锁定,请在1分钟后再次尝试");
