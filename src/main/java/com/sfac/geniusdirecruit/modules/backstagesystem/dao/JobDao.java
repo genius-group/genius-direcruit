@@ -23,7 +23,7 @@ public interface JobDao {
     //添加job
     @Insert("Insert into job (job_category_id,job_name,description,pay,numbers,degree,expiry_date,area,address,view_count,release_time) " +
             "values (#{jobCategoryId},#{jobName},#{description},#{pay},#{numbers},#{degree},#{expiryDate},#{area},#{address},#{viewCount},#{releaseTime})")
-    void insertJob(Job job);
+    int insertJob(Job job);
 
     //根据jobName查询job
     @Select("select* from job where job_name=#{jobName}")
@@ -78,7 +78,14 @@ public interface JobDao {
 
     @Select("<script>" +
             "SELECT\n" +
-            "\tcompany.user_id user_id, company.company_name company_name,job_category.job_category_name job_category_name,job.pay pay, job.numbers numbers,job.job_name job_name,company_job.`status` `status`,company_job.company_job_id company_job_id\n" +
+            "\tcompany.user_id AS user_id, \n" +
+            "\tcompany.company_name AS company_name, \n" +
+            "\tjob_category.job_category_name AS job_category_name, \n" +
+            "\tjob.pay AS pay, \n" +
+            "\tjob.numbers AS numbers, \n" +
+            "\tjob.job_name AS job_name, \n" +
+            "\tcompany_job.`status` AS `status`, \n" +
+            "\tcompany_job.company_job_id AS company_job_id\n" +
             "FROM\n" +
             "\tcompany\n" +
             "\tINNER JOIN\n" +
@@ -92,7 +99,7 @@ public interface JobDao {
             "\tINNER JOIN\n" +
             "\tjob_category\n" +
             "\tON \n" +
-            "\t\tcompany_job.company_job_id = job_category.job_category_id\n"
+            "\t\tjob.job_category_id = job_category.job_category_id"
             + "<where> "
             + "<if test='userId!= null'>"
             + " and user_id = #{userId} "
@@ -109,7 +116,7 @@ public interface JobDao {
             + " order by job_name desc"
             + "</otherwise>"
             + "</choose>"
-            + "</script>")
+            +"</script>")
     List<CompanyVo> getCompanyBySearchBean(CompanyVo companyVo);
 
     @Delete("delete from company_job where company_job_id = #{companyJobId}")

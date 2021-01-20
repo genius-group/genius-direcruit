@@ -3,7 +3,9 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.controller;
 import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.CompanyJob;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Job;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.CompanyVo;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +47,6 @@ public class JobController {
     @PostMapping(value = "/jobs", consumes = "application/json")
     public PageInfo<Job> getJobBySearchBean(
             @RequestBody SearchBean searchBean) {
-        System.err.println(123456789);
         PageInfo<Job> jobBySearchBean = jobService.getJobBySearchBean(searchBean);
         System.err.println(jobBySearchBean);
         return jobBySearchBean;
@@ -65,5 +66,10 @@ public class JobController {
     @DeleteMapping("/companyjob/{companyJobId}")
     public ResultEntity<Object> deleteCompanyJobById(@PathVariable("companyJobId") int companyJobId) {
         return jobService.deleteCompanyJobById(companyJobId);
+    }
+
+    @PostMapping(value = "/jobcompany", consumes = "application/json")
+    public ResultEntity<CompanyVo> insertCompanyJob(@RequestBody CompanyVo companyVo) {
+        return jobService.insertCompanyJob(companyVo);
     }
 }

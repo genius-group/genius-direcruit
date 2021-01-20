@@ -199,18 +199,28 @@
 
     // 初始化添加页面
     function initAddModal() {
-        $("#nameForAdd").val("");
-        $("#viewCountForAdd").val("");
         $("#jobCategoryName").val("");
+        $("#nameForAdd").val("");
+        $("#numbersForAdd").val("");
+        $("#payForAdd").val("");
+        $("#degreeForAdd").val("");
+        $("#addressForAdd").val("");
+        $("#descriptionForAdd").val("");
+        $("#statusForAdd").val("");
     }
     function addModal() {
         var companyVo = {};
+        companyVo.jobCategoryName = $("#jobCategoryName").val();
         companyVo.jobName = $("#nameForAdd").val();
-        companyVo.viewCount = $("#viewCountForAdd").val();
-        companyVo.jobCategoryId = $("#jobCategoryName").val();
+        companyVo.numbers = $("#numbersForAdd").val();
+        companyVo.pay = $("#payForAdd").val();
+        companyVo.degree = $("#degreeForAdd").val();
+        companyVo.address = $("#addressForAdd").val();
+        companyVo.description = $("#descriptionForAdd").val();
+        companyVo.status = $("#statusForAdd").val();
 
         $.ajax({
-            url : "/api/companyjob",
+            url : "/api/jobcompany",
             type : "post",
             contentType: "application/json",
             data : JSON.stringify(companyVo),

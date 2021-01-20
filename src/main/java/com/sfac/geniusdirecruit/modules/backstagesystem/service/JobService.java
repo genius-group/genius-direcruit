@@ -2,8 +2,10 @@ package com.sfac.geniusdirecruit.modules.backstagesystem.service;
 import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.CompanyJob;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Job;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Resume;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.CompanyVo;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,4 +32,5 @@ public interface JobService {
 
     ResultEntity<Object> deleteCompanyJobById(int userId);
 
+    ResultEntity<CompanyVo> insertCompanyJob(CompanyVo companyVo);
 }
