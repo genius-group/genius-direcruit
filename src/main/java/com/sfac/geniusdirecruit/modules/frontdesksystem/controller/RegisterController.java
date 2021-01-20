@@ -146,6 +146,11 @@ public class RegisterController {
 
 
 
+
+
+
+
+
     //企业Company表信息添加
     @PostMapping(value = "/SubmissionCompany",consumes = "application/json")
     @ResponseBody
