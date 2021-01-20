@@ -72,14 +72,16 @@ public class UserServiceImpl implements UserService {
     public PageInfo<User> getUsersBySearchBean(SearchBean searchBean) {
         searchBean.initSearchBean();
         PageHelper.startPage(searchBean.getCurrentPage(), searchBean.getPageSize());
-        PageInfo<User> pageInfo = new PageInfo<User>(Optional
-                .ofNullable(userDao.getUsersBySearchBean(searchBean))
+        List<User> usersBySearchBean = userDao.getUsersBySearchBean(searchBean);
+        List<User> userList=new ArrayList<>();
+        for (User user : usersBySearchBean) {
+            List<Role> roles = userRoleDao.selectRolesByUserId(user.getUserId());
+            user.setRoles(roles);
+            userList.add(user);
+        }
+        return new PageInfo<>(Optional
+                .ofNullable(userList)
                 .orElse(Collections.emptyList()));
-        pageInfo.getList().stream().forEach(item -> {
-            List<Role> roles = userRoleDao.selectRolesByUserId(item.getUserId());
-            item.setRoles(roles);
-        });
-        return pageInfo;
     }
 
 
@@ -132,13 +134,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResultEntity<User> editUser(User user) {
-        System.err.println("------------"+user.getUserId());
-        User userById = userDao.getUserById(user.getUserId());
-        userRoleDao.deleteByUserId(userById.getUserId());
-        List<Role> roleList=user.getRoles();
-        for (Role role : roleList) {
-            userRoleDao.insertUserRole(user.getUserId(),role.getRoleId());
-        }
         userDao.editUser(user);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "update success",user);
@@ -525,11 +520,6 @@ public class UserServiceImpl implements UserService {
         user1.setState(user.getState());
         user1.setCreateTime(user.getCreateTime());
         userDao.insertUser(user1);
-        User user2 = userDao.findUsersByTel(user1.getTel());
-        List<Role> roleList=user.getRoles();
-        for (Role role : roleList) {
-            userRoleDao.insertUserRole(user2.getUserId(),role.getRoleId());
-        }
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "insert success",user1);
     }

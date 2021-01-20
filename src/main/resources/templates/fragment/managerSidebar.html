@@ -17,7 +17,7 @@
             </div>
             <div class="profile_info">
                 <span>欢迎登录!</span><br>
-                <a href="javascript:;" th:text="${userName}"></a>
+                <span></span>
             </div>
         </div>
         <!-- /menu profile quick info -->
@@ -42,7 +42,7 @@
                     <li><a><i class="fa fa-bank"></i> 企业管理 <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li shiro:hasRole="admin"><a href="/companines/companyPage">企业列表</a></li>
-                            <li shiro:hasRole="company"><a href="/companines/companyInfo">企业信息</a></li>
+                            <li shiro:hasRole="company"><a href="/companines/companyPage">企业信息</a></li>
                         </ul>
                     </li>
 
