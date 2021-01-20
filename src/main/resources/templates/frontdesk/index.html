@@ -308,7 +308,7 @@
                 <div class="sider-list about-search">
                     <h3>热门搜索排名</h3>
                     <ul>
-                        <li><a href="/frontjobs/search/?search=JAVA开发" target="_blank" ka="related-search-0">java开发<span class="icon-arrow-right"></span></a></li>
+                        <li th:each="y:${hotlist}"><a th:href="@{'/frontjobs/search/?search='+${y.key}}" target="_blank" ka="related-search-0" th:text="${y.key}"><span class="icon-arrow-right"></span></a></li>
                     </ul>
                 </div>
             </div>

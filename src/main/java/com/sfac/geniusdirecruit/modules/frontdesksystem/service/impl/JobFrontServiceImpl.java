@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
 import java.net.URLEncoder;
+import java.util.regex.Pattern;
 
 /**
  * @Author: yzs
@@ -53,13 +54,7 @@ public class JobFrontServiceImpl implements JobFrontService {
     @Override
     public HashMap<String, Object> findAll(int currentPage) {
         HashMap<String, Object> map = new HashMap();
-        HashMap<String, Object> map2 = new HashMap();
-        Set<String> keys = redisTemplate.keys("*");
-        for (String key : keys) {
-            Integer value = (Integer) redisTemplate.opsForValue().get(key);
-            map2.put(key,value);
-        }
-//        List<Map.Entry<String,Integer>> list = new ArrayList<>(map2.entrySet());
+
         Job job = new Job();
         job.getRow();
         job.setPage(currentPage);
@@ -160,6 +155,7 @@ public class JobFrontServiceImpl implements JobFrontService {
     @Override
     public HashMap<String, Object> findBySearch(int page, String search, HttpServletRequest request) {
         HashMap<String, Object> map = new HashMap();
+        if (search==null){
         redisTemplate.opsForValue().increment(search,1);
         Job job = new Job();
         job.getRow();
@@ -182,6 +178,29 @@ public class JobFrontServiceImpl implements JobFrontService {
         map.put("totalElements",pageInfo.getTotal());
         map.put("list",pageInfo.getList());
         request.getSession().setAttribute("search",str);
+        }else {
+            Job job = new Job();
+            job.getRow();
+            job.setPage(page);
+            PageHelper.startPage(page, 5);
+            String str = "%"+search+"%";
+            PageInfo<Job> pageInfo = new PageInfo<>(jobsMybatisDao.findBySearch(str));
+            map.put("curPage", pageInfo.getPageNum());
+            if (pageInfo.getPageNum() <= 1){
+                map.put("prePage",pageInfo.getPageNum());
+            }else {
+                map.put("prePage",pageInfo.getPageNum()-1);
+            }
+            if (pageInfo.getPageNum()+1 >= pageInfo.getPages()){
+                map.put("nextPage",pageInfo.getPages());
+            }else {
+                map.put("nextPage",pageInfo.getPageNum()+1);
+            }
+            map.put("totalPages",pageInfo.getPages());
+            map.put("totalElements",pageInfo.getTotal());
+            map.put("list",pageInfo.getList());
+            request.getSession().setAttribute("search",str);
+        }
         return map;
     }
 }

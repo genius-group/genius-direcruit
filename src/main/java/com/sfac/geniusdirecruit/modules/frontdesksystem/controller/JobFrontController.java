@@ -4,6 +4,7 @@ import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.frontdesksystem.service.JobFrontService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-
+import java.util.*;
 
 
 @Controller
@@ -21,6 +22,8 @@ public class JobFrontController {
 
     @Autowired(required = false)
     private JobFrontService jobfrontService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     //跳转到主站
     @GetMapping("/index")
@@ -28,6 +31,27 @@ public class JobFrontController {
         map.addAttribute("listUser", jobfrontService.findAll(page));
         User user1 = (User)request.getSession().getAttribute("user");
         map.addAttribute("user",user1);
+        HashMap<String, Integer> map2 = new HashMap();
+
+        Set<String> keys = redisTemplate.keys("*");
+
+        for (String key : keys) {
+            Integer value = (Integer) redisTemplate.opsForValue().get(key);
+            map2.put(key,value);
+        }
+        List<Map.Entry<String,Integer>> list = new ArrayList<>(map2.entrySet());
+        List<Map.Entry<String,Integer>> list2 = new ArrayList<>();
+
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+        for (int i = 0; i <10 ; i++) {
+            list2.add(list.get(i));
+        }
+        map.addAttribute("hotlist",list2);
         return "/frontdesk/index";
     }
 
@@ -80,6 +104,27 @@ public class JobFrontController {
             map.addAttribute("search",request.getSession().getAttribute("search"));
 
         }
+        HashMap<String, Integer> map2 = new HashMap();
+
+        Set<String> keys = redisTemplate.keys("*");
+
+        for (String key : keys) {
+            Integer value = (Integer) redisTemplate.opsForValue().get(key);
+            map2.put(key,value);
+        }
+        List<Map.Entry<String,Integer>> list = new ArrayList<>(map2.entrySet());
+        List<Map.Entry<String,Integer>> list2 = new ArrayList<>();
+
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+        for (int i = 0; i <9 ; i++) {
+            list2.add(list.get(i));
+        }
+        map.addAttribute("hotlist",list2);
 
         return "/frontdesk/index";
     }
