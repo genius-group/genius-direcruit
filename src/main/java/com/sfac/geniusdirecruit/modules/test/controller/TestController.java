@@ -2,8 +2,12 @@ package com.sfac.geniusdirecruit.modules.test.controller;
 
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,15 +55,10 @@ public class TestController {
     //账号密码登录
     @PostMapping("/loginIn")
     @ResponseBody
-    public HashMap<Object,String> loginIn(@RequestBody User user,HttpServletRequest request){
+    public HashMap<Object,String> loginIn(@RequestBody User user, HttpServletRequest request){
         HashMap<Object, String> map = userService.loginIn(user,request);
-        System.err.println(map);
-        return map;
-    }
 
-    @RequestMapping("/index")
-    public String index(){
-        return "frontdesk/index";
+        return map;
     }
 
     @RequestMapping("/managerIndex")
@@ -98,5 +97,20 @@ public class TestController {
         return userService.messageLogin(tel,code,request);
     }
 
-
+    //退出登录
+    @RequestMapping("/loginout")
+    @ResponseBody
+    public HashMap<String,Object> logOut(ModelMap modelMap) {
+        HashMap<String,Object> map = new HashMap<>();
+        try{
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        Session session = subject.getSession();
+        session.removeAttribute("user");
+        map.put("info","退出登录成功");
+        }catch (Exception e){
+            map.put("info","退出失败");
+        }
+        return map;
+    }
 }

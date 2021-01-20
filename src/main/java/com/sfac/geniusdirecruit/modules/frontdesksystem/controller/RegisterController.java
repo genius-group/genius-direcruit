@@ -6,16 +6,19 @@ package com.sfac.geniusdirecruit.modules.frontdesksystem.controller;
  * @date:2021/1/6 14:05
  */
 
+import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.utile.SmsSend;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Company;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Jobhunter;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.UserVo;
+import com.sfac.geniusdirecruit.modules.backstagesystem.service.JobhunterService;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -33,6 +36,50 @@ public class RegisterController {
 
     @Autowired
     SmsSend smsSend;
+
+    @Autowired
+    JobhunterService jobhunterService;
+
+
+    /*
+     *  127.0.0.1:8080/frontdesk/ChangePassword
+     * */
+    @RequestMapping("/ChangePassword")
+    public String changePassword() {
+
+        return "frontdesk/changePassword";
+
+    }
+
+    //修改密码
+    @PostMapping(value = "/ChangePasswordDo",consumes = "application/json")
+    @ResponseBody
+    public HashMap<Object,String> changePassword(@RequestParam String newPassword,HttpServletRequest request){
+
+        System.err.println("changePassword...........newPassword..........."+newPassword);
+
+
+        HashMap<Object, String> map = userService.ChangePassword(newPassword,request);
+
+        System.err.println("changePassword............map.........."+map);
+
+        return map;
+    }
+
+
+
+
+    /*
+     *  127.0.0.1:8080/frontdesk/GoIndex
+     * */
+
+    @RequestMapping("/GoIndex")
+    public String goIndex() {
+
+        return "frontdesk/index";
+
+    }
+
 
 
 
@@ -86,16 +133,16 @@ public class RegisterController {
     }
 
 
-    /*
-     *  127.0.0.1:8080/frontdesk/GoIndex
-     * */
 
-    @RequestMapping("/GoIndex")
-    public String goIndex() {
 
-        return "frontdesk/index";
-
+    //头像上传
+    @RequestMapping(value="/uploadPicture",method = RequestMethod.POST)
+    @ResponseBody         //@RequestParam("file") 数据库中该属性的名称
+    public ResultEntity<String> execute(@RequestParam(value="file",required = false) MultipartFile file, HttpServletRequest request) {
+        return jobhunterService.uploadUserFile(file);
     }
+
+
 
 
 

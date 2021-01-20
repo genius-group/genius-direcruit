@@ -4,6 +4,7 @@ public class ResultEntity<T> {
     private int status;
     private String message;
     private T object;
+    private T src;
 
     public ResultEntity() {
     }
@@ -17,6 +18,21 @@ public class ResultEntity<T> {
         this.status = status;
         this.message = message;
         this.object = object;
+    }
+
+    public ResultEntity(int status, String message, T object, T src) {
+        this.status = status;
+        this.message = message;
+        this.object = object;
+        this.src = src;
+    }
+
+    public T getSrc() {
+        return src;
+    }
+
+    public void setSrc(T src) {
+        this.src = src;
     }
 
     public int getStatus() {

@@ -23,7 +23,7 @@ public interface JobCategoryDao {
             "select * from job_category "
             + "<where> "
             + "<if test='keyWord != \"\" and keyWord != null'>"
-            + " and (user_name like '%${keyWord}%') "
+            + " and (job_category_name like '%${keyWord}%') "
             + "</if>"
             + "</where>"
             + "<choose>"

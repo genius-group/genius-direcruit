@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Company;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.CompanyVo;
 
 import java.util.List;
 
@@ -23,6 +24,10 @@ public interface CompanyService {
     ResultEntity<Company> editCompany(Company company);
 
     ResultEntity<Company> insertCompany(Company company);
+
+    PageInfo<CompanyVo> getJobsBySearchBean(CompanyVo companyVo);
+
+    ResultEntity<CompanyVo> insertCompanyJob(CompanyVo companyVo);
 
     Company getCompanyByUser();
 

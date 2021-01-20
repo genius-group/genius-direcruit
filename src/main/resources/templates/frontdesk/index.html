@@ -41,8 +41,8 @@
 
             <div class="nav">
                 <ul>
-                    <li> <a href="https://www.zhipin.com/" ka="header-home-logo" title="牛人直聘"><span>牛人直聘</span></a></li>
-                    <li class=""><a ka="header-home" href="https://www.zhipin.com/chengdu/">首页</a></li>
+                    <li> <a href="/frontjobs/index" ka="header-home-logo" title="牛人直聘"><span>牛人直聘</span></a></li>
+                    <li class="/frontjobs/index"><a ka="header-home" href="https://www.zhipin.com/chengdu/">首页</a></li>
                     <li class="cur"><a ka="header-job" href="https://www.zhipin.com/job_detail/">职位</a></li>
                     <li class=""><a class="nav-school-new" ka="header-school" href="https://www.zhipin.com/xiaoyuan/">校园</a></li>
                     <li class=""><a ka="header_brand" href="https://www.zhipin.com/gongsi/">公司</a></li>
@@ -50,14 +50,40 @@
                     <li class=""><a class="nav-find" ka="header-find" href="https://www.zhipin.com/faxian/">发现</a></li>
                 </ul>
             </div>
-            <div class="user-nav">
-                <!--未登录-->
-                <div class="btns">
-                    <a href="/frontjobs/resume" rel="nofollow" class="link-sign-resume" title="上传简历，解析内容，完善注册">上传简历</a>
-                    <a href="#" rel="nofollow" ka="header-geek" class="link-sign-resume" title="上传简历，解析内容，完善注册">我要找工作<span class="new" style="display: inline;">hot</span></a>
-                    <a href="https://signup.zhipin.com?intent=1" rel="nofollow" class="link-scan" ka="header-boss" title="我要招聘">我要招聘兼职</a>
-                    <a href="https://signup.zhipin.com" ka="header-register" class="btn btn-outline">注册</a>
-                    <a href="https://login.zhipin.com" ka="header-login" class="btn btn-outline">登录</a>
+            <div th:if="${user==null}">
+                <div class="user-nav">
+                    <!--未登录-->
+                    <div class="btns">
+                        <a href="/frontjobs/resume" rel="nofollow" class="link-sign-resume" title="上传简历，解析内容，完善注册">上传简历</a>
+                        <a href="#" rel="nofollow" ka="header-geek" class="link-sign-resume" title="上传简历，解析内容，完善注册">我要找工作<span class="new" style="display: inline;">hot</span></a>
+                        <a href="https://signup.zhipin.com?intent=1" rel="nofollow" class="link-scan" ka="header-boss" title="我要招聘">我要招聘兼职</a>
+                        <a href="/frontdesk/register" ka="header-register" class="btn btn-outline">注册</a>
+                        <a href="http://localhost:8080/test/login" ka="header-login" class="btn btn-outline">登录</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${user!=null}">
+                <div class="user-nav">
+                    <ul>
+                        <li class=""><a ka="header-message" href="https://www.zhipin.com/web/geek/chat">消息<span class="nav-chat-num"></span></a></li>
+                        <li class=""><a ka="header-resume" href="https://www.zhipin.com/web/geek/resume">简历</a></li>
+                        <li class="nav-dot">·</li>
+                        <li class="nav-up-file"><a class="header-resume-upload" ka="header-resume-upload-2" href="javascript:;">上传</a></li>
+                        <li class="nav-figure">
+                            <a href="https://www.zhipin.com/web/geek/recommend" ka="header-username">
+                                <span class="label-text" th:text="${user.userName}"></span><img src="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2344451607,2404623174&fm=11&gp=0.jpg" alt=""/>
+                            </a>
+                            <div class="dropdown">
+                                <a href="https://www.zhipin.com/web/geek/recommend" ka="header-personal">个人中心<span>推荐职位、编辑在线简历</span></a>
+                                <a href="/frontdesk/ChangePassword" ka="account_manage">账号设置<span>修改密码</span></a>
+                                <a href="https://www.zhipin.com/web/geek/account?type=privacySet" ka="privacy_set">隐私设置</a>
+                                <a href="https://www.zhipin.com/web/geek/mall" class="link-mall" ka="recruit_assistant">求职助手</a>
+                                <a href="javascript:;" class="link-recruit" ka="header-recruit">切换为招聘者</a>
+                                <a href="javascript:;" ka="header-logout" id="loginout">退出登录</a>
+                                <p class="recruit-tip"><img src="https://static.zhipin.com/v2/web/geek/images/recruit-tip.gif" alt=""><span>在 APP 端“我的 - 设置”中切换为Boss身份后，刷新本页面即可进行招聘</span></p>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -66,25 +92,25 @@
         <div class="inner home-inner">
             <div class="search-box">
                 <div class="search-form ">
-                    <form action="/job_detail/" method="get">
+                    <form action="/frontjobs/search/" method="get">
                         <div class="search-form-con">
                             <div class="city-sel">
                                 <i class="line"></i>
                                 <span class="label-text"><b>成都</b><i class="icon-arrow-down"></i></span>
                             </div>
-                            <div class="industry-sel" ka="search_bos_sel_industry">
-                                <i class="line"></i>
-                                <span class="label-text"><b>公司行业</b><i class="icon-arrow-down"></i></span>
-                            </div>
-                            <div class="position-sel" ka="search_box_sel_jobtype">
-                                <i class="line"></i>
-                                <span class="label-text"><b>职位类型</b><i class="icon-arrow-down"></i></span>
-                            </div>
-                            <p class="ipt-wrap"><input type="text" name="query" ka="search-keyword" value="Java" autocomplete="off" class="ipt-search" maxlength="50" placeholder="搜索职位、公司"></p>
+<!--                            <div class="industry-sel" ka="search_bos_sel_industry">-->
+<!--                                <i class="line"></i>-->
+<!--                                <span class="label-text"><b>公司行业</b><i class="icon-arrow-down"></i></span>-->
+<!--                            </div>-->
+<!--                            <div class="position-sel" ka="search_box_sel_jobtype">-->
+<!--                                <i class="line"></i>-->
+<!--                                <span class="label-text"><b>职位类型</b><i class="icon-arrow-down"></i></span>-->
+<!--                            </div>-->
+                            <p class="ipt-wrap"><input type="text" name="search" ka="search-keyword" autocomplete="off" class="ipt-search" maxlength="50" placeholder="搜索职位、公司"></p>
                         </div>
-                        <input type="hidden" name="city" class="city-code" value="101270100" />
-                        <input type="hidden" name="industry" class="industry-code" value="" />
-                        <input type="hidden" name="position" class="position-code" value="" />
+<!--                        <input type="hidden" name="city" class="city-code" value="101270100" />-->
+<!--                        <input type="hidden" name="industry" class="industry-code" value="" />-->
+<!--                        <input type="hidden" name="position" class="position-code" value="" />-->
                         <button class="btn btn-search">搜索</button>
                         <div class="suggest-result" style="display: none;">
                             <ul></ul>
@@ -125,72 +151,72 @@
                             </ul>
                         </div>
 
-                        <div class="position-box">
-                            <div class="dropdown-menu">
-                                <script>
-                                    var jobData = positionList;
-                                </script>
-                                <div class="select-tree" data-level="3">
-                                    <ul class="tree-1"><li data-id="0" class="">不限</li>
-                                        <li data-id="310000">高级管理</li>
-                                        <li data-id="100000" class="">技术</li>
-                                        <li data-id="110000">产品</li
-                                        ><li data-id="120000" class="">设计</li>
-                                        <li data-id="130000" class="">运营</li>
-                                        <li data-id="140000" class="">市场</li>
-                                        <li data-id="150000" class="">人事/财务/行政</li>
-                                        <li data-id="160000" class="">销售</li>
-                                        <li data-id="170000" class="">传媒</li>
-                                        <li data-id="180000" class="">金融</li
-                                        ><li data-id="190000">教育培训</li>
-                                        <li data-id="210000">医疗健康</li>
-                                        <li data-id="250000" class="">采购/贸易</li>
-                                        <li data-id="240000">供应链/物流</li>
-                                        <li data-id="220000" class="selected">房地产/建筑</li><li data-id="260000">咨询/翻译/法律</li>
-                                        <li data-id="280000">旅游</li
-                                        ><li data-id="290000">服务业</li>
-                                        <li data-id="300000">生产制造</li>
-                                        <li data-id="200000">其他</li>
-                                    </ul>
-                                    <ul class="tree-2">
-                                        <li data-id="220100">房地产规划开发</li>
-                                        <li data-id="220200">设计装修与市政建设</li>
-                                        <li data-id="220400">物业管理</li>
-                                        <li data-id="220500">高端房地产职位</li>
-                                        <li data-id="220600">其他房地产职位</li>
-                                    </ul>
-                                    <ul class="tree-3" style="display: none;"></ul>
-                                </div>
-                            </div>
-                        </div>
+<!--                        <div class="position-box">-->
+<!--                            <div class="dropdown-menu">-->
+<!--                                <script>-->
+<!--                                    var jobData = positionList;-->
+<!--                                </script>-->
+<!--                                <div class="select-tree" data-level="3">-->
+<!--                                    <ul class="tree-1"><li data-id="0" class="">不限</li>-->
+<!--                                        <li data-id="310000">高级管理</li>-->
+<!--                                        <li data-id="100000" class="">技术</li>-->
+<!--                                        <li data-id="110000">产品</li-->
+<!--                                        ><li data-id="120000" class="">设计</li>-->
+<!--                                        <li data-id="130000" class="">运营</li>-->
+<!--                                        <li data-id="140000" class="">市场</li>-->
+<!--                                        <li data-id="150000" class="">人事/财务/行政</li>-->
+<!--                                        <li data-id="160000" class="">销售</li>-->
+<!--                                        <li data-id="170000" class="">传媒</li>-->
+<!--                                        <li data-id="180000" class="">金融</li-->
+<!--                                        ><li data-id="190000">教育培训</li>-->
+<!--                                        <li data-id="210000">医疗健康</li>-->
+<!--                                        <li data-id="250000" class="">采购/贸易</li>-->
+<!--                                        <li data-id="240000">供应链/物流</li>-->
+<!--                                        <li data-id="220000" class="selected">房地产/建筑</li><li data-id="260000">咨询/翻译/法律</li>-->
+<!--                                        <li data-id="280000">旅游</li-->
+<!--                                        ><li data-id="290000">服务业</li>-->
+<!--                                        <li data-id="300000">生产制造</li>-->
+<!--                                        <li data-id="200000">其他</li>-->
+<!--                                    </ul>-->
+<!--                                    <ul class="tree-2">-->
+<!--                                        <li data-id="220100">房地产规划开发</li>-->
+<!--                                        <li data-id="220200">设计装修与市政建设</li>-->
+<!--                                        <li data-id="220400">物业管理</li>-->
+<!--                                        <li data-id="220500">高端房地产职位</li>-->
+<!--                                        <li data-id="220600">其他房地产职位</li>-->
+<!--                                    </ul>-->
+<!--                                    <ul class="tree-3" style="display: none;"></ul>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </form>
                 </div>
             </div>
             <div class="condition-box">
                 <dl class='condition-district  show-condition-district '>
                     <dd>
-                        <a  class="selected"  href="/c101270100/?query=Java" ka="sel-business-0">不限</a>
-                        <a  href="/c101270100/b_%E6%AD%A6%E4%BE%AF%E5%8C%BA/?query=Java" ka="sel-business-0">武侯区</a>
-                        <a  href="/c101270100/b_%E9%94%A6%E6%B1%9F%E5%8C%BA/?query=Java" ka="sel-business-1">锦江区</a>
-                        <a  href="/c101270100/b_%E5%8F%8C%E6%B5%81%E5%8C%BA/?query=Java" ka="sel-business-2">双流区</a>
-                        <a  href="/c101270100/b_%E9%83%AB%E9%83%BD%E5%8C%BA/?query=Java" ka="sel-business-3">郫都区</a>
-                        <a  href="/c101270100/b_%E9%9D%92%E7%BE%8A%E5%8C%BA/?query=Java" ka="sel-business-4">青羊区</a>
-                        <a  href="/c101270100/b_%E9%87%91%E7%89%9B%E5%8C%BA/?query=Java" ka="sel-business-5">金牛区</a>
-                        <a  href="/c101270100/b_%E6%88%90%E5%8D%8E%E5%8C%BA/?query=Java" ka="sel-business-6">成华区</a>
-                        <a  href="/c101270100/b_%E9%BE%99%E6%B3%89%E9%A9%BF%E5%8C%BA/?query=Java" ka="sel-business-7">龙泉驿区</a>
-                        <a  href="/c101270100/b_%E6%B8%A9%E6%B1%9F%E5%8C%BA/?query=Java" ka="sel-business-8">温江区</a>
-                        <a  href="/c101270100/b_%E6%96%B0%E9%83%BD%E5%8C%BA/?query=Java" ka="sel-business-9">新都区</a>
-                        <a  href="/c101270100/b_%E5%B4%87%E5%B7%9E%E5%B8%82/?query=Java" ka="sel-business-10">崇州市</a>
-                        <a  href="/c101270100/b_%E9%83%BD%E6%B1%9F%E5%A0%B0%E5%B8%82/?query=Java" ka="sel-business-11">都江堰市</a>
-                        <a  href="/c101270100/b_%E9%87%91%E5%A0%82%E5%8E%BF/?query=Java" ka="sel-business-12">金堂县</a>
-                        <a  href="/c101270100/b_%E9%82%9B%E5%B4%83%E5%B8%82/?query=Java" ka="sel-business-13">邛崃市</a>
-                        <a  href="/c101270100/b_%E5%BD%AD%E5%B7%9E%E5%B8%82/?query=Java" ka="sel-business-14">彭州市</a>
-                        <a  href="/c101270100/b_%E5%A4%A7%E9%82%91%E5%8E%BF/?query=Java" ka="sel-business-15">大邑县</a>
-                        <a href="javascript:;" class="btn-disabled" ka="sel-business-16">青白江区</a>
-                        <a href="javascript:;" class="btn-disabled" ka="sel-business-17">郫都区</a>
-                        <a href="javascript:;" class="btn-disabled" ka="sel-business-18">简阳市</a>
-                        <a href="javascript:;" class="btn-disabled" ka="sel-business-19">新津县</a>
-                        <a href="javascript:;" class="btn-disabled" ka="sel-business-20">蒲江县</a>
+                        <a  class="selected"  href="/frontjobs/index" ka="sel-business-0">不限</a>
+                        <a  href="/frontjobs/search/?search=武侯区" ka="sel-business-0">武侯区</a>
+                        <a  href="/frontjobs/search/?search=锦江区" ka="sel-business-1">锦江区</a>
+                        <a  href="/frontjobs/search/?search=双流区" ka="sel-business-2">双流区</a>
+                        <a  href="/frontjobs/search/?search=郫都区" ka="sel-business-3">郫都区</a>
+                        <a  href="/frontjobs/search/?search=青羊区" ka="sel-business-4">青羊区</a>
+                        <a  href="/frontjobs/search/?search=金牛区" ka="sel-business-5">金牛区</a>
+                        <a  href="/frontjobs/search/?search=成华区" ka="sel-business-6">成华区</a>
+                        <a  href="/frontjobs/search/?search=龙泉驿区" ka="sel-business-7">龙泉驿区</a>
+                        <a  href="/frontjobs/search/?search=温江区" ka="sel-business-8">温江区</a>
+                        <a  href="/frontjobs/search/?search=新都区" ka="sel-business-9">新都区</a>
+                        <a  href="/frontjobs/search/?search=崇州市" ka="sel-business-10">崇州市</a>
+                        <a  href="/frontjobs/search/?search=都江堰市" ka="sel-business-11">都江堰市</a>
+                        <a  href="/frontjobs/search/?search=金堂县" ka="sel-business-12">金堂县</a>
+                        <a  href="/frontjobs/search/?search=邛崃市" ka="sel-business-13">邛崃市</a>
+                        <a  href="/frontjobs/search/?search=彭州市" ka="sel-business-14">彭州市</a>
+                        <a  href="/frontjobs/search/?search=大邑县" ka="sel-business-15">大邑县</a>
+                        <a href="/frontjobs/search/?search=青白江区"  ka="sel-business-16">青白江区</a>
+                        <a href="/frontjobs/search/?search=郫都区"  ka="sel-business-17">郫都区</a>
+                        <a href="/frontjobs/search/?search=简阳市"  ka="sel-business-18">简阳市</a>
+                        <a href="/frontjobs/search/?search=新津县"  ka="sel-business-19">新津县</a>
+                        <a href="/frontjobs/search/?search=蒲江县"  ka="sel-business-20">蒲江县</a>
                     </dd>
                 </dl>
                 <dl class='condition-area '>
@@ -201,19 +227,23 @@
             </div>
             <div class="box-shadow-box"></div>
             <div class="filter-select-box">
-                <div class="dropdown-wrap">
-                        <span class="dropdown-select">
-                                <input type="text" ka="sel-exp" value="工作经验" class="ipt" readonly>
-                            <i class="icon-select-arrow"></i>
-                            <div class="dropdown-menu">
-                                <ul>
-                                    <li><a href="/c101270100/?query=Java" ka="sel-exp-0" rel="nofollow">不限</a></li>
-                                    <li><a href="/c101270100/e_108/?query=Java" ka="sel-exp-108" rel="nofollow">在校生</a></li>
-                                    <li><a href="/c101270100/e_102/?query=Java" ka="sel-exp-102" rel="nofollow">应届生</a></li>
-                                </ul>
-                            </div>
-                        </span>
-                </div>
+<!--                <div class="dropdown-wrap">-->
+<!--                        <span class="dropdown-select">-->
+<!--                                <input type="text" ka="sel-exp" value="工作经验" class="ipt" readonly>-->
+<!--                            <i class="icon-select-arrow"></i>-->
+<!--                            <div class="dropdown-menu">-->
+<!--                                <ul>-->
+<!--                                    <li><a href="/frontjobs/index" ka="sel-exp-0" rel="nofollow">不限</a></li>-->
+<!--                                    <li><a href="/frontjobs/search/?search=在校生" ka="sel-exp-108" rel="nofollow">在校生</a></li>-->
+<!--                                    <li><a href="/frontjobs/search/?search=应届生" ka="sel-exp-102" rel="nofollow">应届生</a></li>-->
+<!--                                    <li><a href="/frontjobs/search/?search=应届生" ka="sel-exp-102" rel="nofollow">1年以下</a></li>-->
+<!--                                    <li><a href="/frontjobs/search/?search=应届生" ka="sel-exp-102" rel="nofollow">1-3年</a></li>-->
+<!--                                    <li><a href="/frontjobs/search/?search=应届生" ka="sel-exp-102" rel="nofollow">3-5年</a></li>-->
+<!--                                    <li><a href="/frontjobs/search/?search=应届生" ka="sel-exp-102" rel="nofollow">5年以上</a></li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+<!--                        </span>-->
+<!--                </div>-->
                 <div class="dropdown-wrap">
 
                         <span class="dropdown-select">
@@ -221,14 +251,14 @@
                             <i class="icon-select-arrow"></i>
                             <div class="dropdown-menu">
                                 <ul>
-                                    <li><a href="/c101270100/?query=Java" ka="sel-degree-0" rel="nofollow">不限</a></li>
-                                    <li><a href="/c101270100/d_209/?query=Java" ka="sel-degree-209" rel="nofollow">初中及以下</a></li>
-                                    <li><a href="/c101270100/d_208/?query=Java" ka="sel-degree-208" rel="nofollow">中专/中技</a></li>
-                                    <li><a href="/c101270100/d_206/?query=Java" ka="sel-degree-206" rel="nofollow">高中</a></li>
-                                    <li><a href="/c101270100/d_202/?query=Java" ka="sel-degree-202" rel="nofollow">大专</a></li>
-                                    <li><a href="/c101270100/d_203/?query=Java" ka="sel-degree-203" rel="nofollow">本科</a></li>
-                                    <li><a href="/c101270100/d_204/?query=Java" ka="sel-degree-204" rel="nofollow">硕士</a></li>
-                                    <li><a href="/c101270100/d_205/?query=Java" ka="sel-degree-205" rel="nofollow">博士</a></li>
+                                    <li><a href="/frontjobs/index" ka="sel-degree-0" rel="nofollow">不限</a></li>
+                                    <li><a href="/frontjobs/search/?search=初中" ka="sel-degree-209" rel="nofollow">初中及以下</a></li>
+                                    <li><a href="/frontjobs/search/?search=中专" ka="sel-degree-208" rel="nofollow">中专</a></li>
+                                    <li><a href="/frontjobs/search/?search=高中" ka="sel-degree-206" rel="nofollow">高中</a></li>
+                                    <li><a href="/frontjobs/search/?search=大专" ka="sel-degree-202" rel="nofollow">大专</a></li>
+                                    <li><a href="/frontjobs/search/?search=本科" ka="sel-degree-203" rel="nofollow">本科</a></li>
+                                    <li><a href="/frontjobs/search/?search=硕士" ka="sel-degree-204" rel="nofollow">硕士</a></li>
+                                    <li><a href="/frontjobs/search/?search=博士" ka="sel-degree-205" rel="nofollow">博士</a></li>
                                 </ul>
                             </div>
                         </span>
@@ -239,9 +269,12 @@
                             <i class="icon-select-arrow"></i>
                             <div class="dropdown-menu">
                                 <ul>
-                                    <li><a href="/c101270100/?query=Java" ka="sel-salary-0" rel="nofollow">不限</a></li>
-                                    <li><a href="/c101270100/y_1/?query=Java" ka="sel-salary-1" rel="nofollow">3K以下</a></li>
-                                    <li><a href="/c101270100/y_2/?query=Java" ka="sel-salary-2" rel="nofollow">3-5K</a></li>
+                                    <li><a href="/frontjobs/index" ka="sel-salary-0" rel="nofollow">不限</a></li>
+                                    <li><a href="/frontjobs/search/?search=3K" ka="sel-salary-1" rel="nofollow">3K以下</a></li>
+                                    <li><a href="/frontjobs/search/?search=3-5K" ka="sel-salary-2" rel="nofollow">3-5K</a></li>
+                                    <li><a href="/frontjobs/search/?search=5-7K" ka="sel-salary-2" rel="nofollow">5-7K</a></li>
+                                    <li><a href="/frontjobs/search/?search=7-9K" ka="sel-salary-2" rel="nofollow">7-9K</a></li>
+                                    <li><a href="/frontjobs/search/?search=10k以上" ka="sel-salary-2" rel="nofollow">10k以上</a></li>
                                 </ul>
                             </div>
                         </span>
@@ -249,22 +282,22 @@
 
                 <div class="dropdown-wrap">
                         <span class="dropdown-select">
-                                <input type="text" ka="sel-scale" value="公司规模" class="ipt" readonly>
+                                <input type="text" ka="sel-scale" value="招聘人数" class="ipt" readonly>
                             <i class="icon-select-arrow"></i>
                             <div class="dropdown-menu">
                                 <ul>
-                                    <li><a href="/c101270100/?query=Java" ka="sel-scale-0" rel="nofollow">不限</a></li>
-                                    <li><a href="/c101270100/s_301/?query=Java" ka="sel-scale-301" rel="nofollow">0-20人</a></li>
-                                    <li><a href="/c101270100/s_302/?query=Java" ka="sel-scale-302" rel="nofollow">20-99人</a></li>
-                                    <li><a href="/c101270100/s_303/?query=Java" ka="sel-scale-303" rel="nofollow">100-499人</a></li>
-                                    <li><a href="/c101270100/s_304/?query=Java" ka="sel-scale-304" rel="nofollow">500-999人</a></li>
-                                    <li><a href="/c101270100/s_305/?query=Java" ka="sel-scale-305" rel="nofollow">1000-9999人</a></li>
-                                    <li><a href="/c101270100/s_306/?query=Java" ka="sel-scale-306" rel="nofollow">10000人以上</a></li>
+                                    <li><a href="/frontjobs/index" ka="sel-scale-0" rel="nofollow">不限</a></li>
+                                    <li><a href="/frontjobs/search/?search=1-4人" ka="sel-scale-301" rel="nofollow">1-4人</a></li>
+                                    <li><a href="/frontjobs/search/?search=5-9人" ka="sel-scale-302" rel="nofollow">5-9人</a></li>
+                                    <li><a href="/frontjobs/search/?search=10-49人" ka="sel-scale-303" rel="nofollow">10-49人</a></li>
+                                    <li><a href="/frontjobs/search/?search=50-99人" ka="sel-scale-304" rel="nofollow">50-99人</a></li>
+                                    <li><a href="/frontjobs/search/?search=100-999人" ka="sel-scale-305" rel="nofollow">100-999人</a></li>
+                                    <li><a href="/frontjobs/search/?search=1000人以上" ka="sel-scale-306" rel="nofollow">1000人以上</a></li>
                                 </ul>
                             </div>
                         </span>
                 </div>
-                <a href="/c101270100/?query=Java" ka="empty-filter" class="empty-filter" rel="nofollow">清空筛选条件</a>
+                <a href="/frontjobs/index" ka="empty-filter" class="empty-filter" rel="nofollow">清空筛选条件</a>
             </div>
         </div>
     </div>
@@ -273,10 +306,9 @@
         <div class="job-box">
             <div class="sider">
                 <div class="sider-list about-search">
-                    <h3>热门职位排名</h3>
+                    <h3>热门搜索排名</h3>
                     <ul>
-                        <li><a href="/job_detail/?query=java%E5%BC%80%E5%8F%91" target="_blank" ka="related-search-0">java开发<span class="icon-arrow-right"></span></a></li>
-                        <li><a href="/job_detail/?query=java%E5%88%9D%E7%BA%A7%E5%BC%80%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88" target="_blank" ka="related-search-1">java初级开发工程师<span class="icon-arrow-right"></span></a></li>
+                        <li><a href="/frontjobs/search/?search=JAVA开发" target="_blank" ka="related-search-0">java开发<span class="icon-arrow-right"></span></a></li>
                     </ul>
                 </div>
             </div>
@@ -287,9 +319,9 @@
                         <div class="job-primary">
                             <div class="info-primary">
                                 <div class="primary-wrapper">
-                                    <div class="primary-box" href="/job_detail/43d2cafabb881ee83nd90ty1E1M~.html" data-jid="43d2cafabb881ee83nd90ty1E1M~" data-itemid="1" data-lid="9nos9elhdsS.search.1" data-jobid="93791831" data-index="0" ka="search_list_1" target="_blank">
+                                    <div class="primary-box" th:href="@{'/frontjobs/job?jobId='+${x.jobId}}" data-jid="43d2cafabb881ee83nd90ty1E1M~" data-itemid="1" data-lid="9nos9elhdsS.search.1" data-jobid="93791831" data-index="0" ka="search_list_1" target="_blank">
                                         <div class="job-title">
-                                            <span class="job-name"><a href="/job_detail/43d2cafabb881ee83nd90ty1E1M~.html" th:text="${x.jobName}" target="_blank" ka="search_list_jname_1" data-jid="43d2cafabb881ee83nd90ty1E1M~" data-itemid="1" data-lid="9nos9elhdsS.search.1" data-jobid="93791831" data-index="0"></a></span>
+                                            <span class="job-name"><a th:href="@{'/frontjobs/job?jobId='+${x.jobId}}" th:text="${x.jobName}" target="_blank" ka="search_list_jname_1" data-jid="43d2cafabb881ee83nd90ty1E1M~" data-itemid="1" data-lid="9nos9elhdsS.search.1" data-jobid="93791831" data-index="0"></a></span>
                                             <span class="job-area-wrapper">
                                                 <span class="job-area" th:text="${x.area}"></span>
                                                 <span class="job-area" th:text="${x.address}"></span>
@@ -297,25 +329,25 @@
                                             <span class="job-pub-time"></span>
                                         </div>
                                         <div class="job-limit clearfix">
-                                            <span class="red">20-40K·15薪</span>
+                                            <span class="red" th:text="${x.pay}">20-40K·15薪</span>
                                             <p th:text="${x.degree}">3-5年<em class="vline"></em></p>
-                                            <div class="info-publis">
-                                                <h3 class="name"><img class="icon-chat" src="https://z.zhipin.com/web/geek/resource/icon-chat-v2.png"/>卓先生<em class="vline"></em>招聘者</h3>
-                                            </div>
-                                            <button class="btn btn-startchat" href="javascript:;" data-url="/wapi/zpgeek/friend/add.json?jobId=43d2cafabb881ee83nd90ty1E1M~&lid=9nos9elhdsS.search.1" redirect-url="/web/geek/chat?id=54365c79c9d9d0ab1HFz3Nu6EVs~">
-                                                <img class="icon-chat icon-chat-hover" src="https://z.zhipin.com/web/geek/resource/icon-chat-hover-v2.png" alt="">
-                                                <span>立即沟通</span>
-                                            </button>
+<!--                                            <div class="info-publis">-->
+<!--                                                <h3 class="name"><img class="icon-chat" src="https://z.zhipin.com/web/geek/resource/icon-chat-v2.png"/>卓先生<em class="vline"></em>招聘者</h3>-->
+<!--                                            </div>-->
+<!--                                            <button class="btn btn-startchat" href="javascript:;" data-url="/wapi/zpgeek/friend/add.json?jobId=43d2cafabb881ee83nd90ty1E1M~&lid=9nos9elhdsS.search.1" redirect-url="/web/geek/chat?id=54365c79c9d9d0ab1HFz3Nu6EVs~">-->
+<!--                                                <img class="icon-chat icon-chat-hover" src="https://z.zhipin.com/web/geek/resource/icon-chat-hover-v2.png" alt="">-->
+<!--                                                <span>立即沟通</span>-->
+<!--                                            </button>-->
                                         </div>
                                         <div class="info-detail"></div>
                                     </div>
                                 </div>
                                 <div class="info-company">
                                     <div class="company-text">
-                                        <h3 class="name"><a href="/gongsi/b633a34f787d94f21nZ_0929E1I~.html" title="美团招聘" ka="search_list_company_1_custompage" target="_blank">美团</a></h3>
-                                        <p><a href="/i100020/" class="false-link" target="_blank" ka="search_list_company_industry_1_custompage" title="互联网行业招聘信息">互联网</a><em class="vline"></em>已上市<em class="vline"></em>10000人以上</p>
+                                        <h3 class="name"><a href="" title="" ka="search_list_company_1_custompage" target="_blank" th:text="${x.companyName}">美团</a></h3>
+                                        <p><a href="" class="false-link" target="_blank" ka="search_list_company_industry_1_custompage" title="互联网行业招聘信息" th:text="${x.jobCategoryName}">互联网</a><em class="vline"></em><span th:text="${x.expiryDate}">已上市</span><em class="vline"></em><span th:text="${x.numbers}">10000人以上</span></p>
                                     </div>
-                                    <a href="/gongsi/b633a34f787d94f21nZ_0929E1I~.html" ka="search_list_company_1_custompage_logo" target="_blank"><img class="company-logo" src="https://img.bosszhipin.com/beijin/mcs/chatphoto/20201029/1628f7f87eb1f94e693c84e7356095cba1b24b3a47b9f9aa1f3dd21e84bb3294_s.jpg?x-oss-process=image/resize,w_100,limit_0" alt=""></a>
+                                    <a href=""><img class="" src="" alt=""></a>
                                 </div>
                             </div>
                             <div class="info-append clearfix">
@@ -333,13 +365,26 @@
                 </ul>
 
                 <!--分页功能-->
-                <div class="page">
-                    <div>
-                        <a class="prev" th:href="@{/frontjobs/index(page=${listUser.prePage})}">&lt;&lt;</a>
-                        <a class="num" href="/frontjobs/index">首页</a>
-                        <span class="current" th:text="${listUser.curPage}"></span>
-                        <a class="num" th:href="@{/frontjobs/index(page=${listUser.totalPages})}">尾页</a>
-                        <a class="next" th:href="@{/frontjobs/index(page=${listUser.nextPage})}">&gt;&gt;</a>
+                <div th:if="${search==null}">
+                    <div class="page">
+                        <div>
+                            <a class="prev" th:href="@{/frontjobs/index(page=${listUser.prePage})}">&lt;&lt;</a>
+                            <a class="num" href="/frontjobs/index">首页</a>
+                            <span class="current" th:text="${listUser.curPage}"></span>
+                            <a class="num" th:href="@{/frontjobs/index(page=${listUser.totalPages})}">尾页</a>
+                            <a class="next" th:href="@{/frontjobs/index(page=${listUser.nextPage})}">&gt;&gt;</a>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${search!=null}">
+                    <div class="page">
+                        <div>
+                            <a class="prev" th:href="@{/frontjobs/search(page=${listUser.prePage})}">&lt;&lt;</a>
+                            <a class="num" href="/frontjobs/index">首页</a>
+                            <span class="current" th:text="${listUser.curPage}"></span>
+                            <a class="num" th:href="@{/frontjobs/search(page=${listUser.totalPages})}">尾页</a>
+                            <a class="next" th:href="@{/frontjobs/search(page=${listUser.nextPage})}">&gt;&gt;</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -405,4 +450,19 @@
 <script src="https://static.zhipin.com/zhipin-geek/v350/web/geek/js/main.js"></script>
 <input type="hidden" id="page_key_name" value="cpc_job_list" />
 </body>
+<script>
+    $("#loginout").bind("click",function () {
+        loginout();
+    });
+    function loginout() {
+        $.ajax({
+            url:"/test/loginout",
+            dataType:"json",
+            success:function (data) {
+                alert(data.info);
+                window.location.reload();
+            }
+        })
+    }
+</script>
 </html>

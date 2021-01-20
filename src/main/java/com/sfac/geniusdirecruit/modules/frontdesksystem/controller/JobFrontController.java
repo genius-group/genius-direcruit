@@ -1,6 +1,7 @@
 package com.sfac.geniusdirecruit.modules.frontdesksystem.controller;
 
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
 import com.sfac.geniusdirecruit.modules.frontdesksystem.service.JobFrontService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,8 +24,10 @@ public class JobFrontController {
 
     //跳转到主站
     @GetMapping("/index")
-    public String index1(Model map, @RequestParam(required = false,defaultValue = "1") int page) {
+    public String index1(Model map,HttpServletRequest request, @RequestParam(required = false,defaultValue = "1") int page) {
         map.addAttribute("listUser", jobfrontService.findAll(page));
+        User user1 = (User)request.getSession().getAttribute("user");
+        map.addAttribute("user",user1);
         return "/frontdesk/index";
     }
 
@@ -53,5 +56,31 @@ public class JobFrontController {
     @GetMapping("/resume")
     public String resume() {
         return "/frontdesk/resume";
+    }
+
+    //岗位详情页面
+    @RequestMapping("/job")
+    public String job(Integer jobId){
+
+        return null;
+    }
+
+    //条件搜索
+    @GetMapping("/search")
+    public String search(@RequestParam(required = false,defaultValue = "1") int page, String search,Model map,HttpServletRequest request){
+        if (search!=null){map.addAttribute("listUser", jobfrontService.findBySearch(page,search,request));
+            User user1 = (User)request.getSession().getAttribute("user");
+            map.addAttribute("user",user1);
+            map.addAttribute("search",request.getSession().getAttribute("search"));
+        }else {
+            String search1 = (String) request.getSession().getAttribute("search");
+            map.addAttribute("listUser", jobfrontService.findBySearch(page,search1,request));
+            User user1 = (User)request.getSession().getAttribute("user");
+            map.addAttribute("user",user1);
+            map.addAttribute("search",request.getSession().getAttribute("search"));
+
+        }
+
+        return "/frontdesk/index";
     }
 }

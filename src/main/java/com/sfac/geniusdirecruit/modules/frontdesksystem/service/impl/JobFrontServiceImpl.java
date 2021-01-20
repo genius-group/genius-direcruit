@@ -1,11 +1,14 @@
 package com.sfac.geniusdirecruit.modules.frontdesksystem.service.impl;
 
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Job;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Resume;
 import com.sfac.geniusdirecruit.modules.frontdesksystem.dao.JobFrontDao;
 import com.sfac.geniusdirecruit.modules.frontdesksystem.dao.JobsFrontDao;
+import com.sfac.geniusdirecruit.modules.frontdesksystem.dao.JobsMybatisDao;
 import com.sfac.geniusdirecruit.modules.frontdesksystem.service.JobFrontService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,12 +16,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 import java.net.URLEncoder;
 
 /**
@@ -31,9 +36,12 @@ import java.net.URLEncoder;
 public class JobFrontServiceImpl implements JobFrontService {
     @Autowired
     private JobFrontDao jobFrontDao;
-
     @Autowired
     private JobsFrontDao jobsFrontDao;
+    @Autowired
+    private JobsMybatisDao jobsMybatisDao;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     //定义文件上传保存的路径
     @Value("${file.address}")
@@ -45,26 +53,50 @@ public class JobFrontServiceImpl implements JobFrontService {
     @Override
     public HashMap<String, Object> findAll(int currentPage) {
         HashMap<String, Object> map = new HashMap();
+        HashMap<String, Object> map2 = new HashMap();
+        Set<String> keys = redisTemplate.keys("*");
+        for (String key : keys) {
+            Integer value = (Integer) redisTemplate.opsForValue().get(key);
+            map2.put(key,value);
+        }
+//        List<Map.Entry<String,Integer>> list = new ArrayList<>(map2.entrySet());
         Job job = new Job();
+        job.getRow();
         job.setPage(currentPage);
-        Pageable pageable = PageRequest.of(job.getPage() - 1, job.getRow(), Sort.by(new String[]{"numbers"}).descending());
-        Page<Job> userInfoPage = jobsFrontDao.findAll(pageable);
-        map.put("curPage", userInfoPage.getNumber() + 1);
-        if (userInfoPage.getNumber() < 1) {
-            map.put("prePage", userInfoPage.getNumber() + 1);
-        } else {
-            map.put("prePage", userInfoPage.getNumber());
+//        Pageable pageable = PageRequest.of(job.getPage() - 1, job.getRow(), Sort.by(new String[]{"numbers"}).descending());
+//        Page<Job> userInfoPage = jobsFrontDao.findAll(pageable);
+        PageHelper.startPage(currentPage, 5);
+        PageInfo<Job> pageInfo = new PageInfo<>(jobsMybatisDao.findAll());
+        map.put("curPage", pageInfo.getPageNum());
+        if (pageInfo.getPageNum() <= 1){
+            map.put("prePage",pageInfo.getPageNum());
+        }else {
+            map.put("prePage",pageInfo.getPageNum()-1);
         }
-
-        if (userInfoPage.getNumber() + 2 >= userInfoPage.getTotalPages()) {
-            map.put("nextPage", userInfoPage.getTotalPages());
-        } else {
-            map.put("nextPage", userInfoPage.getNumber() + 2);
+        if (pageInfo.getPageNum()+1 >= pageInfo.getPages()){
+            map.put("nextPage",pageInfo.getPages());
+        }else {
+            map.put("nextPage",pageInfo.getPageNum()+1);
         }
-
-        map.put("totalPages", userInfoPage.getTotalPages());
-        map.put("totalElements", userInfoPage.getTotalElements());
-        map.put("list", userInfoPage.getContent());
+        map.put("totalPages",pageInfo.getPages());
+        map.put("totalElements",pageInfo.getTotal());
+        map.put("list",pageInfo.getList());
+//        map.put("curPage", userInfoPage.getNumber() + 1);
+//        if (userInfoPage.getNumber() < 1) {
+//            map.put("prePage", userInfoPage.getNumber() + 1);
+//        } else {
+//            map.put("prePage", userInfoPage.getNumber());
+//        }
+//
+//        if (userInfoPage.getNumber() + 2 >= userInfoPage.getTotalPages()) {
+//            map.put("nextPage", userInfoPage.getTotalPages());
+//        } else {
+//            map.put("nextPage", userInfoPage.getNumber() + 2);
+//        }
+//
+//        map.put("totalPages", userInfoPage.getTotalPages());
+//        map.put("totalElements", userInfoPage.getTotalElements());
+//        map.put("list", userInfoPage.getContent());
         return map;
     }
 
@@ -123,6 +155,34 @@ public class JobFrontServiceImpl implements JobFrontService {
         }
         out.close();
         return new ResultEntity<>(ResultEntity.ResultStatus.FAILED.status,"File download success.",fileName);
+    }
+
+    @Override
+    public HashMap<String, Object> findBySearch(int page, String search, HttpServletRequest request) {
+        HashMap<String, Object> map = new HashMap();
+        redisTemplate.opsForValue().increment(search,1);
+        Job job = new Job();
+        job.getRow();
+        job.setPage(page);
+        PageHelper.startPage(page, 5);
+        String str = "%"+search+"%";
+        PageInfo<Job> pageInfo = new PageInfo<>(jobsMybatisDao.findBySearch(str));
+        map.put("curPage", pageInfo.getPageNum());
+        if (pageInfo.getPageNum() <= 1){
+            map.put("prePage",pageInfo.getPageNum());
+        }else {
+            map.put("prePage",pageInfo.getPageNum()-1);
+        }
+        if (pageInfo.getPageNum()+1 >= pageInfo.getPages()){
+            map.put("nextPage",pageInfo.getPages());
+        }else {
+            map.put("nextPage",pageInfo.getPageNum()+1);
+        }
+        map.put("totalPages",pageInfo.getPages());
+        map.put("totalElements",pageInfo.getTotal());
+        map.put("list",pageInfo.getList());
+        request.getSession().setAttribute("search",str);
+        return map;
     }
 }
 

@@ -4,10 +4,13 @@ import com.github.pagehelper.PageInfo;
 import com.sfac.geniusdirecruit.common.entity.ResultEntity;
 import com.sfac.geniusdirecruit.common.entity.SearchBean;
 import com.sfac.geniusdirecruit.modules.backstagesystem.entity.Company;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.User;
+import com.sfac.geniusdirecruit.modules.backstagesystem.entity.vo.CompanyVo;
 import com.sfac.geniusdirecruit.modules.backstagesystem.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -87,5 +90,15 @@ public class CompanyController {
     @PutMapping(value = "/company/companyinfo",consumes = "application/json")
     public ResultEntity<Company> editorAddCompany(@RequestBody Company company){
         return companyService.editorAddCompany(company);
+    }
+    //查询企业职位发布
+    @PostMapping(value = "/companyjobs",consumes = "application/json")
+    public PageInfo<CompanyVo> getJobsBySearchBean(@RequestBody CompanyVo companyVo){
+
+        return companyService.getJobsBySearchBean(companyVo);
+    }
+    @PostMapping(value = "/companyjob", consumes = "application/json")
+    public ResultEntity<CompanyVo> insertCompanyJob(@RequestBody CompanyVo companyVo) {
+        return companyService.insertCompanyJob(companyVo);
     }
 }
