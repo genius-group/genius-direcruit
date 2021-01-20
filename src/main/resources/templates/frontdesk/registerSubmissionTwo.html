@@ -42,13 +42,15 @@
 
                <form action="javascript:void(0)" data-parsley-validate class="form-horizontal form-label-left">
 
-                  <div class="form-group">
+
+                   <div class="form-group">
                      <label class="mb-1">姓名</label>
                      <div class="position-relative icon-form-control">
 
                         <input type="text"  id="jobHunterName" name="jobHunterName" class="form-control">
                      </div>
                   </div>
+
 
                   <div class="form-group">
                      <label class="mb-1">性别</label>
@@ -70,6 +72,21 @@
                      </div>
                   </div>
 
+                   <div class="sign-content">
+                       <div class="inner-box">
+                           <h5>请上传您的头像</h5>
+                           <div class="sub-title"><!--<br/>--><!--<span class="red">文件大小不超过&nbsp;8&nbsp;M</span>--></div>
+
+                           上传图片<input type="file" id="file" name="file"><br/><br/>
+                           <div class="layui-upload-list" style="margin-left: 100px">
+                               <img class="layui-upload-img" id="demo1" width="200" height="100" >
+                               <input type="hidden" id="photo" value=""/>
+                               <!--<p id="demoText"></p>-->
+                           </div>
+                           <input type="button" id="button"  style="text-align: right" value="上传" onclick="ajaxFileUpload();">
+                       </div>
+                   </div>
+
 
                   <div class="form-group">
                      <label class="mb-1">生日</label>
@@ -78,31 +95,6 @@
                         <input name="birth" id="birth" type="date" class="form-control">
                      </div>
                   </div>
-
-         <!--         <div class="form-group">
-                     <label class="mb-1">头像</label>
-                     <div class="position-relative icon-form-control">
-
-                        <input name="url" id="photo" type="text" class="image">
-                     </div>
-                  </div>-->
-
-                   <div class="sign-content">
-                       <div class="inner-box">
-                           <h4>请上传您的图片</h4>
-                           <div class="sub-title">***头像***<br/><span class="red">文件大小不超过&nbsp;8&nbsp;M</span></div>
-                         <!--  <a href="javascript:;" class="btn upload-resume-wrap" ka="nlp_resume_upload_choose">
-                           </a>-->
-                               <!--multiple是html的新特性可实现多文件传输  accept="application/pdf"-->
-                           上传图片<input type="file" id="file" name="file">
-                           <div class="layui-upload-list" style="margin-left: 100px">
-                               <img class="layui-upload-img" id="demo1" width="200" height="100" >
-                               <input type="hidden" id="photo" value=""/>
-                               <!--<p id="demoText"></p>-->
-                           </div>
-                               <input type="button" id="button" value="上传" onclick="ajaxFileUpload();">
-                       </div>
-                   </div>
 
 
 

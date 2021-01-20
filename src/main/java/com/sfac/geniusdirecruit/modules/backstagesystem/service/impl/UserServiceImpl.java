@@ -554,8 +554,6 @@ public class UserServiceImpl implements UserService {
 
         System.err.println("..进入了....ChangePassword.....impl........");
 
-//        user.setUserPwd(MD5Util.getMD5(user.getUserPwd()));
-//        request.getSession().setAttribute("userId",user.getUserId());
 
              User user1 = (User) request.getSession().getAttribute("user");
              Integer userId = user1.getUserId();
